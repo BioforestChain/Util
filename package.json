@@ -1,0 +1,78 @@
+{
+  "name": "@bfchain/util",
+  "version": "mono",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "",
+  "main": "./build/cjs/src/index.js",
+  "module": "./build/esm/src/index.js",
+  "type": "./build/cjs/src/index.d.ts",
+  "files": [
+    "build/cjs",
+    "build/esm"
+  ],
+  "scripts": {
+    "mono": "bdk-mono",
+    "up": "yarn upgrade-interactive",
+    "upl": "yarn upgrade-interactive --latest",
+    "tslint": "node ./script/tslint.js",
+    "format": "bdk-format",
+    "format:all": "bdk-format --mode all",
+    "lsts": "bdk-lsts --path ./tsconfig.json --out",
+    "postinstall": "node --experimental-modules ./script/postinstall.mjs",
+    "test": "ndb ./node_modules/ava/cli.js",
+    "publ": "lerna publish",
+    "publ:force": "lerna publish --force-publish",
+    "clear": "node ./script/rmBuild.js",
+    "rebuild": "yarn clear & yarn build",
+    "build": "bdk-tsc --build tsconfig.all.json",
+    "dev:esm-es5": "bdk-tsc --build tsconfig.esm-es5.json -w",
+    "dev:esm": "bdk-tsc --build tsconfig.esm.json -w",
+    "dev:all": "bdk-tsc --build tsconfig.all.json -w",
+    "dev": "bdk-tsc --build -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://xmn-tfs-isn01:22/tfs/DefaultCollection/BFChain/_git/BFChain-Util"
+  },
+  "bdkMono": {
+    "generateConfigFiles": [
+      {
+        "packages": "*",
+        "type": "mergejson",
+        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.tslint.json",
+        "to": "$PACKAGE/tsconfig.tslint.json"
+      },
+      {
+        "packages": "*,-test_",
+        "type": "mergejson",
+        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.cjs.json",
+        "to": "$PACKAGE/tsconfig.json"
+      },
+      {
+        "packages": "*,-test,-test_*",
+        "type": "mergejson",
+        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.esm.json",
+        "to": "$PACKAGE/tsconfig.esm.json"
+      },
+      {
+        "packages": "*,-test,-test_*,-exception,-exception-*,-extends-error,-extends-map",
+        "type": "mergejson",
+        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.esm-es5.json",
+        "to": "$PACKAGE/tsconfig.esm-es5.json"
+      }
+    ]
+  },
+  "keywords": [
+    "util"
+  ],
+  "author": "Gaubee",
+  "license": "ISC",
+  "devDependencies": {
+    "@bfchain/devkit": "^0.9.34",
+    "lerna": "^4.0.0",
+    "tslib": "^2.2.0"
+  }
+}

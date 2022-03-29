@@ -1,0 +1,24 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/bindThis.ts",
+    "src/cacheGetter.ts",
+    "src/expirableCacheGetter.ts",
+    "src/index.ts",
+    "src/PropArrayHelper.ts",
+    "src/quene.ts",
+    "src/throttleWrap.ts"
+  ],
+  "references": [
+    {
+      "path": "../extends-promise-out/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

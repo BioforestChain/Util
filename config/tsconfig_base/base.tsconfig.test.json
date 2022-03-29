@@ -1,0 +1,8 @@
+{
+  "extends": "./base.tsconfig.cjs",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false
+  }
+}

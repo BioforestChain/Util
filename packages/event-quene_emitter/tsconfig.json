@@ -1,0 +1,38 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/@types.ts",
+    "src/index.ts",
+    "src/QueneEventEmitter.ts"
+  ],
+  "references": [
+    {
+      "path": "../decorator/tsconfig.json"
+    },
+    {
+      "path": "../env/tsconfig.json"
+    },
+    {
+      "path": "../event-base/tsconfig.json"
+    },
+    {
+      "path": "../extends-error/tsconfig.json"
+    },
+    {
+      "path": "../extends-function/tsconfig.json"
+    },
+    {
+      "path": "../extends-iterator-is/tsconfig.json"
+    },
+    {
+      "path": "../extends-promise-out/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

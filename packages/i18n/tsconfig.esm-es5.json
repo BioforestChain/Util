@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig",
+  "mixin": [
+    "./tsconfig.json",
+    "../../config/tsconfig_base/base.tsconfig.esm-es5.json"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/esm-es5"
+  },
+  "references": [
+    {
+      "path": "../dep_inject/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../exception-error-code/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.esm-es5.json"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.test",
+  "compilerOptions": {
+    "outDir": "./build/test",
+    "rootDir": "./test"
+  },
+  "files": ["test/a.test.ts", "test/b.test.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.cjs.json"
+    }
+  ]
+}

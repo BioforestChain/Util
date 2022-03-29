@@ -1,0 +1,11 @@
+{
+  "extends": "./base.tsconfig.@types",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "transformPlugins": ["es2019"]
+  }
+}

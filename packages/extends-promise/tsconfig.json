@@ -1,0 +1,34 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/AggregateList.ts",
+    "src/DelayPromise.ts",
+    "src/index.ts",
+    "src/ParallelPool.ts",
+    "src/PromiseAbortError.ts",
+    "src/PromisePro.ts",
+    "src/sleep.ts",
+    "src/TaskList.ts"
+  ],
+  "references": [
+    {
+      "path": "../event/tsconfig.json"
+    },
+    {
+      "path": "../extends-error/tsconfig.json"
+    },
+    {
+      "path": "../extends-promise-out/tsconfig.json"
+    },
+    {
+      "path": "../extends-promise-safe/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

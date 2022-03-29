@@ -1,0 +1,36 @@
+{
+  "extends": "./tsconfig",
+  "mixin": [
+    "./tsconfig.json",
+    "../../config/tsconfig_base/base.tsconfig.esm-es5.json"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/esm-es5"
+  },
+  "references": [
+    {
+      "path": "../decorator/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../env/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../event-base/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../extends-error/tsconfig.json"
+    },
+    {
+      "path": "../extends-function/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../extends-iterator-is/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../extends-promise-out/tsconfig.esm-es5.json"
+    },
+    {
+      "path": "../typings/tsconfig.esm-es5.json"
+    }
+  ]
+}

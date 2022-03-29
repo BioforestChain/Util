@@ -1,0 +1,37 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/index.ts",
+    "src/mix.ts"
+  ],
+  "references": [
+    {
+      "path": "../dep_inject/tsconfig.json"
+    },
+    {
+      "path": "../exception-error-code/tsconfig.json"
+    },
+    {
+      "path": "../exception-generator/tsconfig.json"
+    },
+    {
+      "path": "../exception-logger/tsconfig.json"
+    },
+    {
+      "path": "../extends-error/tsconfig.json"
+    },
+    {
+      "path": "../logger/tsconfig.json"
+    },
+    {
+      "path": "../platform/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

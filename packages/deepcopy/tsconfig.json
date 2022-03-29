@@ -1,0 +1,24 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "src"
+  },
+  "references": [
+    {
+      "path": "../type_detect/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ],
+  "files": [
+    "src/buffer.ts",
+    "src/collection.ts",
+    "src/copier.ts",
+    "src/copy_map.ts",
+    "src/detector.ts",
+    "src/global.ts",
+    "src/index.ts"
+  ]
+}

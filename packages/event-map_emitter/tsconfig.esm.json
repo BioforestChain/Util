@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig",
+  "mixin": [
+    "./tsconfig.json",
+    "../../config/tsconfig_base/base.tsconfig.esm.json"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/esm"
+  },
+  "references": [
+    {
+      "path": "../event-base/tsconfig.esm.json"
+    },
+    {
+      "path": "../extends-function/tsconfig.esm.json"
+    },
+    {
+      "path": "../typings/tsconfig.esm.json"
+    }
+  ]
+}

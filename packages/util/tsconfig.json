@@ -1,0 +1,112 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src",
+    "paths": {
+      "@bfchain/util/performance": ["./src/performance.ts"]
+    }
+  },
+  "files": [
+    "src/flagsHelper.ts",
+    "src/index.ts",
+    "src/ipHelper.ts",
+    "src/lib/AOT.ts",
+    "src/lib/AsyncIteratorGenerator.ts",
+    "src/lib/BlizzardHash.ts",
+    "src/lib/eventsExtends.ts",
+    "src/lib/ObjectZoom.ts",
+    "src/lib/sequenceHelper.ts",
+    "src/performance.browser.ts",
+    "src/performance.node.ts",
+    "src/performance.ts",
+    "src/platformHelper.ts",
+    "src/timeHelper.ts"
+  ],
+  "references": [
+    {
+      "path": "../aborter/tsconfig.json"
+    },
+    {
+      "path": "../buffer/tsconfig.json"
+    },
+    {
+      "path": "../decorator/tsconfig.json"
+    },
+    {
+      "path": "../deepcopy/tsconfig.json"
+    },
+    {
+      "path": "../deepmix/tsconfig.json"
+    },
+    {
+      "path": "../dep_inject/tsconfig.json"
+    },
+    {
+      "path": "../encoding-binary/tsconfig.json"
+    },
+    {
+      "path": "../encoding-hex/tsconfig.json"
+    },
+    {
+      "path": "../encoding-utf8/tsconfig.json"
+    },
+    {
+      "path": "../env/tsconfig.json"
+    },
+    {
+      "path": "../event/tsconfig.json"
+    },
+    {
+      "path": "../exception/tsconfig.json"
+    },
+    {
+      "path": "../extends-error/tsconfig.json"
+    },
+    {
+      "path": "../extends-function/tsconfig.json"
+    },
+    {
+      "path": "../extends-iterator/tsconfig.json"
+    },
+    {
+      "path": "../extends-map/tsconfig.json"
+    },
+    {
+      "path": "../extends-object/tsconfig.json"
+    },
+    {
+      "path": "../extends-promise-out/tsconfig.json"
+    },
+    {
+      "path": "../extends-promise/tsconfig.json"
+    },
+    {
+      "path": "../extends-set/tsconfig.json"
+    },
+    {
+      "path": "../fast_deep_equal/tsconfig.json"
+    },
+    {
+      "path": "../i18n/tsconfig.json"
+    },
+    {
+      "path": "../lock-atom/tsconfig.json"
+    },
+    {
+      "path": "../logger/tsconfig.json"
+    },
+    {
+      "path": "../ms/tsconfig.json"
+    },
+    {
+      "path": "../platform/tsconfig.json"
+    },
+    {
+      "path": "../type_detect/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

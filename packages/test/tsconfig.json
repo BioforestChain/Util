@@ -1,0 +1,24 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/asyncIteratorGenerator.test.ts",
+    "src/depInject.test.ts",
+    "src/ipHelper.test.ts",
+    "src/logger.test.ts",
+    "src/mapExtends.test.ts",
+    "src/objectZoom.test.ts",
+    "src/promiseRace.test.ts"
+  ],
+  "references": [
+    {
+      "path": "../typings/tsconfig.json"
+    },
+    {
+      "path": "../util/tsconfig.json"
+    }
+  ]
+}

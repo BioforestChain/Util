@@ -1,0 +1,30 @@
+{
+  "name": "@bfchain/util-fast-deep-equal",
+  "version": "4.12.44",
+  "description": "The lodash method `_.cloneDeep` exported as a module.",
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "license": "MIT",
+  "keywords": "lodash-modularized, clonedeep",
+  "author": "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",
+  "contributors": [
+    "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",
+    "Blaine Bublitz <blaine.bublitz@gmail.com> (https://github.com/phated)",
+    "Mathias Bynens <mathias@qiwi.be> (https://mathiasbynens.be/)"
+  ],
+  "repository": "lodash/lodash",
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  },
+  "main": "build/cjs/index.js",
+  "type": "commonjs",
+  "module": "build/esm/index.js",
+  "files": [
+    "build"
+  ],
+  "dependencies": {
+    "@bfchain/util-type-detect": "4.12.44",
+    "@bfchain/util-typings": "4.12.44"
+  },
+  "types": "build/cjs/index.d.ts"
+}

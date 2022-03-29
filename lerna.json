@@ -1,0 +1,12 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "useWorkspaces": true,
+  "npmClient": "yarn",
+  "version": "4.12.45",
+  "publishConifg": {
+    "registry": "http://192.168.110.189:4873/"
+  },
+  "exact": true
+}

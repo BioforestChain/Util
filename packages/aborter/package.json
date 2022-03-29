@@ -1,0 +1,16 @@
+{
+  "name": "@bfchain/util-aborter",
+  "version": "4.12.44",
+  "main": "build/cjs/index.js",
+  "type": "commonjs",
+  "files": [
+    "build"
+  ],
+  "dependencies": {
+    "@bfchain/util-extends-promise-out": "4.12.44",
+    "@bfchain/util-extends-promise-safe": "4.12.44",
+    "@bfchain/util-typings": "4.12.44"
+  },
+  "module": "build/esm/index.js",
+  "types": "build/cjs/index.d.ts"
+}

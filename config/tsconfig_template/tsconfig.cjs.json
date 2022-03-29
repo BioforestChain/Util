@@ -1,0 +1,7 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "@assign#compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@bfchain/util-type-detect",
+  "version": "4.12.44",
+  "main": "build/cjs/index.js",
+  "type": "commonjs",
+  "module": "build/esm/index.js",
+  "files": [
+    "build"
+  ],
+  "dependencies": {
+    "@bfchain/util-typings": "4.12.44"
+  },
+  "types": "build/cjs/index.d.ts"
+}

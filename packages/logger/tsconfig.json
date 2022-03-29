@@ -1,0 +1,40 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src",
+    "paths": {
+      "@bfchain/util-logger/debug-creator": [
+        "./src/debug-creator.ts"
+      ]
+    }
+  },
+  "files": [
+    "src/@types.ts",
+    "src/common.ts",
+    "src/debug-creator.browser.ts",
+    "src/debug-creator.node.ts",
+    "src/debug-creator.ts",
+    "src/index.ts"
+  ],
+  "references": [
+    {
+      "path": "../decorator/tsconfig.json"
+    },
+    {
+      "path": "../env/tsconfig.json"
+    },
+    {
+      "path": "../extends-map/tsconfig.json"
+    },
+    {
+      "path": "../ms/tsconfig.json"
+    },
+    {
+      "path": "../platform/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/@types.ts",
+    "src/index.ts",
+    "src/PromiseOut.ts"
+  ],
+  "references": [
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}
