@@ -71,7 +71,7 @@
   "author": "Gaubee",
   "license": "ISC",
   "devDependencies": {
-    "@bfchain/devkit": "^0.9.34",
+    "@bfchain/devkit": "^0.0.1-alpha.3",
     "lerna": "^4.0.0",
     "tslib": "^2.2.0"
   }
