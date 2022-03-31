@@ -12,7 +12,7 @@
     "build"
   ],
   "dependencies": {
-    "@bfchain/util-dep-inject": "4.12.27",
+    "@bfchain/util-dep-inject": "0.0.1-alpha.4",
     "@bfchain/util-exception-error-code": "4.12.44",
     "@bfchain/util-typings": "4.12.44"
   },

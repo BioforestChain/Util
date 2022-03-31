@@ -50,7 +50,7 @@
     "@bfchain/util-decorator": "4.12.44",
     "@bfchain/util-deepcopy": "4.12.44",
     "@bfchain/util-deepmix": "4.12.44",
-    "@bfchain/util-dep-inject": "4.12.27",
+    "@bfchain/util-dep-inject": "0.0.1-alpha.4",
     "@bfchain/util-encoding-binary": "4.12.44",
     "@bfchain/util-encoding-hex": "4.12.44",
     "@bfchain/util-encoding-utf8": "4.12.44",
