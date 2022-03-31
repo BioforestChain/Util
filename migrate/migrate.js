@@ -23,7 +23,7 @@ const beforeInit = async () => {
     return init();
   }
   const workspaces = await getUserCmdInput('请输入您工作区的位置(相对路径)：');
-  workspaceRoot = path.join(__dirname, workspaces);
+  workspaceRoot = path.join(process.cwd(), workspaces);
   init();
 }
 beforeInit();
