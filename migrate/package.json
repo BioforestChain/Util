@@ -1,8 +1,11 @@
 {
-  "name": "migrate",
-  "version": "1.0.0",
-  "description": "1. 判断是否有@types.ts 类型文件\r     有：告知用户是否要进行替换\r     无：进行下一逻辑处理\r         判断文件是否有import <spe> 这样的语法\r             有：告知用户在哪个文件里面\r             无：不处理",
+  "name": "@bfchain/migrate",
+  "version": "1.0.1",
+  "description": "将代码风格向pkgm靠拢",
   "main": "migrate.js",
+  "bin": {
+    "migrate": "./migrate.bin.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

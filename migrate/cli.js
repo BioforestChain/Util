@@ -1,9 +1,20 @@
 const prompts = require('prompts');
 
-const logCmdArrMsg = (arrMsg) => {
-    chalk
+/**
+ * 请求用户是否要做出更改
+ * @param {*} tips 
+ * @returns
+ */
+const getUserCmdInput = (tips) => {
+    return new Promise(async (resolve, reject) => {
+        const response = await prompts({
+            type: 'text',
+            name: 'value',
+            message: tips
+        });
+        resolve(response.value);
+    })
 }
-
 
 /**
  * 请求用户是否要做出更改
@@ -11,7 +22,7 @@ const logCmdArrMsg = (arrMsg) => {
  * @returns 
  */
 const getUserCmdConfirm = (tips) => {
-    return new Promise(async (resolve,reject) => {
+    return new Promise(async (resolve, reject) => {
         const response = await prompts({
             type: 'confirm',
             name: 'value',
@@ -23,5 +34,6 @@ const getUserCmdConfirm = (tips) => {
 }
 
 module.exports = {
+    getUserCmdInput,
     getUserCmdConfirm
 }

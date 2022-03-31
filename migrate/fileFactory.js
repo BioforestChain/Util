@@ -43,7 +43,7 @@ const createReadStream = (path) => {
         out.setEncoding('utf8');
         out.on('data', (dataChunk) => {
             out.on('end', () => {
-              resolve(dataChunk);
+                resolve(dataChunk);
             })
         })
 
@@ -95,7 +95,15 @@ const readSrcDirAllFile = (srcDir) => {
     })
 }
 
-const getWorkspaceRoot = async (workspaceRoot) => {
+/**
+ * 获取工作区下的所有文件
+ * @param {*} workspaceRoot 
+ * @returns 
+ */
+const getWorkspaceContext = async (workspaceRoot) => {
+    if(!fsExistsSync(workspaceRoot)) {
+       throw new Error('工作目录不存在');
+    }
     const filesArrs = [],
         fileDirs = [];
     for (const item of fs.readdirSync(workspaceRoot)) {
@@ -110,10 +118,20 @@ const getWorkspaceRoot = async (workspaceRoot) => {
     };
 }
 
+//检测文件或者文件夹存在 nodeJS
+function fsExistsSync(path) {
+    try{
+        fs.accessSync(path,fs.F_OK);
+    }catch(e){
+        return false;
+    }
+    return true;
+}
+
 module.exports = {
     createWriteStream,
     createReadStream,
-    getWorkspaceRoot,
+    getWorkspaceContext,
     readSrcDirAllFile,
     reFileNameFactory
 }
