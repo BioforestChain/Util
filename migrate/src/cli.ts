@@ -1,11 +1,11 @@
-const prompts = require('prompts');
+import prompts from 'prompts';
 
 /**
  * 请求用户是否要做出更改
- * @param {*} tips 
+ * @param {string} tips 
  * @returns
  */
-const getUserCmdInput = (tips) => {
+export const getUserCmdInput = (tips:string):Promise<string> => {
     return new Promise(async (resolve, reject) => {
         const response = await prompts({
             type: 'text',
@@ -18,10 +18,10 @@ const getUserCmdInput = (tips) => {
 
 /**
  * 请求用户是否要做出更改
- * @param {*} tips 
+ * @param {string} tips 
  * @returns 
  */
-const getUserCmdConfirm = (tips) => {
+export const getUserCmdConfirm = (tips:string):Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
         const response = await prompts({
             type: 'confirm',
@@ -31,9 +31,4 @@ const getUserCmdConfirm = (tips) => {
         });
         resolve(response.value);
     })
-}
-
-module.exports = {
-    getUserCmdInput,
-    getUserCmdConfirm
 }

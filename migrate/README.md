@@ -16,6 +16,8 @@ git clone
 git install 
 
 npm link
+
+migrate
 ```
 
 
@@ -36,5 +38,5 @@ npm link
 3. 判断文件是否有import <spe> 这样的语法
 
     有：告知用户在哪个文件里面
-    
+
     无：进行下一逻辑处理

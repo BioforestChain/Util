@@ -1,21 +1,14 @@
-const path = require("node:path");
-const {
-  getWorkspaceContext,
-  createWriteStream,
-  createReadStream
-} = require('./fileFactory');
-const {
-  getUserCmdInput,
-  getUserCmdConfirm
-} = require("./cli");
-const os = require('os');
+import path from "node:path";
+import fs from "node:fs";
+import { getWorkspaceContext, createWriteStream, createReadStream } from './fileFactory';
+import { getUserCmdInput, getUserCmdConfirm } from "./cli";
+import os from 'os';
 
-let workspaceRoot = path.join(__dirname, "../packages");
+let workspaceRoot = path.join(process.cwd());
 const opinionFile = path.join(__dirname, 'opinionFile.md');
-const emptyFiles = []; // src下没有文件的文件（备用）
-const typeFiles = []; // type类型匹配到的文件
-const nodeFiles = []; // .node.ts 类型匹配到的文件
-const declareFiles = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法
+const typeFiles: string[] = []; // type类型匹配到的文件
+const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
+const declareFiles: string[] = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法
 
 const beforeInit = async () => {
   const result = await getUserCmdConfirm(`此工具将会帮助您的代码风格向pkgm靠拢 ${os.EOL} 您现在是否在您的工作目录下？`);
@@ -33,9 +26,7 @@ const init = async () => {
     fileDirs,
     filesArrs
   } = await getWorkspaceContext(workspaceRoot)
-  fileDirs.forEach(async (dir, index) => {
-    await mainMigrateFactory(filesArrs[index], dir);
-  });
+  fileDirs.forEach(async (dir, index) => await mainMigrateFactory(filesArrs[index] as string[] | string, dir));
   await askDeveloperOpinion();
   console.log('风格标记结束');
 }
@@ -69,51 +60,77 @@ const askDeveloperOpinion = async () => {
 
 /**
  * 收集匹配规则的文件
- * @param {*} files 
- * @param {*} srcDir 
+ * @param {FileArray | File} files 
+ * @param {string} dir 
  * @returns 
  */
-const mainMigrateFactory = async (files, srcDir) => {
-  if (files.length === 0) return emptyFiles.push(srcDir);
-  files.map(async (file, index) => {
-    const filesDir = path.join(srcDir, file);
-    if (/@type[s]?\.ts[x]?$/.test(file)) {
-      typeFiles.push(filesDir);
-      await declareFilesRule(filesDir)
+const mainMigrateFactory = async (files:Array<string> | string, dir:string) => {
+  if (!Array.isArray(files)) {
+    const stat = fs.lstatSync(files);
+    const is_direc = stat.isDirectory();
+    // 如果是文件，直接判断规则
+    if (!is_direc) {
+      fileFilterFactory(files)
     }
-
-    if (/\.[^d]+\.ts[x]?$/.test(file)) {
-      nodeFiles.push(filesDir);
-    }
+    return;
+  }
+  files.map(async (fileName, index) => {
+    const filesDir = path.join(dir, fileName);
+    fileFilterFactory(filesDir);
   })
 };
 
-const typeMigrateFactory = async (typeFiles) => {
-  console.log('typeMigrateFactory:', typeFiles);
+/**
+ * 把记录的文件写入
+ * @param {FileArray} typeFiles 
+ */
+const typeMigrateFactory = async (typeFiles:Array<string>) => {
   createWriteStream(opinionFile, typeFiles, '以下文件不符合pkgm的*.t.ts 风格');
 }
-
-const nodeMigrateFactory = (nodeFiles) => {
+/**
+ * 把记录的文件写入
+ * @param {FileArray} nodeFiles 
+ */
+const nodeMigrateFactory = (nodeFiles:Array<string>) => {
   createWriteStream(opinionFile, nodeFiles, '以下文件不符合pkgm的*#node.ts风格', {
     'flags': 'a'
   });
 }
-
-const declareMigrateFactory = (declareFiles) => {
+/**
+ * 把记录的文件写入
+ * @param {FileArray} declareFiles 
+ */
+const declareMigrateFactory = (declareFiles:Array<string>) => {
   createWriteStream(opinionFile, declareFiles, '@types.ts 这种文件，只用来declare，不可以出现import <spe>', {
     'flags': 'a'
   });
 }
 
 /**
+ * 处理文件规则
+ * @param {string} filesDir 
+ */
+const fileFilterFactory = async (filesDir:string) => {
+  const fileName = path.basename(filesDir);
+  if (/@type[s]?\.[t,j,m,c]s[x]?$/.test(fileName)) {
+    typeFiles.push(filesDir);
+    await declareFilesRule(filesDir)
+  }
+
+  if (/\.[^d]+\.[t,j,m,c]s[x]?$/.test(fileName)) {
+    nodeFiles.push(filesDir);
+  }
+}
+
+/**
  * 处理@types.ts里有import的
- * @param {*} filesDir 
+ * @param {string} filesDir 
  * @returns 
  */
-const declareFilesRule = (filesDir) => {
-  return new Promise(async (resolve) => {
+const declareFilesRule = (filesDir: string) => {
+  return new Promise<void>(async (resolve) => {
     const dataChunk = await createReadStream(filesDir);
-    if (/import\(.+\)/g.test(dataChunk)) {
+    if (/import\(.+\)/g.test(dataChunk as string)) {
       declareFiles.push(filesDir);
     }
     resolve()

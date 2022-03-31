@@ -1,6 +1,7 @@
-const path = require("node:path");
-const fs = require("node:fs");
-const os = require('os');
+import path from 'node:path';
+import * as fs from 'fs';
+import os from 'os';
+import { IWriteStreamFlag } from 'types/file';
 
 /**
  * 写入文件
@@ -8,7 +9,7 @@ const os = require('os');
  * @param {*} data 
  * @returns promise<Booblean>
  */
-const createWriteStream = (path, data, title, flag) => {
+export const createWriteStream = (path: string, data:Array<string>, title:string, flag?: IWriteStreamFlag) => {
     return new Promise((resolve, reject) => {
         let writeData = `${os.EOL} ${title} ${os.EOL}`;
         if (data.length !== 0) {
@@ -37,13 +38,13 @@ const createWriteStream = (path, data, title, flag) => {
  * @param {*} path 
  * @returns 
  */
-const createReadStream = (path) => {
+export const createReadStream = (path: string):Promise<string| Buffer> => {
     return new Promise((resolve, reject) => {
         const out = fs.createReadStream(path);
         out.setEncoding('utf8');
         out.on('data', (dataChunk) => {
             out.on('end', () => {
-                resolve(dataChunk);
+                return resolve(dataChunk);
             })
         })
 
@@ -59,7 +60,7 @@ const createReadStream = (path) => {
  * @param {newFileName} newFile 
  * @returns Promise<Boolean>
  */
-const reFileNameFactory = (oldFile, newFile) => {
+export const reFileNameFactory = (oldFile:string, newFile:string) => {
     return new Promise((resolve, reject) => {
         fs.rename(oldFile, newFile, (err) => {
             if (err) {
@@ -72,26 +73,18 @@ const reFileNameFactory = (oldFile, newFile) => {
 }
 
 /**
- * 获取src目录下的所有文件
+ * 获取目录下的所有文件
  * @param {path} pathName 
  * @returns Promise<path>
  */
-const readSrcDirAllFile = (srcDir) => {
+export const readSrcDirAllFile = (srcDir:string) => {
     return new Promise((resolve, reject) => {
-        fs.access(srcDir, function (err) {
-            if (err) {
-                return resolve([])
+        fs.readdir(srcDir, function (err, files) {
+            if (err !== null) {
+                return reject(err);
             }
-            if (!err) {
-                fs.readdir(srcDir, function (err, files) {
-                    if (err !== null) {
-                        return reject(err);
-                    }
-                    return resolve(files)
-                })
-            }
+            return resolve(files)
         })
-
     })
 }
 
@@ -100,7 +93,7 @@ const readSrcDirAllFile = (srcDir) => {
  * @param {*} workspaceRoot 
  * @returns 
  */
-const getWorkspaceContext = async (workspaceRoot) => {
+export const getWorkspaceContext = async (workspaceRoot:string) => {
     if(!fsExistsSync(workspaceRoot)) {
        throw new Error('工作目录不存在');
     }
@@ -109,8 +102,13 @@ const getWorkspaceContext = async (workspaceRoot) => {
     for (const item of fs.readdirSync(workspaceRoot)) {
         const projectRoot = path.join(workspaceRoot, item);
         const srcDir = path.join(projectRoot, "src");
-        fileDirs.push(srcDir);
-        filesArrs.push(await readSrcDirAllFile(srcDir));
+        if (fsExistsSync(srcDir)) {
+            fileDirs.push(srcDir);
+            filesArrs.push(await readSrcDirAllFile(srcDir));
+        } else {
+            fileDirs.push(workspaceRoot);
+            filesArrs.push(projectRoot);
+        }
     }
     return {
         fileDirs,
@@ -119,19 +117,12 @@ const getWorkspaceContext = async (workspaceRoot) => {
 }
 
 //检测文件或者文件夹存在 nodeJS
-function fsExistsSync(path) {
+export function fsExistsSync(path:string) {
     try{
-        fs.accessSync(path,fs.F_OK);
+        fs.accessSync(path);
     }catch(e){
         return false;
     }
     return true;
 }
 
-module.exports = {
-    createWriteStream,
-    createReadStream,
-    getWorkspaceContext,
-    readSrcDirAllFile,
-    reFileNameFactory
-}
