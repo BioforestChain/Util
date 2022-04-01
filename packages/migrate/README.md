@@ -3,7 +3,7 @@
 ### 使用方法
 
 ```bash
-npm install @bfchain/migrate -g
+yarn add @bfchain/migrate -g
 
 migrate
 ```
@@ -19,6 +19,8 @@ npm link
 
 migrate
 ```
+
+
 
 
 
@@ -40,3 +42,11 @@ migrate
     有：告知用户在哪个文件里面
 
     无：进行下一逻辑处理
+
+4. 判断是否有index.ts 不是入口文件直接写function
+
+    有：告知用户是哪个index文件
+
+    无：进行下一逻辑处理
+
+5. 判断

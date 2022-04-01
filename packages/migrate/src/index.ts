@@ -1,3 +1,3 @@
 #! /usr/bin/env node
 
-require('./migrate.js');
+import './cmd.js';

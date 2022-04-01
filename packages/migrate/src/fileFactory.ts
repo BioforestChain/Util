@@ -9,9 +9,9 @@ import { IWriteStreamFlag } from 'typings/file';
  * @param {*} data 
  * @returns promise<Booblean>
  */
-export const createWriteStream = (path: string, data:Array<string>, title:string, flag?: IWriteStreamFlag) => {
+export const createWriteStream = (path: string, data:string[], title:string, flag?: IWriteStreamFlag) => {
     return new Promise((resolve, reject) => {
-        let writeData = `${os.EOL} ${title} ${os.EOL}`;
+        let writeData = `${os.EOL} ## ${title} ${os.EOL} \`\`\``;
         if (data.length !== 0) {
             data.map((val) => {
                 writeData += `${os.EOL} ${val}`;
@@ -24,7 +24,7 @@ export const createWriteStream = (path: string, data:Array<string>, title:string
 
         input.write(writeData, () => {})
 
-        input.end(`${os.EOL} ------------------------- ${os.EOL}`, () => {
+        input.end(`${os.EOL} \`\`\` ${os.EOL}`, () => {
             resolve(true);
         })
         input.once('error', (err) => {
@@ -126,3 +126,12 @@ export function fsExistsSync(path:string) {
     return true;
 }
 
+export const migragteFactory = (typeFiles: string[],insert = false) => {
+    return async function(opinion:string,opinionFile:string) {
+        if (insert) {
+            await createWriteStream(opinionFile, typeFiles, opinion,{"flags":"a"});
+        } else {
+            await createWriteStream(opinionFile, typeFiles, opinion);
+        }
+    }
+}
