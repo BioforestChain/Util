@@ -3,7 +3,7 @@
 ### 使用方法
 
 ```bash
-npm install @bfchain/migrate -g
+yarn add @bfchain/migrate -g
 
 migrate
 ```

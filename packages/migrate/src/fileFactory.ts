@@ -127,11 +127,11 @@ export function fsExistsSync(path:string) {
 }
 
 export const migragteFactory = (typeFiles: string[],insert = false) => {
-    return async function(opinion:string) {
+    return async function(opinion:string,opinionFile:string) {
         if (insert) {
-            await createWriteStream(path.join(process.cwd(), 'opinionFile.md'), typeFiles, opinion,{"flags":"a"});
+            await createWriteStream(opinionFile, typeFiles, opinion,{"flags":"a"});
         } else {
-            await createWriteStream(path.join(process.cwd(), 'opinionFile.md'), typeFiles, opinion);
+            await createWriteStream(opinionFile, typeFiles, opinion);
         }
     }
 }
