@@ -1,0 +1,32 @@
+{
+  "name": "@bfchain/migrate",
+  "version": "1.0.1",
+  "description": "将代码风格向pkgm靠拢",
+  "main": "scr/migrate.ts",
+  "type": "commonjs",
+  "bin": {
+    "migrate": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "cross-env nodemon --watch src -e ts --exec tsc",
+    "build": "tsc"
+  },
+  "keywords": [
+    "BFChain"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "@types/prompts": "^2.0.14",
+    "cross-env": "^7.0.3",
+    "ts-lib": "^0.0.5",
+    "ts-node": "^10.7.0"
+  },
+  "files": [
+    "dist/**/*"
+  ]
+}
