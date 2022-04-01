@@ -5,7 +5,7 @@ import { getUserCmdInput, getUserCmdConfirm } from "./cli";
 import os from 'os';
 
 let workspaceRoot = path.join(process.cwd());
-const opinionFile = path.join(__dirname, 'opinionFile.md');
+const opinionFile = path.join(process.cwd(), 'opinionFile.md');
 const typeFiles: string[] = []; // type类型匹配到的文件
 const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
 const declareFiles: string[] = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法

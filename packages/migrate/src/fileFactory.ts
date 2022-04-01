@@ -1,7 +1,7 @@
 import path from 'node:path';
 import * as fs from 'fs';
 import os from 'os';
-import { IWriteStreamFlag } from 'types/file';
+import { IWriteStreamFlag } from 'typings/file';
 
 /**
  * 写入文件
