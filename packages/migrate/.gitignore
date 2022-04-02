@@ -17,5 +17,6 @@ src/**/.*
 yarn-error.log
 lerna-debug.log
 packages/*/tsconfig.tslint.json
+coverage
 *.md
 !README.md
