@@ -1,6 +1,5 @@
 import path from "node:path";
-import fs from "node:fs";
-import { getWorkspaceContext, createReadStream, migragteFactory } from "./fileFactory";
+import { getWorkspaceContext, createReadStream, migragteFactory, isDirectory, readSrcDirAllFile } from "./fileFactory";
 import { getUserCmdInput, getUserCmdConfirm } from "./cli";
 import os from "os";
 import { indexRule, nodeRule, typeDeclareRule, typeDRule } from "./rule";
@@ -12,6 +11,7 @@ const typeFiles: string[] = []; // type类型匹配到的文件
 const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
 const declareFiles: string[] = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法
 const indexFiles: string[] = []; // index.ts只允许作为入口文件
+
 
 export const beforeInit = async (agree: boolean = false,writeFileName?:string ) => {
   if (writeFileName !== undefined) {
@@ -87,11 +87,16 @@ const askDeveloperOpinion = async (agree: boolean = false) => {
  */
 const mainMigrateFactory = async (files: Array<string> | string, dir: string) => {
   if (!Array.isArray(files)) {
-    const stat = fs.lstatSync(files);
-    const is_direc = stat.isDirectory();
+    const is_direc = isDirectory(files);
     // 如果是文件，直接判断规则
     if (!is_direc) {
       fileFilterFactory(files);
+    } else {
+      const fileName = path.basename(files);
+      if (fileName === 'src') {
+        const deepFile = await readSrcDirAllFile(files)
+        mainMigrateFactory(deepFile, path.join(dir,'src'))
+      }
     }
     return;
   }
@@ -112,7 +117,7 @@ const fileFilterFactory = async (filesDir: string) => {
     await declareFilesRule(filesDir);
   }
 
-  if (/\.[^d]+\.[t,j,m,c]s[x]?$/.test(fileName)) {
+  if (/\.(?!test|d)([a-z0-9]+)\.[t,j,m,c]s[x]?$/.test(fileName)) {
     nodeFiles.push(filesDir);
   }
 
