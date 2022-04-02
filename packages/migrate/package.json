@@ -9,7 +9,9 @@
   },
   "scripts": {
     "dev": "cross-env nodemon --watch src -e ts --exec tsc",
-    "build": "tsc"
+    "build": "tsc",
+    "dev:test": "cross-env nodemon --watch test -e ts --exec tsc",
+    "test": "jest"
   },
   "keywords": [
     "BFChain"
@@ -21,10 +23,13 @@
     "prompts": "^2.4.2"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "@types/node": "^17.0.23",
     "@types/prompts": "^2.0.14",
     "cross-env": "^7.0.3",
-    "ts-lib": "^0.0.5"
+    "jest": "^27.5.1",
+    "ts-lib": "^0.0.5",
+    "ts-node": "^10.7.0"
   },
   "files": [
     "dist/**/*"

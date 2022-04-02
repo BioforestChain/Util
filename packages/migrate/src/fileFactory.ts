@@ -77,7 +77,7 @@ export const reFileNameFactory = (oldFile:string, newFile:string) => {
  * @param {path} pathName 
  * @returns Promise<path>
  */
-export const readSrcDirAllFile = (srcDir:string) => {
+export const readSrcDirAllFile = (srcDir:string):Promise<string[]> => {
     return new Promise((resolve, reject) => {
         fs.readdir(srcDir, function (err, files) {
             if (err !== null) {
@@ -89,7 +89,7 @@ export const readSrcDirAllFile = (srcDir:string) => {
 }
 
 /**
- * 获取工作区下的所有文件
+ * 获取src工作区下的所有文件
  * @param {*} workspaceRoot 
  * @returns 
  */
@@ -116,8 +116,8 @@ export const getWorkspaceContext = async (workspaceRoot:string) => {
     };
 }
 
-//检测文件或者文件夹存在 nodeJS
-export function fsExistsSync(path:string) {
+/**检测文件或者文件夹存在 */
+export const fsExistsSync = (path:string) => {
     try{
         fs.accessSync(path);
     }catch(e){
@@ -125,6 +125,13 @@ export function fsExistsSync(path:string) {
     }
     return true;
 }
+
+/** 判断是不是文件夹 */
+export const isDirectory = (path:string) => {
+    const stat = fs.lstatSync(path);
+    return stat.isDirectory();
+}
+
 
 export const migragteFactory = (typeFiles: string[],insert = false) => {
     return async function(opinion:string,opinionFile:string) {
