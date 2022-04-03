@@ -201,7 +201,7 @@ export class BrowserDebugCreater extends DebugCreater<string> {
       try {
         return JSON.stringify(v);
       } catch (error) {
-        return "[UnexpectedJSONParseError]: " + error.message;
+        return "[UnexpectedJSONParseError]: " + (error instanceof Error ? error.message : error);
       }
     },
     t(debug: Debug<string>, v: unknown) {

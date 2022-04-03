@@ -1,4 +1,4 @@
-export const isAsyncGeneratorInstance = (maybe: any) => {
+export const isAsyncGeneratorInstance = <T = AsyncGenerator>(maybe: any): maybe is T => {
   if (maybe && maybe.constructor) {
     return (
       typeof maybe.next === "function" &&
@@ -10,7 +10,7 @@ export const isAsyncGeneratorInstance = (maybe: any) => {
   }
   return false;
 };
-export const isGeneratorInstance = (maybe: any) => {
+export const isGeneratorInstance = <T = Generator>(maybe: any): maybe is T => {
   if (maybe) {
     return (
       typeof maybe.next === "function" &&

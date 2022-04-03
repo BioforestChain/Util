@@ -29,7 +29,7 @@ export class QueneEventEmitter<EM extends BFChainUtil.EventInOutMap>
     if (!handlerMap) {
       handlerMap = this._e[eventname] = new Map();
     } else if (handlerMap.has(handler)) {
-      console.warn(`重复监听[${opts.taskname || eventname}]事件，可能存在异常`);
+      console.warn(`重复监听[${opts.taskname || eventname.toString()}]事件，可能存在异常`);
     }
     if (opts.taskname === undefined) {
       opts.taskname = GetCallerInfo(this.on);
@@ -212,13 +212,13 @@ export class QueneEventEmitter<EM extends BFChainUtil.EventInOutMap>
             yield;
             const res = await handler(data, next);
             if (typeof res === "object") {
-              if (isAsyncGeneratorInstance(res)) {
-                return yield* res as AsyncGenerator<unknown, EM[K]["out"], unknown>;
-              } else if (isGeneratorInstance(res)) {
-                return yield* res as Generator<unknown, EM[K]["out"], unknown>;
+              if (isAsyncGeneratorInstance<AsyncGenerator<unknown, EM[K]["out"], unknown>>(res)) {
+                return yield* res;
+              } else if (isGeneratorInstance<Generator<unknown, EM[K]["out"], unknown>>(res)) {
+                return yield* res;
               }
             }
-            return res as EM[K]["out"];
+            return res as Awaited<EM[K]["out"]>;
           } catch (err) {
             this._emitErrorHanlder(err, eventname, data);
           } finally {
@@ -271,7 +271,7 @@ export class QueneEventEmitter<EM extends BFChainUtil.EventInOutMap>
    * @param name
    */
   protected _emitErrorHanlder<K extends keyof EM>(
-    err: Error,
+    err: unknown,
     // hanlder: BFChainUtil.MutArgEventHandler<EM[K]>,
     eventname: K,
     arg: EM[K]["in"],

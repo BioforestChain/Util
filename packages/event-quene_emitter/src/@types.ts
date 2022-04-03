@@ -54,7 +54,7 @@ declare namespace BFChainUtil {
 
   //#region catch error in out events
   type InnerErrorInOutHandlerArg<EM extends EventInOutMap, K extends keyof EM = keyof EM> = [
-    Error,
+    unknown,
     {
       // hanlder: InOutEventHandler<EM[K]>;
       eventname: K;

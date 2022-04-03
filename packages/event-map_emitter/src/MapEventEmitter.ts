@@ -175,7 +175,7 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
    * @param name
    */
   protected _emitErrorHanlder<K extends keyof this["TYPE"]>(
-    err: Error,
+    err: unknown,
     eventname: K,
     args: BFChainUtil.MutArg<EMX[K]>,
   ) {

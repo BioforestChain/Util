@@ -1,0 +1,17 @@
+/build
+/packages/*/build
+/dist
+*.tsbuildinfo
+*.log
+.node_modules
+node_modules
+package-lock.json
+.vscode
+.cache
+/docs
+src/**/.*
+.idea
+.project
+.settings
+.rpt2_cache
+packages/*/tsconfig.tslint.json

@@ -27,14 +27,24 @@ export class PromiseOut<T = unknown> {
 
   constructor() {
     this.promise = new Promise<T>((resolve, reject) => {
-      this.resolve = async (value: T | PromiseLike<T>) => {
+      this.resolve = (value: T | PromiseLike<T>) => {
         try {
           this.is_resolved = true;
           this.is_finished = true;
-          resolve((this.value = await value));
-          this._runThen();
-          this._innerFinallyArg = Object.freeze({ status: "resolved", result: this.value });
-          this._runFinally();
+          if (
+            /// when value is PromsieLike
+            typeof value === "object" &&
+            value !== null &&
+            "then" in value &&
+            typeof value.then === "function"
+          ) {
+            value.then(this.resolve, this.reject);
+          } else {
+            resolve((this.value = value as T));
+            this._runThen();
+            this._innerFinallyArg = Object.freeze({ status: "resolved", result: this.value });
+            this._runFinally();
+          }
         } catch (err) {
           this.reject(err);
         }

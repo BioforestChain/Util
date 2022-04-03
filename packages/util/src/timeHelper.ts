@@ -19,6 +19,7 @@ export class TimeHelper {
     @Inject(TIME_HELPER_ARGS.TIME_SPEED, { optional: true })
     public readonly TIME_SPEED = 1,
   ) {
+    this.SYSTEM_START_TIME = this.platformHelper.performance.timeOrigin;
     if (!(typeof TIME_SPEED === "number" && TIME_SPEED > 0)) {
       this.TIME_SPEED = 1;
     }
@@ -38,7 +39,7 @@ export class TimeHelper {
   }
 
   /**系统启动时间 */
-  readonly SYSTEM_START_TIME = this.platformHelper.performance.timeOrigin;
+  readonly SYSTEM_START_TIME: number;
   /**时间偏移量，毫秒 */
   time_offset_ms = 0;
   get BLOCKCHAIN_SYSTEM_START_TIME() {

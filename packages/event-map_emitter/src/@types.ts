@@ -72,7 +72,10 @@ declare namespace BFChainUtil {
   };
   type _EMObjectList<EM> = _EM_To_Object<EM>[keyof _EM_To_Object<EM>];
   //#region catch error events
-  type InnerErrorHanlderArg<EM, EMOL extends _EMObjectList<EM> = _EMObjectList<EM>> = [Error, EMOL];
+  type InnerErrorHanlderArg<EM, EMOL extends _EMObjectList<EM> = _EMObjectList<EM>> = [
+    unknown,
+    EMOL,
+  ];
   type InnerErrorHandler<EM> = MutArgEventHandler<InnerErrorHanlderArg<EM>>;
   //#endregion
   //#region watch any events

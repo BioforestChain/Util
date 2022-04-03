@@ -1,11 +1,11 @@
 {
   "extends": "./base.tsconfig.@types",
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2020",
     "module": "commonjs",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "transformPlugins": ["es2019"]
+    // "transformPlugins": ["es2019"]
   }
 }

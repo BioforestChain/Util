@@ -1,7 +1,7 @@
 {
   "extends": "./base.tsconfig.@types",
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2020",
     "module": "ESNext",
     "declaration": true,
     "declarationMap": false,
