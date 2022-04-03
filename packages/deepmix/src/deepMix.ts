@@ -92,7 +92,7 @@ function _safeDeepMix<L extends object[]>(objList: L): DeepMix<L> {
       return { ...latestPd, value: _safeDeepMix(matchedObjValueList.map(ov => ov.value)) };
     },
     ownKeys() {
-      const keys = new Set<string | symbol>();
+      const keys = new Set<ReturnType<typeof Reflect["ownKeys"]>[number]>();
       for (const obj of objList) {
         for (const key of Reflect.ownKeys(obj)) {
           keys.add(key);
