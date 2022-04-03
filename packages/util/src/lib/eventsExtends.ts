@@ -75,11 +75,12 @@ export function EventMapIsolation<E extends BFChainUtil.EventEmitter>(eventEmitt
  * 在使用事件清除的时候（`off`,`clear`），能之清理有经过隔离器来进行绑定的事件
  */
 export class EventCleanerIsolation<
-  T extends BFChainUtil.EventMap
+  T extends BFChainUtil.EventMap,
   // EE extends BFChainUtil.EventEmitter<T>,
   // EE extends  BFChainUtil.EventEmitter ,
   // T extends  BFChainUtil.EmitterEvents<EE>
-> implements BFChainUtil.EventEmitter<T> {
+> implements BFChainUtil.EventEmitter<T>
+{
   constructor(private eventEmitter: BFChainUtil.EventEmitter<T>) {}
   public readonly BINDED_EVENTS_MAP = new EventsMap<keyof T, BFChainUtil.MutArgEventHandler<any>>();
   on<K extends keyof T>(

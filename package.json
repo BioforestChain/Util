@@ -73,6 +73,7 @@
   "devDependencies": {
     "@bfchain/devkit": "^0.0.1-alpha.3",
     "lerna": "^4.0.0",
+    "prettier": "^2.6.2",
     "tslib": "^2.2.0"
   }
 }

@@ -12,10 +12,5 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": [
-    "src/@types.ts",
-    "src/index.ts",
-    "src/safePromiseRace.ts",
-    "src/safePromiseThen.ts"
-  ]
+  "files": ["src/@types.ts", "src/index.ts", "src/safePromiseRace.ts", "src/safePromiseThen.ts"]
 }

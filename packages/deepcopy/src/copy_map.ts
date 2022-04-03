@@ -18,7 +18,7 @@ function copyArrayBuffer<R extends ArrayBuffer>(value: R): R {
  * @return {Boolean}
  */
 function copyBoolean<R extends boolean>(value: R): R {
-  return !!(value.valueOf()) as R;
+  return !!value.valueOf() as R;
 }
 
 /**
@@ -59,7 +59,7 @@ function copyDate<R extends Date>(value: R): R {
  * @return {Number}
  */
 function copyNumber<R extends number>(value: R): R {
-  return +(value) as R;
+  return +value as R;
 }
 
 /**
@@ -79,7 +79,7 @@ function copyRegExp<R extends RegExp>(value: R): R {
  * @return {String}
  */
 function copyString<R extends string>(value: R): R {
-  return "" + (value) as R;
+  return ("" + value) as R;
 }
 
 /**

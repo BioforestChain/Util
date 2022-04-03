@@ -12,9 +12,11 @@ test("new PromiseRace", async (t) => {
   race.addRacer(aborter.abortedPromise);
 
   let result: number | undefined;
-  ignoreAwait(Promise.resolve(race.race()).then((res) => {
-    result = res;
-  }));
+  ignoreAwait(
+    Promise.resolve(race.race()).then((res) => {
+      result = res;
+    }),
+  );
   t.is(race.size, 1);
 
   await sleep(100);

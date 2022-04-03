@@ -12,9 +12,5 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": [
-    "src/@types.ts",
-    "src/errorCode.ts",
-    "src/index.ts"
-  ]
+  "files": ["src/@types.ts", "src/errorCode.ts", "src/index.ts"]
 }

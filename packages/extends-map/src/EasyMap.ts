@@ -3,7 +3,7 @@ export class EasyMap<K, V, F = K> extends Map<F, V> {
   constructor(
     public creater: (key: K, formatedKey: F) => V,
     entries?: ReadonlyArray<readonly [F, V]> | null,
-    public transformKey: (key: K) => F = (v) => (v as unknown) as F,
+    public transformKey: (key: K) => F = (v) => v as unknown as F,
     private readonly _afterDelete?: (key: F) => unknown,
   ) {
     super(entries);

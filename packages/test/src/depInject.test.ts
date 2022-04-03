@@ -9,7 +9,7 @@ import {
   cacheGetter,
 } from "@bfchain/util";
 
-test("Injectable group", t => {
+test("Injectable group", (t) => {
   (global as any).console = t;
   @Injectable({ group: true })
   class A {}
@@ -44,7 +44,7 @@ test("Injectable group", t => {
   t.true(groupAB.has(ac));
   t.true(groupAB.has(ab));
 });
-test("ModuleStroge mask", t => {
+test("ModuleStroge mask", (t) => {
   const m1 = new ModuleStroge([["a", 1]]);
   const m1_m1 = m1.installMask(
     new ModuleStroge([

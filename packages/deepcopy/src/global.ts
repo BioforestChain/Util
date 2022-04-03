@@ -1,20 +1,12 @@
 const freeGlobalThis =
-  typeof globalThis !== 'undefined' &&
+  typeof globalThis !== "undefined" &&
   globalThis !== null &&
   globalThis.Object === Object &&
   globalThis;
 
 const freeGlobal =
-  typeof global !== 'undefined' &&
-  global !== null &&
-  global.Object === Object &&
-  global;
+  typeof global !== "undefined" && global !== null && global.Object === Object && global;
 
-const freeSelf =
-  typeof self !== 'undefined' &&
-  self !== null &&
-  self.Object === Object &&
-  self;
+const freeSelf = typeof self !== "undefined" && self !== null && self.Object === Object && self;
 
-export const globalObject =
-  freeGlobalThis || freeGlobal || freeSelf || Function('return this')();
+export const globalObject = freeGlobalThis || freeGlobal || freeSelf || Function("return this")();

@@ -2,7 +2,8 @@
 
 type TREE = { [key: string]: TREE };
 export class BinaryTreeMap<V, K extends { [index: number]: number } = { [index: number]: number }>
-  implements Map<K, V> {
+  implements Map<K, V>
+{
   private _tree: TREE = {};
   clear(): void {
     throw new Error("Method not implemented.");

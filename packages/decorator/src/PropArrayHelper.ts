@@ -2,11 +2,7 @@ import { bindThis } from "./bindThis";
 
 // 存储在原型链上的数据（字符串）集合
 export class PropArrayHelper<T = any> {
-  constructor(
-    public pid = Math.random()
-      .toString(36)
-      .substr(2),
-  ) {}
+  constructor(public pid = Math.random().toString(36).substr(2)) {}
   CLASS_PROTO_ARRAYDATA_POOL = new Map<string | Symbol, Map<string, T[]>>();
   PA_ID_KEY = Symbol(`@PAID:${this.pid}`);
   @bindThis

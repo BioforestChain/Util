@@ -17,7 +17,7 @@ const simpleSleep = (ms: number) => new Promise((resolve) => setTimeout(resolve,
 export function FunctionQuener<
   ARGS extends unknown[] = any[],
   RES = any,
-  PR extends BFChainUtil.PromiseType<RES> = BFChainUtil.PromiseType<RES>
+  PR extends BFChainUtil.PromiseType<RES> = BFChainUtil.PromiseType<RES>,
 >(
   sourceFun: (...args: ARGS) => RES,
   opts: {
@@ -44,7 +44,7 @@ export function FunctionQuener<
       }
       try {
         const startTime = Date.now();
-        lock.resolve(((await sourceFun.apply(_this, args)) as unknown) as PR);
+        lock.resolve((await sourceFun.apply(_this, args)) as unknown as PR);
         if (bounceTime) {
           const restTime = bounceTime - (Date.now() - startTime);
           if (restTime > 1) {
@@ -100,7 +100,7 @@ type Parameters<T> = T extends (...args: infer P) => any ? P : any[];
 export function quene<
   T extends { [key: string]: any } = any,
   P extends string = any,
-  ARSG extends Parameters<T[P]> = Parameters<T[P]>
+  ARSG extends Parameters<T[P]> = Parameters<T[P]>,
 >(
   opts: {
     bounceTime?: number;

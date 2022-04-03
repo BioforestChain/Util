@@ -4,7 +4,7 @@ export class EasyWeakSet<K extends object, F extends object = K> {
   private _ws: WeakSet<F>;
   constructor(
     entries?: ReadonlyArray<F> | null,
-    public transformKey: (key: K) => F = v => (v as unknown) as F,
+    public transformKey: (key: K) => F = (v) => v as unknown as F,
     private readonly _afterDelete?: (key: F) => unknown,
   ) {
     this._ws = new WeakSet(entries);

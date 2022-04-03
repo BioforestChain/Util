@@ -4,7 +4,7 @@ export class EasySet<K, F = K> {
   private _set: Set<F>;
   constructor(
     entries?: Iterable<F> | null,
-    public transformKey: (key: K) => F = v => (v as unknown) as F,
+    public transformKey: (key: K) => F = (v) => v as unknown as F,
     private readonly _afterDelete?: (key: F) => unknown,
   ) {
     this._set = new Set(entries);

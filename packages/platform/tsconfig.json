@@ -4,12 +4,7 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": [
-    "src/common.ts",
-    "src/diff.browser.ts",
-    "src/diff.ts",
-    "src/index.ts"
-  ],
+  "files": ["src/common.ts", "src/diff.browser.ts", "src/diff.ts", "src/index.ts"],
   "references": [
     {
       "path": "../typings/tsconfig.json"

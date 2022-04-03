@@ -31,8 +31,8 @@ export function deepCopy<V>(value: V, options: { customizer?: Function } = {}) {
 
   const copiedValue = copy(value, valueType, customizer);
 
-  const references = new WeakMap([[(value as unknown) as object, copiedValue]]);
-  const visited = new WeakSet([(value as unknown) as object]);
+  const references = new WeakMap([[value as unknown as object, copiedValue]]);
+  const visited = new WeakSet([value as unknown as object]);
 
   return recursiveCopy(value, copiedValue, references, visited, customizer);
 }
@@ -76,7 +76,7 @@ function recursiveCopy<V>(
       break;
     case "Map":
     case "Set":
-      keys = ((value as unknown) as Map<any, any> | Set<any>).keys();
+      keys = (value as unknown as Map<any, any> | Set<any>).keys();
       break;
     default:
   }

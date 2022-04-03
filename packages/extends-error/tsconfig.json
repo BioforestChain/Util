@@ -4,10 +4,7 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": [
-    "src/CustomError.ts",
-    "src/index.ts"
-  ],
+  "files": ["src/CustomError.ts", "src/index.ts"],
   "references": [
     {
       "path": "../typings/tsconfig.json"

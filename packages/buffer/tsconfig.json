@@ -4,10 +4,7 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": [
-    "src/@types.ts",
-    "src/index.ts"
-  ],
+  "files": ["src/@types.ts", "src/index.ts"],
   "references": [
     {
       "path": "../typings/tsconfig.json"

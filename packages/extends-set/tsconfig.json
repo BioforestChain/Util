@@ -4,11 +4,7 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": [
-    "src/EasySet.ts",
-    "src/EasyWeakSet.ts",
-    "src/index.ts"
-  ],
+  "files": ["src/EasySet.ts", "src/EasyWeakSet.ts", "src/index.ts"],
   "references": [
     {
       "path": "../decorator/tsconfig.json"

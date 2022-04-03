@@ -43,7 +43,7 @@ export function Resolve<T extends {}>(
   const groups = getInjectionGroups(Factory);
 
   /**根据名称获取实例存储器中的对象 */
-  let instance: (T&Partial<OnInit&AfterInit>) | undefined;
+  let instance: (T & Partial<OnInit & AfterInit>) | undefined;
   if (isSingleton instanceof Factory) {
     moduleMap.set(moduleName, (instance = isSingleton));
   } else {

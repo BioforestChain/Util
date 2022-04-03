@@ -15,9 +15,5 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": [
-    "src/@types.ts",
-    "src/Aborter.ts",
-    "src/index.ts"
-  ]
+  "files": ["src/@types.ts", "src/Aborter.ts", "src/index.ts"]
 }

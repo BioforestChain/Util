@@ -4,9 +4,7 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": [
-    "src/index.ts"
-  ],
+  "files": ["src/index.ts"],
   "references": [
     {
       "path": "../extends-iterator-is/tsconfig.json"

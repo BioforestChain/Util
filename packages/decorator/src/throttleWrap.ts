@@ -21,9 +21,11 @@ export function throttleWrap(ms: number = 1000, plot = THROTTLE_WRAP_PLOT.WAIT_R
           setTimeout(() => {
             const res: Promise<any> = source_fun.apply(this, args);
             if (plot === THROTTLE_WRAP_PLOT.WAIT_RESULT_RETURN) {
-              ignoreAwait(res.then(resolve, reject).finally(() => {
-                run_lock = undefined;
-              }));
+              ignoreAwait(
+                res.then(resolve, reject).finally(() => {
+                  run_lock = undefined;
+                }),
+              );
             } else if (plot === THROTTLE_WRAP_PLOT.NO_WAIT_EXEC_TIME) {
               resolve(res);
               run_lock = undefined;

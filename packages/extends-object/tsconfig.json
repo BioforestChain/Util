@@ -9,8 +9,5 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": [
-    "src/cacheObjectGetter.ts",
-    "src/index.ts"
-  ]
+  "files": ["src/cacheObjectGetter.ts", "src/index.ts"]
 }

@@ -41,7 +41,7 @@ export class ObjectZoom<T extends { [key: string]: objValue }> {
     }
     /// 保存索引
     if (is_new_item) {
-      this.indexs.forEach(index => {
+      this.indexs.forEach((index) => {
         const indexKey = index.keyzoom.fromObject(res);
         let indexVal = index.valueRef.get(indexKey);
         if (!indexVal) {

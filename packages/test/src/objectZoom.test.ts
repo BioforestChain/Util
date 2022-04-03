@@ -1,6 +1,6 @@
 import test from "ava";
 import { ObjectZoom } from "@bfchain/util";
-test("objectZoom", async t => {
+test("objectZoom", async (t) => {
   type MyZOOM_OBJ = { a: number; b: string; c: boolean };
   const zoom = new ObjectZoom<MyZOOM_OBJ>(undefined, new Map([["a_b", ["a", "b"]]]));
   const zobj_1 = zoom.fromObject({ a: 1, b: "qaq", c: true });

@@ -19,19 +19,25 @@ export const declareFiles: string[] = []; // @types.ts 这种文件，只用来d
 export const indexFiles: string[] = []; // index.ts只允许作为入口文件
 
 /**
- * 
+ *
  * @param agree 是否同意直接写入
  * @param writeFileName 自定义文件名
  * @param yy 是否直接同意直接在当前目录检索
- * @returns 
+ * @returns
  */
-export const beforeInit = async (agree: boolean = false, writeFileName?: string,currentDirectory?:boolean) => {
+export const beforeInit = async (
+  agree: boolean = false,
+  writeFileName?: string,
+  currentDirectory?: boolean,
+) => {
   if (writeFileName !== undefined) {
     opinionFile = path.join(process.cwd(), `${writeFileName}.md`);
   }
-  const result = currentDirectory ? true : await getUserCmdConfirm(
-    `此工具将会帮助您的代码风格向pkgm靠拢 ${os.EOL} 您现在是否在您的工作目录下？`,
-  );
+  const result = currentDirectory
+    ? true
+    : await getUserCmdConfirm(
+        `此工具将会帮助您的代码风格向pkgm靠拢 ${os.EOL} 您现在是否在您的工作目录下？`,
+      );
   if (result) {
     return init(agree);
   }
@@ -137,7 +143,7 @@ export const fileFilterFactory = async (filesDir: string) => {
   }
 
   if (/index.ts/.test(fileName)) {
-     await indexFilesRule(filesDir);
+    await indexFilesRule(filesDir);
   }
 };
 

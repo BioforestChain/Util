@@ -27,7 +27,7 @@ export function expirableCacheGetter(
           return Date.now() - cacheTime > timeout;
         };
         const sou_source_fun = source_fun;
-        source_fun = function(this: typeof target) {
+        source_fun = function (this: typeof target) {
           try {
             return sou_source_fun.apply(this, arguments as any);
           } finally {
@@ -37,7 +37,7 @@ export function expirableCacheGetter(
       } else {
         expirableChecker = () => true;
         const sou_source_fun = source_fun;
-        source_fun = function(this: typeof target) {
+        source_fun = function (this: typeof target) {
           try {
             return sou_source_fun.apply(this, arguments as any);
           } finally {
@@ -50,7 +50,7 @@ export function expirableCacheGetter(
     } else {
       expirableChecker = expirationCondition;
     }
-    descriptor.get = function(this: any, ...args) {
+    descriptor.get = function (this: any, ...args) {
       if (CACHE_VALUE_SYMBOL in this && expirableChecker()) {
         return this[CACHE_VALUE_SYMBOL];
       } else {

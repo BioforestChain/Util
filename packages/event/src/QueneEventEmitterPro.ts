@@ -10,7 +10,8 @@ import { QueneEventEmitter } from "@bfchain/util-event-quene-emitter";
 /**一个极简的事件管理模块 */
 export class QueneEventEmitterPro<EM extends BFChainUtil.EventInOutMap>
   extends QueneEventEmitter<EM>
-  implements BFChainUtil.QueneEventEmitterPro<EM> {
+  implements BFChainUtil.QueneEventEmitterPro<EM>
+{
   /**触发事件监听 */
   emit<K extends keyof EM>(eventname: K, data: EM[K]["in"]) {
     /**

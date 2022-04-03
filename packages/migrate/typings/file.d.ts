@@ -1,4 +1,4 @@
 export interface IWriteStreamFlag {
-    encoding?: BufferEncoding,
-    flags?: string
+  encoding?: BufferEncoding;
+  flags?: string;
 }

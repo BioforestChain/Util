@@ -53,7 +53,7 @@ export class AOT {
     const self = this;
     return (target: unknown, name: string, des: PropertyDescriptor) => {
       const source_fun = des.value;
-      des.value = function(this: any, ...args: unknown[]) {
+      des.value = function (this: any, ...args: unknown[]) {
         const { condition } = self;
         if (self.compile_into) {
           this[name] = condition ? this[then_fun_name] : source_fun;
@@ -73,7 +73,7 @@ export class AOT {
     const self = this;
     return (target: unknown, name: string, des: PropertyDescriptor) => {
       const source_fun = des.value;
-      des.value = function(this: any, ...args: unknown[]) {
+      des.value = function (this: any, ...args: unknown[]) {
         const { condition } = self;
         if (self.compile_into) {
           if (!condition) {
@@ -86,9 +86,10 @@ export class AOT {
         if (!condition) {
           // 在条件不成立的时候，需要始终进行条件判断的等待
           const condition = this[condition_promise_fun_name];
-          return (condition instanceof Function
-            ? this[condition_promise_fun_name](...args)
-            : Promise.resolve(condition)
+          return (
+            condition instanceof Function
+              ? this[condition_promise_fun_name](...args)
+              : Promise.resolve(condition)
           ).then((pre_condition_res: unknown) => {
             if (skip_if_false && !pre_condition_res) {
               return;

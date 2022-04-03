@@ -27,8 +27,8 @@ test(`test ${nodeRule}`, async () => {
 });
 
 test(`test ${typeDeclareRule}`, async () => {
-    await expect(declareFiles.length).toBeGreaterThanOrEqual(1);
+  await expect(declareFiles.length).toBeGreaterThanOrEqual(1);
 });
 test(`test ${indexRule}`, async () => {
-    await expect(indexFiles.length).toBeGreaterThanOrEqual(1);
+  await expect(indexFiles.length).toBeGreaterThanOrEqual(1);
 });

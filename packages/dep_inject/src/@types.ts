@@ -16,6 +16,6 @@ declare namespace BFChainUtil {
   };
   type ResolvableOptions = {};
   type ConfigCustomInjectModule = Map<number, InjectModuleConfig>;
-  type AutoResolveMatedata =  Map<string, { injectModel: BFChainUtil.Constructor<object> }>
+  type AutoResolveMatedata = Map<string, { injectModel: BFChainUtil.Constructor<object> }>;
   //#endregion
 }

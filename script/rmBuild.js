@@ -10,4 +10,4 @@ matchRemover(
     deep === 2 && fs.statSync(fullpath).isDirectory() && file.includes("build"),
   2,
 );
-matchRemover(cachePath, _ => true);
+matchRemover(cachePath, (_) => true);

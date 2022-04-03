@@ -2,7 +2,7 @@ export class EasyWeakMap<K extends object, V, F extends object = K> extends Weak
   constructor(
     public creater: (key: K, formatedKey: F) => V,
     entries?: ReadonlyArray<[F, V]> | null,
-    public transformKey: (key: K) => F = (v) => (v as unknown) as F,
+    public transformKey: (key: K) => F = (v) => v as unknown as F,
     private readonly _afterDelete?: (key: F) => unknown,
   ) {
     super(entries);

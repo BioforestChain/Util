@@ -26,7 +26,7 @@ function namePackages(moduleBaseName) {
       } else {
         packageJson.name = `${moduleBaseName}-${packagesSortName
           .replace(/_/g, "-")
-          .replace(/[A-Z]/, c => "-" + c.toLocaleLowerCase())}`;
+          .replace(/[A-Z]/, (c) => "-" + c.toLocaleLowerCase())}`;
       }
       if (packagesSortName !== "typings") {
         const dependencies = packageJson.dependencies || (packageJson.dependencies = {});

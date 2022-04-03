@@ -48,7 +48,7 @@ function _safeDeepMix<L extends object[]>(objList: L): DeepMix<L> {
   }
   return new Proxy(objList[0] as DeepMix<L>, {
     get(t, prop, r) {
-      const matchedObjList = objList.filter(obj => Reflect.has(obj, prop));
+      const matchedObjList = objList.filter((obj) => Reflect.has(obj, prop));
       if (matchedObjList.length === 0) {
         return undefined;
       }
@@ -56,8 +56,8 @@ function _safeDeepMix<L extends object[]>(objList: L): DeepMix<L> {
         return Reflect.get(matchedObjList[0], prop);
       }
       /// 如果有object，那么优先object
-      const matchedValueList = matchedObjList.map(obj => Reflect.get(obj, prop));
-      const mergeableMatchedValueList = matchedValueList.filter(value => mergeAble(value));
+      const matchedValueList = matchedObjList.map((obj) => Reflect.get(obj, prop));
+      const mergeableMatchedValueList = matchedValueList.filter((value) => mergeAble(value));
       /// 如果都是无法合并的值，那么直接返回最后一个就行了
       if (mergeableMatchedValueList.length === 0) {
         return matchedValueList[matchedValueList.length - 1];
@@ -66,7 +66,7 @@ function _safeDeepMix<L extends object[]>(objList: L): DeepMix<L> {
       return _safeDeepMix(mergeableMatchedValueList);
     },
     getOwnPropertyDescriptor(t, prop) {
-      const matchedObjList = objList.filter(obj => Reflect.has(obj, prop));
+      const matchedObjList = objList.filter((obj) => Reflect.has(obj, prop));
       if (matchedObjList.length === 0) {
         return undefined;
       }
@@ -74,11 +74,11 @@ function _safeDeepMix<L extends object[]>(objList: L): DeepMix<L> {
         return Object.getOwnPropertyDescriptor(matchedObjList[0], prop);
       }
       /// 如果有object，那么优先object
-      const matchedObjValueList = matchedObjList.map(obj => ({
+      const matchedObjValueList = matchedObjList.map((obj) => ({
         obj,
         value: Reflect.get(obj, prop),
       }));
-      const mergeableMatchedObjValueList = matchedObjValueList.filter(ov => mergeAble(ov.value));
+      const mergeableMatchedObjValueList = matchedObjValueList.filter((ov) => mergeAble(ov.value));
 
       const latestPd = Object.getOwnPropertyDescriptor(
         matchedObjValueList[matchedObjValueList.length - 1].obj,
@@ -89,7 +89,7 @@ function _safeDeepMix<L extends object[]>(objList: L): DeepMix<L> {
         return latestPd;
       }
       /// 如果能够合并，那么进入合并模式
-      return { ...latestPd, value: _safeDeepMix(matchedObjValueList.map(ov => ov.value)) };
+      return { ...latestPd, value: _safeDeepMix(matchedObjValueList.map((ov) => ov.value)) };
     },
     ownKeys() {
       const keys = new Set<ReturnType<typeof Reflect["ownKeys"]>[number]>();

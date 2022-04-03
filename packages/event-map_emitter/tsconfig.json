@@ -4,11 +4,7 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": [
-    "src/@types.ts",
-    "src/index.ts",
-    "src/MapEventEmitter.ts"
-  ],
+  "files": ["src/@types.ts", "src/index.ts", "src/MapEventEmitter.ts"],
   "references": [
     {
       "path": "../event-base/tsconfig.json"

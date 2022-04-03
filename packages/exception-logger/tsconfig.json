@@ -15,8 +15,5 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": [
-    "src/index.ts",
-    "src/LogGenerator.ts"
-  ]
+  "files": ["src/index.ts", "src/LogGenerator.ts"]
 }

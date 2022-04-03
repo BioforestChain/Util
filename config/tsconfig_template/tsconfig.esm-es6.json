@@ -1,9 +1,6 @@
 {
   "extends": "./tsconfig",
-  "@assign#mixin": [
-    "./tsconfig.json",
-    "../../config/tsconfig_base/base.tsconfig.esm-es6.json"
-  ],
+  "@assign#mixin": ["./tsconfig.json", "../../config/tsconfig_base/base.tsconfig.esm-es6.json"],
   "@assign#compilerOptions": {
     "outDir": "./build/esm-es6"
   }

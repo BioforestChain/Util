@@ -8,7 +8,8 @@ import {
 } from "@bfchain/util-event-base";
 
 export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | EM2>
-  implements BFChainUtil.EventEmitterMix<EM, EM2> {
+  implements BFChainUtil.EventEmitterMix<EM, EM2>
+{
   /**导出类型 */
   TYPE!: EMX;
 
@@ -135,7 +136,7 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
       );
       console.log(
         ...eventDebugStyle.head("%s ARGS:", eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE),
-        ...args as unknown[],
+        ...(args as unknown[]),
       );
     }
     if (eventMap) {

@@ -157,7 +157,7 @@ export class ModuleStroge implements Map<BFChainUtil.MODULE_ID_TYPE, any> {
    */
   groupInsert(groupName: BFChainUtil.MODULE_ID_TYPE, instance: unknown) {
     const pluginCollection =
-      this._groupCollection || (this._groupCollection = new EasyMap(name => new Set()));
+      this._groupCollection || (this._groupCollection = new EasyMap((name) => new Set()));
     const plugins = pluginCollection.forceGet(groupName);
     plugins.add(instance);
   }

@@ -43,16 +43,14 @@ export class FlagsHelper {
    */
   parse(flags: string) {
     const stringValueCache: string[] = [];
-    const stringPlaceholder = `_PLACE_${Math.random()
-      .toString(36)
-      .slice(2)}_HOLDER_`;
+    const stringPlaceholder = `_PLACE_${Math.random().toString(36).slice(2)}_HOLDER_`;
     const flagList = flags
-      .replace(QuotedStringReg, m => {
+      .replace(QuotedStringReg, (m) => {
         stringValueCache.push(m);
         return stringPlaceholder;
       })
       .split(/\s+/)
-      .filter(flag => !!flag);
+      .filter((flag) => !!flag);
     const flagMap = new Map<string, boolean | number | string | undefined>();
     for (const flag of flagList) {
       const equal = flag.indexOf("=");
@@ -71,7 +69,7 @@ export class FlagsHelper {
             )} is invilde.`,
           );
         }
-        param = flag.substr(equal + 1).replace(new RegExp(stringPlaceholder, "g"), ph => {
+        param = flag.substr(equal + 1).replace(new RegExp(stringPlaceholder, "g"), (ph) => {
           const sourceStr = stringValueCache.shift();
           if (!sourceStr) {
             throw new Error();
