@@ -137,6 +137,12 @@ export const isDirectory = (path: string) => {
   return stat.isDirectory();
 };
 
+/**
+ * 写文件的适配器
+ * @param typeFiles 
+ * @param insert 
+ * @returns 
+ */
 export const migragteFactory = (typeFiles: string[], insert = false) => {
   return async function (opinion: string, opinionFile: string) {
     if (insert) {

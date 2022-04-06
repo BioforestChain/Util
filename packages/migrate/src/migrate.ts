@@ -22,7 +22,7 @@ export const indexFiles: string[] = []; // index.ts只允许作为入口文件
  *
  * @param agree 是否同意直接写入
  * @param writeFileName 自定义文件名
- * @param yy 是否直接同意直接在当前目录检索
+ * @param currentDirectory 是否直接同意直接在当前目录检索
  * @returns
  */
 export const beforeInit = async (
@@ -30,9 +30,11 @@ export const beforeInit = async (
   writeFileName?: string,
   currentDirectory?: boolean,
 ) => {
+  // 如果用户使用了自定义文件名
   if (writeFileName !== undefined) {
     opinionFile = path.join(process.cwd(), `${writeFileName}.md`);
   }
+  // 用户在命令行直接同意在当前目录检索，则不再询问用户
   const result = currentDirectory
     ? true
     : await getUserCmdConfirm(
@@ -51,11 +53,11 @@ export const agreeRecordAllData = async (writeFileName?: string) => {
 };
 
 export const init = async (agree: boolean = false) => {
-  console.log(workspaceRoot);
   const { fileDirs, filesArrs } = await getWorkspaceContext(workspaceRoot);
   fileDirs.forEach(
     async (dir, index) => await mainMigrateFactory(filesArrs[index] as string[] | string, dir),
   );
+  // agree=true 表示用户需要全部记录下来
   if (agree) {
     await askDeveloperOpinion(agree);
   } else {
@@ -69,28 +71,28 @@ export const init = async (agree: boolean = false) => {
  */
 const askDeveloperOpinion = async (agree: boolean = false) => {
   if (typeFiles.length !== 0) {
-    console.log(typeFiles);
+    console.log(typeFiles); // 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${typeDRule} ${tip}`);
     if (result) {
       await migragteFactory(typeFiles)(typeDRule, opinionFile);
     }
   }
   if (nodeFiles.length !== 0) {
-    console.log(nodeFiles);
+    console.log(nodeFiles);// 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${nodeRule} ${tip}`);
     if (result) {
       await migragteFactory(nodeFiles, true)(nodeRule, opinionFile);
     }
   }
   if (declareFiles.length !== 0) {
-    console.log(declareFiles);
+    console.log(declareFiles);// 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${typeDeclareRule} ${tip}`);
     if (result) {
       await migragteFactory(declareFiles, true)(typeDeclareRule, opinionFile);
     }
   }
   if (indexFiles.length !== 0) {
-    console.log(indexFiles);
+    console.log(indexFiles);// 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${indexRule} ${tip}`);
     if (result) {
       await migragteFactory(indexFiles, true)(indexRule, opinionFile);
@@ -109,13 +111,13 @@ export const mainMigrateFactory = async (files: Array<string> | string, dir: str
     const is_direc = isDirectory(files);
     // 如果是文件，直接判断规则
     if (!is_direc) {
-      await fileFilterFactory(files);
-    } else {
-      const fileName = path.basename(files);
-      if (fileName === "src") {
-        const deepFile = await readSrcDirAllFile(files);
-        await mainMigrateFactory(deepFile, path.join(dir, "src"));
-      }
+      return await fileFilterFactory(files);
+    }
+    // 如果不是文件，只检测src目录
+    const fileName = path.basename(files);
+    if (fileName === "src") {
+      const deepFile = await readSrcDirAllFile(files);
+      await mainMigrateFactory(deepFile, path.join(dir, "src"));
     }
     return;
   }
