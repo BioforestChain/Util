@@ -1,3 +1,4 @@
+import { isPromiseLike } from "@bfchain/util-extends-promise-is";
 type InnerFinallyArg<T> =
   | {
       readonly status: "resolved";
@@ -29,18 +30,12 @@ export class PromiseOut<T = unknown> {
     this.promise = new Promise<T>((resolve, reject) => {
       this.resolve = (value: T | PromiseLike<T>) => {
         try {
-          this.is_resolved = true;
-          this.is_finished = true;
-          if (
-            /// when value is PromsieLike
-            typeof value === "object" &&
-            value !== null &&
-            "then" in value &&
-            typeof value.then === "function"
-          ) {
+          if (isPromiseLike(value)) {
             value.then(this.resolve, this.reject);
           } else {
-            resolve((this.value = value as T));
+            this.is_resolved = true;
+            this.is_finished = true;
+            resolve((this.value = value));
             this._runThen();
             this._innerFinallyArg = Object.freeze({ status: "resolved", result: this.value });
             this._runFinally();

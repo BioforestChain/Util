@@ -4,18 +4,19 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
+  "files": [
+    "src/index.ts",
+    "src/ReactiveArray.ts"
+  ],
   "references": [
     {
       "path": "../extends-promise-out/tsconfig.json"
     },
     {
+      "path": "../extends-promise-is/tsconfig.json"
+    },
+    {
       "path": "../typings/tsconfig.json"
     }
-  ],
-  "files": [
-    "src/@types.ts",
-    "src/index.ts",
-    "src/safePromiseRace.ts",
-    "src/safePromiseThen.ts"
   ]
 }
