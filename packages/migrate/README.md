@@ -31,24 +31,29 @@ migrate -y
 自定义写入文件的名称
 
 ```
-migrate -f opinion
+migrate -f <fileName>
+```
+
+同意在当前文件夹下，并且进行记录
+```
+migtate -yy 
 ```
 
 ### 判定规则
 
-1. 判断是否有@types.ts 类型文件
+1. 判断是否有@types.ts 类型文件 : 相对应pkgm的代码风格，就是 *.type.ts 文件
 
    有：告知用户是否要进行记录
 
    无：进行下一逻辑处理
 
-2. 判断是否有/\..+\.ts$/（.node.ts|.web.ts）文件
+2. 判断是否有/\..+\.ts$/（.node.ts|.web.ts）文件: .node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts
 
    有：告知用户是否要进行记录
 
    无：进行下一逻辑处理
 
-3. 判断文件是否有 import <spe> 这样的语法
+3. 判断@type文件是否有 import <spe> 这样的语法: @types.ts 这种文件，只用来declare，不可以出现import <spe>
 
    有：告知用户在哪个文件里面
 
@@ -60,8 +65,3 @@ migrate -f opinion
 
    无：进行下一逻辑处理
 
-5. 判断 typings 文件夹里有没有不是\*.d.ts 类型文件
-
-   有：告知用户是否进行记录
-   
-   无：进行下一逻辑处理
