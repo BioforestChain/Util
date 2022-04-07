@@ -10,6 +10,7 @@ import { getUserCmdInput, getUserCmdConfirm } from "./cli";
 import os from "os";
 import { indexRule, nodeRule, typeDeclareRule, typeDRule } from "./rule";
 
+const log = console.log;
 let workspaceRoot = path.join(process.cwd());
 let opinionFile = path.join(process.cwd(), "opinionFile.md");
 const tip = "是否要把以上文件记录下来?";
@@ -63,7 +64,7 @@ export const init = async (agree: boolean = false) => {
   } else {
     await askDeveloperOpinion();
   }
-  console.log("风格标记结束");
+  log("风格标记结束");
 };
 
 /**
@@ -71,28 +72,28 @@ export const init = async (agree: boolean = false) => {
  */
 const askDeveloperOpinion = async (agree: boolean = false) => {
   if (typeFiles.length !== 0) {
-    console.log(typeFiles); // 不要删除
+    log(typeFiles); // 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${typeDRule} ${tip}`);
     if (result) {
       await migragteFactory(typeFiles)(typeDRule, opinionFile);
     }
   }
   if (nodeFiles.length !== 0) {
-    console.log(nodeFiles);// 不要删除
+    log(nodeFiles);// 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${nodeRule} ${tip}`);
     if (result) {
       await migragteFactory(nodeFiles, true)(nodeRule, opinionFile);
     }
   }
   if (declareFiles.length !== 0) {
-    console.log(declareFiles);// 不要删除
+    log(declareFiles);// 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${typeDeclareRule} ${tip}`);
     if (result) {
       await migragteFactory(declareFiles, true)(typeDeclareRule, opinionFile);
     }
   }
   if (indexFiles.length !== 0) {
-    console.log(indexFiles);// 不要删除
+    log(indexFiles);// 不要删除
     const result = agree ? true : await getUserCmdConfirm(`${indexRule} ${tip}`);
     if (result) {
       await migragteFactory(indexFiles, true)(indexRule, opinionFile);

@@ -1,6 +1,8 @@
 import { createReadStream, readSrcDirAllFile } from "./fileFactory";
 import path from "path";
 import { watchFactory } from "./watch";
+import chalk from 'chalk';
+const log = console.log;
 
 const judgeBfspBfsw = async (folder: string) => {
 
@@ -67,5 +69,5 @@ const runDoctor = async (pathName: string) => {
  * @param path
  */
 export const operatingRoom = (path: string) => {
-  console.log("xxxx", path);
+    log(chalk.blue(path) + ' World' + chalk.red('!'));
 };
