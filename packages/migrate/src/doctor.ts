@@ -1,8 +1,12 @@
-import { createReadStream, readSrcDirAllFile } from "./fileFactory";
+import { createReadStream, getWorkspaceContext, readSrcDirAllFile } from "./fileFactory";
 import path from "path";
 import { watchFactory } from "./watch";
 import chalk from 'chalk';
+import { indexFiles, mainMigrateFactory, nodeFiles } from "./migrate";
+
 const log = console.log;
+let workspaceRoot = process.cwd(); // 用户当前位置
+let observerWorkspack:string[] = [];
 
 const judgeBfspBfsw = async (folder: string) => {
 
@@ -12,14 +16,14 @@ const judgeBfspBfsw = async (folder: string) => {
     throw new Error("🚨目录下没有内容");
   }
 
-  let packagesNames: string[] = await lernaFactory(folder, allFile);
-  watchFactory(folder, packagesNames);
+  observerWorkspack = await lernaFactory(folder, allFile);
+  watchFactory(folder, observerWorkspack); // 观察所有packages位置
 
   // 如果packagesNames没有东西 锁定为bfsp
-  if (packagesNames.length !== 0) return;
-  watchFactory(folder);
+  if (observerWorkspack.length !== 0) return;
+  watchFactory(folder); // 没有packages观察当前目录
 };
-judgeBfspBfsw(process.cwd());
+judgeBfspBfsw(workspaceRoot);
 
 /**
  * 处理有lerna的包名
@@ -49,18 +53,34 @@ const identifyLerna = async (folder: string) => {
   const jsonLerna = JSON.parse(lerna as string);
   const packagesNames = jsonLerna["packages"];
   if (!Array.isArray(packagesNames)) {
-    return packagesNames.match(/\b[A-Za-z]+\b/)[0] + "/**";
+    return packagesNames.match(/\b[A-Za-z]+\b/)[0];
   }
   const names: string[] = [];
   packagesNames.forEach((name) => {
-    names.push(name.match(/\b[A-Za-z]+\b/)[0] + "/**");
+    names.push(name.match(/\b[A-Za-z]+\b/)[0]);
   });
   return names;
 };
 
 
-const runDoctor = async (pathName: string) => {
-    
+const runDoctor = async () => {
+  console.log("observerWorkspack:",observerWorkspack)
+  // observerWorkspack为0表示为bfsp
+   if (observerWorkspack.length === 0) {
+     
+    return;
+   }
+   // bfsw
+   observerWorkspack.map(async pathName => {
+    const { fileDirs, filesArrs } = await getWorkspaceContext(path.join(workspaceRoot,pathName));
+    console.log(fileDirs)
+    await Promise.all( fileDirs.map(
+     async (dir, index) => await mainMigrateFactory(filesArrs[index] as string[] | string, dir),
+   ))
+   console.log(indexFiles,nodeFiles)
+   })
+
+
 };
 
 /**
@@ -68,6 +88,6 @@ const runDoctor = async (pathName: string) => {
  * 他会检测直到迁移完成
  * @param path
  */
-export const operatingRoom = (path: string) => {
-    log(chalk.blue(path) + ' World' + chalk.red('!'));
+export const operatingRoom = async (packages: string,ready:boolean = false) => {
+  if(ready) return runDoctor()
 };

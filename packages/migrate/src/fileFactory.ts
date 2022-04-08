@@ -93,6 +93,12 @@ export const readSrcDirAllFile = (srcDir: string): Promise<string[]> => {
   });
 };
 
+const excludePath:{[key:string]:boolean} = {
+  "node_modules": true,
+  "build": true,
+  "test": true,
+  "dist": true,
+}
 /**
  * 获取src工作区下的所有文件
  * @param {*} workspaceRoot
@@ -102,24 +108,30 @@ export const getWorkspaceContext = async (workspaceRoot: string) => {
   if (!fsExistsSync(workspaceRoot)) {
     throw new Error("工作目录不存在");
   }
-  const filesArrs = [],
-    fileDirs = [];
-  for (const item of fs.readdirSync(workspaceRoot)) {
-    const projectRoot = path.join(workspaceRoot, item);
-    const srcDir = path.join(projectRoot, "src");
-    if (fsExistsSync(srcDir)) {
-      fileDirs.push(srcDir);
-      filesArrs.push(await readSrcDirAllFile(srcDir));
-    } else {
-      fileDirs.push(workspaceRoot);
-      filesArrs.push(projectRoot);
-    }
+  const filesArrs: string[]= [],
+    fileDirs: string[] = [];
+  async function deepWorkspace(folderAddress:string) {
+      for (const pathName of fs.readdirSync(folderAddress)) {
+        const fileAddress = path.join(folderAddress, pathName);
+          if (excludePath[pathName] || /(^|[\/\\])\../.test(pathName)) continue; // 排除不要的(ps:正则是排除开头为.的文件夹)
+          if (isDirectory(fileAddress)) {
+           await deepWorkspace(path.join(fileAddress));
+           continue;
+          }
+          // 依赖收集
+          if (/\.ts$/.test(fileAddress)) { 
+            fileDirs.push(folderAddress);
+            filesArrs.push(fileAddress);
+          }
+      }
   }
+  await deepWorkspace(workspaceRoot)
   return {
     fileDirs,
     filesArrs,
   };
 };
+
 
 /**检测文件或者文件夹存在 */
 export const fsExistsSync = (path: string) => {

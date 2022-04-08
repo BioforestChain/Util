@@ -4,8 +4,10 @@ const program = new Command();
 
 program.command("doctor", "Like ESLint",{
   executableFile: 'doctor'
-});
+}).action(() => {
 
+});
+ 
 program
   .version("@bfchain/migrate2.0.0", "-v, --version")
   .option("-y, --yes", "Direct consent to write data") //默认记录文件名
