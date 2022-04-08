@@ -63,6 +63,12 @@
       "path": "../exception/tsconfig.json"
     },
     {
+      "path": "../extends-array/tsconfig.json"
+    },
+    {
+      "path": "../extends-async_iterator/tsconfig.json"
+    },
+    {
       "path": "../extends-error/tsconfig.json"
     },
     {

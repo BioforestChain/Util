@@ -1,0 +1,23 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/@types.ts",
+    "src/index.ts",
+    "src/MixAsyncIterator.ts"
+  ],
+  "references": [
+    {
+      "path": "../extends-promise/tsconfig.json"
+    },
+    {
+      "path": "../extends-array/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

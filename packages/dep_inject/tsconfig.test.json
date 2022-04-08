@@ -4,7 +4,10 @@
     "outDir": "./build/test",
     "rootDir": "./test"
   },
-  "files": ["test/a.test.ts", "test/b.test.ts"],
+  "files": [
+    "test/a.test.ts",
+    "test/b.test.ts"
+  ],
   "references": [
     {
       "path": "./tsconfig.cjs.json"

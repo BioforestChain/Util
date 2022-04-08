@@ -42,6 +42,12 @@
       "path": "../exception/tsconfig.esm.json"
     },
     {
+      "path": "../extends-array/tsconfig.esm.json"
+    },
+    {
+      "path": "../extends-async_iterator/tsconfig.esm.json"
+    },
+    {
       "path": "../extends-error/tsconfig.esm.json"
     },
     {
