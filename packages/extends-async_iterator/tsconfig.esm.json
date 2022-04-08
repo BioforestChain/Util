@@ -9,10 +9,10 @@
   },
   "references": [
     {
-      "path": "../extends-promise/tsconfig.esm.json"
+      "path": "../extends-array/tsconfig.esm.json"
     },
     {
-      "path": "../extends-array/tsconfig.esm.json"
+      "path": "../extends-promise/tsconfig.esm.json"
     },
     {
       "path": "../typings/tsconfig.esm.json"

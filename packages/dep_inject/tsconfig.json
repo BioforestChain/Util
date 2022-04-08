@@ -1,14 +1,14 @@
 {
   "files": [],
   "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src",
     "composite": true
   },
   "references": [
     {
-      "path": "./tsconfig.cjs.json"
-    },
-    {
-      "path": "./tsconfig.test.json"
+      "path": "../typings/tsconfig.json"
     }
-  ]
+  ],
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs"
 }

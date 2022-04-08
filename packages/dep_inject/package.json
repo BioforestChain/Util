@@ -18,12 +18,8 @@
     "url": "ssh://xmn-tfs-isn01:22/tfs/DefaultCollection/BFChain/_git/BFChain-Util"
   },
   "dependencies": {
-    "@bfchain/util-extends-map": "4.12.44",
     "@bfchain/util-typings": "4.12.44",
     "reflect-metadata": "^0.1.13"
-  },
-  "devDependencies": {
-    "@bfchain/util-dep-inject": "link:./"
   },
   "types": "build/cjs/index.d.ts"
 }

@@ -18,8 +18,10 @@
     "url": "ssh://xmn-tfs-isn01:22/tfs/DefaultCollection/BFChain/_git/BFChain-Util"
   },
   "dependencies": {
-    "rxjs": "7.5.5",
-    "@bfchain/util-typings": "4.12.44"
+    "@bfchain/util-extends-promise-is": "4.12.44",
+    "@bfchain/util-extends-promise-out": "4.12.44",
+    "@bfchain/util-typings": "4.12.44",
+    "rxjs": "7.5.5"
   },
   "types": "build/cjs/index.d.ts"
 }
