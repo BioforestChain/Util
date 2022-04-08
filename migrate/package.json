@@ -1,6 +1,6 @@
 {
   "name": "@bfchain/migrate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "将代码风格向pkgm靠拢",
   "main": "scr/migrate.ts",
   "type": "commonjs",

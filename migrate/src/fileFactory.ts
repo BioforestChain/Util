@@ -43,17 +43,21 @@ export const createWriteStream = (
  * @param {*} path
  * @returns
  */
-export const createReadStream = (path: string): Promise<string | Buffer> => {
+export const createReadStream = (FilePath: string): Promise<string | Buffer> => {
   return new Promise((resolve, reject) => {
-    const out = fs.createReadStream(path);
+    // 规范化路径，不然会出现系统不同，识别不到的问题
+    const out = fs.createReadStream(path.normalize(FilePath));
     out.setEncoding("utf8");
     out.on("data", (dataChunk) => {
-      out.on("end", () => {
-        return resolve(dataChunk);
-      });
+       return resolve(dataChunk);
     });
-
-    out.once("error", (err) => {
+    out.on('readable', () => {
+      // 如果是空文件
+      if (out.read() === null) {
+        return resolve('')
+      }
+    });
+    out.on("error", (err) => {
       reject(err);
     });
   });

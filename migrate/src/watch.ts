@@ -25,18 +25,18 @@ export const watchFactory = (watchPath: string,packages?:string[]) => {
     const log = console.log.bind(console);
     // Add event listeners.
     watcher
-      .on("add", (path) => operatingRoom(path))
-      .on("change", (path) =>operatingRoom(path))
-      .on("unlink", (path) => operatingRoom(path));
+      .on("add", (path) => operatingRoom("add",path))
+      .on("change", (path) =>operatingRoom("change",path))
+      .on("unlink", (path) => operatingRoom("unlink",path));
 
     // More possible events.
     watcher
-      .on("addDir", (path) => operatingRoom(path))
-      .on("unlinkDir", (path) => operatingRoom(path))
+      .on("addDir", (path) => operatingRoom("addDir",path))
+      .on("unlinkDir", (path) => operatingRoom("unlinkDir",path))
       .on("error", (error) => reject(error))
       .on("ready", (path: string) => {
         log("Initial scan complete. Ready for changes");
-        operatingRoom(path,true)
+        operatingRoom("ready",path)
       });
 
       resolve(true)

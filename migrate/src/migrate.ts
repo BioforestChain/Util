@@ -135,19 +135,22 @@ export const mainMigrateFactory = async (files: Array<string> | string, dir: str
  * @param {string} filesDir
  */
 export const fileFilterFactory = async (filesDir: string) => {
-  const fileName = path.basename(filesDir);
-  if (/@type[s]?\.[t,j,m,c]s[x]?$/.test(fileName)) {
-    typeFiles.push(filesDir);
-    await declareFilesRule(filesDir);
-  }
+  return new Promise(async (resolve) => {
+    const fileName = path.basename(filesDir);
+    if (/@type[s]?\.[t,j,m,c]s[x]?$/.test(fileName)) {
+      typeFiles.push(filesDir);
+     await declareFilesRule(filesDir);
+    }
+  
+    if (/\.(?!test|d)([a-z0-9]+)\.[t,j,m,c]s[x]?$/.test(fileName)) {
+      nodeFiles.push(filesDir);
+    }
 
-  if (/\.(?!test|d)([a-z0-9]+)\.[t,j,m,c]s[x]?$/.test(fileName)) {
-    nodeFiles.push(filesDir);
-  }
-
-  if (/index.ts/.test(fileName)) {
-    await indexFilesRule(filesDir);
-  }
+    if (/index\.ts/.test(fileName)) {
+      await indexFilesRule(filesDir);
+    }
+    resolve(filesDir)
+  })
 };
 
 /**
@@ -155,7 +158,7 @@ export const fileFilterFactory = async (filesDir: string) => {
  * @param {string} filesDir
  * @returns
  */
-const declareFilesRule = (filesDir: string) => {
+const declareFilesRule = async (filesDir: string) => {
   return new Promise<boolean>(async (resolve) => {
     const dataChunk = await createReadStream(filesDir);
     if (/import\(.+\)/g.test(dataChunk as string)) {
@@ -165,12 +168,12 @@ const declareFilesRule = (filesDir: string) => {
   });
 };
 
-const indexFilesRule = (filesDir: string) => {
+const indexFilesRule = async (filesDir: string) => {
   return new Promise<boolean>(async (resolve) => {
-    const dataChunk = await createReadStream(filesDir);
-    if (/(function)/g.test(dataChunk as string)) {
-      indexFiles.push(filesDir);
-    }
+      const dataChunk = await createReadStream(filesDir);
+      if (/(function)/g.test(dataChunk as string)) {
+        indexFiles.push(filesDir);
+      }
     resolve(true);
   });
 };
