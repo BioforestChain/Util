@@ -66,7 +66,7 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
   wrapAsyncRunner<ARGS extends any[], R>(task: (...args: ARGS) => R, label?: symbol) {
     return (...args: ARGS) => this.wrapAsync(task(...args), label, 1);
   }
-  async *wrapAsyncIterator<I>(aIterator: AsyncIterableIterator<I>) {
+  async *wrapAsyncIterator<I>(aIterator: AsyncIterator<I>) {
     const aborter = new PromiseOut<never>();
     const stackIndex = {
       aborter,
@@ -82,7 +82,7 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
       yield item.value;
     } while (true);
   }
-  async wrapAsyncIteratorReturn<R>(aIterator: AsyncGenerator<unknown, R, unknown>) {
+  async wrapAsyncIteratorReturn<R>(aIterator: AsyncIterator<unknown, R, unknown>) {
     do {
       const item = await this.wrapAsync(aIterator.next());
       if (item.done) {
