@@ -5,7 +5,7 @@
     "rootDir": "./src"
   },
   "files": [
-    "src/@types.ts",
+    "src/types.ts",
     "src/common.ts",
     "src/index.ts",
     "src/Inject.ts",
