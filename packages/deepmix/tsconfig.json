@@ -9,5 +9,9 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": ["src/deepMix.ts", "src/helper.ts", "src/index.ts"]
+  "files": [
+    "src/deepMix.ts",
+    "src/helper.ts",
+    "src/index.ts"
+  ]
 }

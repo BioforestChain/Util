@@ -4,7 +4,9 @@
     "outDir": "./build/cjs",
     "rootDir": "./src",
     "paths": {
-      "@bfchain/util/performance": ["./src/performance.ts"]
+      "@bfchain/util/performance": [
+        "./src/performance.ts"
+      ]
     }
   },
   "files": [
