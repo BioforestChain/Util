@@ -3,8 +3,8 @@ import path from "path";
 import os from "os";
 import { watchFactory } from "./watch";
 import chalk from "chalk";
-import { indexRule, nodeRule, typeDeclareRule, typeDRule } from "./rule";
-import { fileFilterFactory, indexFiles, nodeFiles, typeFiles, declareFiles } from "./migrate";
+import { fileFilterFactory, importRule, indexRule, nodeRule, privateImportRule, typeDeclareRule, typeDRule, warringTestTypeRule } from "./rule";
+import { indexFiles, nodeFiles, typeFiles, declareFiles, privateImportFiles, warringTestTypeFiles, importFiles } from "./migrate";
 
 const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
@@ -91,29 +91,50 @@ const runDoctor = async () => {
 
 const CommondNotification = () => {
   if (typeFiles.length !== 0) {
-    log(chalk.bold.yellow(`建议修改以下文件：${typeDRule}`));
+    log(chalk.bold.yellow(`${typeDRule}`));
     typeFiles.map((val) => {
       log(chalk.underline.yellow(val));
     });
   }
   if (nodeFiles.length !== 0) {
     log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.yellow(`建议修改以下文件：${nodeRule}`));
+    log(chalk.bold.yellow(`${nodeRule}`));
     nodeFiles.map((val) => {
       log(chalk.underline.yellow(val));
     });
   }
   if (declareFiles.length !== 0) {
     log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.red(`需要修改以下文件：${typeDeclareRule}`));
+    log(chalk.bold.red(`${typeDeclareRule}`));
     declareFiles.map((val) => {
       log(chalk.underline.red(val));
     });
   }
   if (indexFiles.length !== 0) {
     log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.red(`需要修改以下文件：${indexRule}`));
+    log(chalk.bold.blue(`${indexRule}`));
     indexFiles.map((val) => {
+      log(chalk.underline.blue(val));
+    });
+  }
+  if (privateImportFiles.length !== 0) {
+    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
+    log(chalk.bold.red(`${privateImportRule}`));
+    privateImportFiles.map((val) => {
+      log(chalk.underline.red(val));
+    });
+  }
+  if (warringTestTypeFiles.length !== 0) {
+    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
+    log(chalk.bold.yellow(`${warringTestTypeRule}`));
+    warringTestTypeFiles.map((val) => {
+      log(chalk.underline.yellow(val));
+    });
+  }
+  if (importFiles.length !== 0) {
+    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
+    log(chalk.bold.red(`${importRule}`));
+    importFiles.map((val) => {
       log(chalk.underline.red(val));
     });
   }
@@ -130,7 +151,10 @@ export const operatingRoom = async (type: string, packages: string| Error) => {
     (indexFiles.length = 0),
       (nodeFiles.length = 0),
       (typeFiles.length = 0),
-      (declareFiles.length = 0);
+      (declareFiles.length = 0),
+      (warringTestTypeFiles.length = 0),
+      (privateImportFiles.length = 0),
+      (importFiles.length = 0);
     return runDoctor();
   }
 };
