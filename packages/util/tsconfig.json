@@ -103,6 +103,12 @@
       "path": "../platform/tsconfig.json"
     },
     {
+      "path": "../reactive-stream/tsconfig.json"
+    },
+    {
+      "path": "../reactive-array/tsconfig.json"
+    },
+    {
       "path": "../type_detect/tsconfig.json"
     },
     {

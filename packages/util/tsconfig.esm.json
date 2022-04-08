@@ -84,6 +84,12 @@
       "path": "../platform/tsconfig.esm.json"
     },
     {
+      "path": "../reactive-stream/tsconfig.esm.json"
+    },
+    {
+      "path": "../reactive-array/tsconfig.esm.json"
+    },
+    {
       "path": "../type_detect/tsconfig.esm.json"
     },
     {
