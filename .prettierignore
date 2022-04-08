@@ -6,6 +6,9 @@
 .node_modules
 node_modules
 package-lock.json
+tsconfig.json
+tsconfig.esm.json
+tsconfig.esm-es5.json
 .vscode
 .cache
 /docs

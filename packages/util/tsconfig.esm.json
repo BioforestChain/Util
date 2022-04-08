@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig",
-  "mixin": ["./tsconfig.json", "../../config/tsconfig_base/base.tsconfig.esm.json"],
+  "mixin": [
+    "./tsconfig.json",
+    "../../config/tsconfig_base/base.tsconfig.esm.json"
+  ],
   "compilerOptions": {
     "outDir": "./build/esm"
   },
@@ -40,6 +43,12 @@
     },
     {
       "path": "../exception/tsconfig.esm.json"
+    },
+    {
+      "path": "../extends-array/tsconfig.esm.json"
+    },
+    {
+      "path": "../extends-async_iterator/tsconfig.esm.json"
     },
     {
       "path": "../extends-error/tsconfig.esm.json"
@@ -82,6 +91,12 @@
     },
     {
       "path": "../platform/tsconfig.esm.json"
+    },
+    {
+      "path": "../reactive-array/tsconfig.esm.json"
+    },
+    {
+      "path": "../reactive-stream/tsconfig.esm.json"
     },
     {
       "path": "../type_detect/tsconfig.esm.json"

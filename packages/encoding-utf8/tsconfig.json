@@ -4,10 +4,17 @@
     "outDir": "./build/cjs",
     "rootDir": "./src",
     "paths": {
-      "@bfchain/util-encoding-utf8/text": ["./src/text.ts"]
+      "@bfchain/util-encoding-utf8/text": [
+        "./src/text.ts"
+      ]
     }
   },
-  "files": ["src/index.ts", "src/text.browser.ts", "src/text.node.ts", "src/text.ts"],
+  "files": [
+    "src/index.ts",
+    "src/text.browser.ts",
+    "src/text.node.ts",
+    "src/text.ts"
+  ],
   "references": [
     {
       "path": "../platform/tsconfig.json"

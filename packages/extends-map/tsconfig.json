@@ -4,7 +4,11 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": ["src/EasyMap.ts", "src/EasyWeakMap.ts", "src/index.ts"],
+  "files": [
+    "src/EasyMap.ts",
+    "src/EasyWeakMap.ts",
+    "src/index.ts"
+  ],
   "references": [
     {
       "path": "../decorator/tsconfig.json"

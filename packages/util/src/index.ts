@@ -34,6 +34,8 @@ export * from "@bfchain/util-extends-set";
 export * from "@bfchain/util-logger";
 export * from "@bfchain/util-ms";
 export * from "@bfchain/util-platform";
+export * from "@bfchain/util-reactive-stream";
+export * from "@bfchain/util-reactive-array";
 
 export * from "@bfchain/util-type-detect";
 export * from "@bfchain/util-deepcopy";

@@ -4,7 +4,10 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": ["src/index.ts", "src/mix.ts"],
+  "files": [
+    "src/index.ts",
+    "src/mix.ts"
+  ],
   "references": [
     {
       "path": "../dep_inject/tsconfig.json"

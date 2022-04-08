@@ -9,5 +9,9 @@
       "path": "../typings/tsconfig.json"
     }
   ],
-  "files": ["src/@types.ts", "src/AtomLocksManager.ts", "src/index.ts"]
+  "files": [
+    "src/@types.ts",
+    "src/AtomLocksManager.ts",
+    "src/index.ts"
+  ]
 }

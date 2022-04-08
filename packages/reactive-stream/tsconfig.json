@@ -1,0 +1,30 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
+  "compilerOptions": {
+    "outDir": "./build/cjs",
+    "rootDir": "./src"
+  },
+  "files": [
+    "src/@types.ts",
+    "src/index.ts",
+    "src/operators/distinct.ts",
+    "src/operators/index.ts",
+    "src/operators/sample.ts",
+    "src/operators/slice.ts",
+    "src/operators/time.ts",
+    "src/ReactiveStream.ts",
+    "src/streams/index.ts",
+    "src/streams/interval.ts"
+  ],
+  "references": [
+    {
+      "path": "../extends-promise-is/tsconfig.json"
+    },
+    {
+      "path": "../extends-promise-out/tsconfig.json"
+    },
+    {
+      "path": "../typings/tsconfig.json"
+    }
+  ]
+}

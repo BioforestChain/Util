@@ -10,10 +10,10 @@
   ],
   "references": [
     {
-      "path": "../extends-promise-out/tsconfig.json"
+      "path": "../extends-promise-is/tsconfig.json"
     },
     {
-      "path": "../extends-promise-is/tsconfig.json"
+      "path": "../extends-promise-out/tsconfig.json"
     },
     {
       "path": "../typings/tsconfig.json"

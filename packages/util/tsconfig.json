@@ -4,7 +4,9 @@
     "outDir": "./build/cjs",
     "rootDir": "./src",
     "paths": {
-      "@bfchain/util/performance": ["./src/performance.ts"]
+      "@bfchain/util/performance": [
+        "./src/performance.ts"
+      ]
     }
   },
   "files": [
@@ -61,6 +63,12 @@
       "path": "../exception/tsconfig.json"
     },
     {
+      "path": "../extends-array/tsconfig.json"
+    },
+    {
+      "path": "../extends-async_iterator/tsconfig.json"
+    },
+    {
       "path": "../extends-error/tsconfig.json"
     },
     {
@@ -101,6 +109,12 @@
     },
     {
       "path": "../platform/tsconfig.json"
+    },
+    {
+      "path": "../reactive-array/tsconfig.json"
+    },
+    {
+      "path": "../reactive-stream/tsconfig.json"
     },
     {
       "path": "../type_detect/tsconfig.json"

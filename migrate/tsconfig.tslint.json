@@ -1,0 +1,7 @@
+{
+  "extends": "../../config/tsconfig_base/base.tsconfig.@types",
+  "mixin": ["./tsconfig.json"],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

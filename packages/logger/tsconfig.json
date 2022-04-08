@@ -4,7 +4,9 @@
     "outDir": "./build/cjs",
     "rootDir": "./src",
     "paths": {
-      "@bfchain/util-logger/debug-creator": ["./src/debug-creator.ts"]
+      "@bfchain/util-logger/debug-creator": [
+        "./src/debug-creator.ts"
+      ]
     }
   },
   "files": [

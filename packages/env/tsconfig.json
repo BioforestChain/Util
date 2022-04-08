@@ -4,7 +4,12 @@
     "outDir": "./build/cjs",
     "rootDir": "./src"
   },
-  "files": ["src/dev.prod.ts", "src/dev.ts", "src/devFlag.ts", "src/index.ts"],
+  "files": [
+    "src/dev.prod.ts",
+    "src/dev.ts",
+    "src/devFlag.ts",
+    "src/index.ts"
+  ],
   "references": [
     {
       "path": "../platform/tsconfig.json"
