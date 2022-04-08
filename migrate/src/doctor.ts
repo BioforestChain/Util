@@ -16,12 +16,15 @@ const judgeBfspBfsw = async (folder: string) => {
   if (!Array.isArray(allFile)) {
     throw new Error("🚨目录下没有内容");
   }
-
+  
   observerWorkspack = await lernaFactory(folder, allFile);
-  watchFactory(folder, observerWorkspack); // 观察所有packages位置
+  // 如果packagesNames有东西 锁定为bfsw
+  if (observerWorkspack.length !== 0) {
+    watchFactory(folder, observerWorkspack); // 观察所有packages位置
+    return;
+  };
 
   // 如果packagesNames没有东西 锁定为bfsp
-  if (observerWorkspack.length !== 0) return;
   watchFactory(folder); // 没有packages观察当前目录
 };
 judgeBfspBfsw(workspaceRoot);
@@ -67,7 +70,12 @@ const runDoctor = async () => {
   log(chalk.bgBlue(`${os.EOL} 开启动态对比模式： ${os.EOL}`))
   // observerWorkspack为0表示为bfsp
   if (observerWorkspack.length === 0) {
-    CommondNotification();
+    const { filesArrs } = await getWorkspaceContext(workspaceRoot)
+   const resolveFn =  filesArrs.map(async (file, index) => {
+      return await fileFilterFactory(file);
+    });
+    await Promise.all(resolveFn)
+     CommondNotification();
     return;
   }
   // bfsw
@@ -117,7 +125,7 @@ const CommondNotification = () => {
  * @param path
  */
 const react: { [key: string]: boolean } = { change: true, ready: true,unlink:true };
-export const operatingRoom = async (type: string, packages: string) => {
+export const operatingRoom = async (type: string, packages: string| Error) => {
   if (react[type]) {
     (indexFiles.length = 0),
       (nodeFiles.length = 0),

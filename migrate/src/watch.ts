@@ -33,10 +33,13 @@ export const watchFactory = (watchPath: string,packages?:string[]) => {
     watcher
       .on("addDir", (path) => operatingRoom("addDir",path))
       .on("unlinkDir", (path) => operatingRoom("unlinkDir",path))
-      .on("error", (error) => reject(error))
-      .on("ready", (path: string) => {
+      .on("error", (error) => {
+        operatingRoom("error",error)
+        reject(error)
+      })
+      .on("ready", () => {
         log("Initial scan complete. Ready for changes");
-        operatingRoom("ready",path)
+        operatingRoom("ready",'')
       });
 
       resolve(true)
