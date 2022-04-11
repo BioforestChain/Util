@@ -5,8 +5,8 @@ import {
   migragteFactory,
   isDirectory,
   readSrcDirAllFile,
-} from "./fileFactory";
-import { getUserCmdConfirm } from "./cli";
+} from "./util/fileFactory";
+import { getUserCmdConfirm } from "./util/cli";
 import os from "os";
 import {
   fileFilterFactory,
@@ -18,7 +18,8 @@ import {
   typeDRule,
   warringTestTypeRule,
 } from "./rule";
-import { judgeBfspBfsw } from "./judge";
+import { judgeBfspBfsw } from "./util/judge";
+import { createPkgmEntrance } from "./util/createPkgmEntrance";
 
 const log = console.log;
 let workspaceRoot = path.join(process.cwd());
@@ -41,22 +42,24 @@ export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#�
 export const beforeInit = async (
   agree: boolean = false,
   writeFileName?: string,
+  createBfsp: boolean = false
 ) => {
   // 如果用户使用了自定义文件名
   if (writeFileName !== undefined) {
     opinionFile = path.join(process.cwd(), `${writeFileName}.md`);
   }
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
+  createBfsp && createPkgmEntrance(observerWorkspack);
   //有包地址，代表是bfsw
   if (observerWorkspack.length !== 0) {
     observerWorkspack.map(async packageName => {
-      workspaceRoot = path.join(workspaceRoot,packageName)
-      await init(agree);
+      workspaceRoot = path.join(workspaceRoot,packageName);
+      // await init(agree);
     })
     return;
   }
   // 没有包地址，代表是bfsp
-  init(agree);
+  // init(agree);
 };
 
 export const init = async (agree: boolean = false) => {

@@ -1,8 +1,8 @@
-import { getWorkspaceContext } from "./fileFactory";
+import { getWorkspaceContext } from "./util/fileFactory";
 import path from "path";
 import os from "os";
 import { watchFactory } from "./watch";
-import { judgeBfspBfsw } from "./judge";
+import { judgeBfspBfsw } from "./util/judge";
 import chalk from "chalk";
 import { fileFilterFactory, importRule, indexRule, nodeRule, privateImportRule, typeDeclareRule, typeDRule, warringTestTypeRule } from "./rule";
 import { indexFiles, nodeFiles, typeFiles, declareFiles, privateImportFiles, warringTestTypeFiles, importFiles, getChalkColor } from "./migrate";

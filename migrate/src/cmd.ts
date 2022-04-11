@@ -11,9 +11,9 @@ program.command("doctor", "Like ESLint",{
 program
   .version("@bfchain/migrate2.0.0", "-v, --version")
   .option("-p, --bfsp", "auto create #bfsp.ts or #bfsw.ts") // 创建#bfsp.ts或者#bfsw.ts
-  .option("-y, --yes", "Direct consent to write data") //默认记录文件名
+  .option("-y, --yes", "Direct consent to write data") //直接将不匹配规则的文件记录下来
   .option("-f, --file <string>", "Custom write filename") // 自定义文件名称
-  .option("-yy, --yy", "Defaults to the current directory and Direct consent to write data"); //默认同意在当前目录，并且记录文件名
+  .option("-yy, --yy", "Defaults to the current directory and Direct consent to write data"); //直接将不匹配规则的文件记录下来，并且创建#bfsp.ts或者#bfsw.ts
 
 program.parse(process.argv);
 
@@ -21,18 +21,21 @@ const options = program.opts();
 
 //  console.log(process.argv)
 const rocket = () => {
+  let bfsp = false;// 是否要创建#bfsp.ts或者#bfsw.ts
+  let yes = false; // 是否要将不匹配规则的文件记录下来
+  if (options.bfsp) {
+    bfsp = true;
+  }
+  if (options.yes){
+    yes = true;
+  }
+
   // 如果没有同意在当前目录，并且记录文件名
   if (options.yy === undefined) {
-    if (options.yes === undefined) {
-      beforeInit(false, options.file);
-    }
-
-    if (options.yes === true) {
-      beforeInit(true, options.file);
-    }
+      beforeInit(yes, options.file,bfsp);
   } else {
-    // 当默认同意在当前目录，并且记录文件名
-    beforeInit(true, options.file);
+    // 直接将不匹配规则的文件记录下来，并且创建#bfsp.ts或者#bfsw.ts
+    beforeInit(true, options.file,true);
   }
 };
 

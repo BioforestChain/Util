@@ -3,8 +3,35 @@ import * as fs from "fs";
 import os from "os";
 import { IWriteStreamFlag } from "typings/file";
 
+export const excludePath:{[key:string]:boolean} = {
+  "node_modules": true,
+  "build": true,
+  "test": true,
+  "dist": true,
+}
+
 /**
- * 写入文件
+ * 创建文件并写入内容
+ * @param path 
+ * @param writeData 
+ * @returns 
+ */
+export const writeContext = (path:string,writeData:string) => {
+  return new Promise((resolve,reject) => {
+    const input = fs.createWriteStream(path, { encoding: "utf8" });
+    input.write(writeData, () => {});
+    input.end('', () => {
+      resolve(true);
+    });
+    input.once("error", (err) => {
+      console.log(err)
+      reject(err);
+    });
+  })
+}
+
+/**
+ * 把匹配的规则写入文件
  * @param {*} path
  * @param {*} data
  * @returns promise<Booblean>
@@ -64,24 +91,6 @@ export const createReadStream = (FilePath: string): Promise<string | Buffer> => 
 };
 
 /**
- * 替换文件名
- * @param {oldFileName } oldFile
- * @param {newFileName} newFile
- * @returns Promise<Boolean>
- */
-export const reFileNameFactory = (oldFile: string, newFile: string) => {
-  return new Promise((resolve, reject) => {
-    fs.rename(oldFile, newFile, (err) => {
-      if (err) {
-        reject(false);
-        throw err;
-      }
-      resolve(true);
-    });
-  });
-};
-
-/**
  * 获取目录下的所有文件
  * @param {path} pathName
  * @returns Promise<path>
@@ -97,12 +106,7 @@ export const readSrcDirAllFile = (srcDir: string): Promise<string[]> => {
   });
 };
 
-const excludePath:{[key:string]:boolean} = {
-  "node_modules": true,
-  "build": true,
-  "test": true,
-  "dist": true,
-}
+
 /**
  * 获取src工作区下的所有文件
  * @param {*} workspaceRoot
@@ -168,3 +172,4 @@ export const migragteFactory = (typeFiles: string[], insert = false) => {
     }
   };
 };
+

@@ -1,5 +1,5 @@
 import path from "node:path";
-import { createReadStream } from "./fileFactory";
+import { createReadStream } from "./util/fileFactory";
 import {
   declareFiles,
   indexFiles,
