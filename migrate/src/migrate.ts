@@ -8,7 +8,16 @@ import {
 } from "./fileFactory";
 import { getUserCmdInput, getUserCmdConfirm } from "./cli";
 import os from "os";
-import { fileFilterFactory, importRule, indexRule, nodeRule, privateImportRule, typeDeclareRule, typeDRule, warringTestTypeRule } from "./rule";
+import {
+  fileFilterFactory,
+  importRule,
+  indexRule,
+  nodeRule,
+  privateImportRule,
+  typeDeclareRule,
+  typeDRule,
+  warringTestTypeRule,
+} from "./rule";
 
 const log = console.log;
 let workspaceRoot = path.join(process.cwd());
@@ -19,8 +28,8 @@ export const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
 export const declareFiles: string[] = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法
 export const indexFiles: string[] = []; // index.ts只允许作为入口文件
 export const privateImportFiles: string[] = []; //"'#'开头是pkgm私有导入的写法,不允许在旧项目出现文件名带#";
-export const warringTestTypeFiles:string[] = []; // '*.test.ts在bfsp中属于测试文件';
-export const importFiles:string[] = []; // import mod from '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现
+export const warringTestTypeFiles: string[] = []; // '*.test.ts在bfsp中属于测试文件';
+export const importFiles: string[] = []; // import mod from '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现
 
 /**
  *
@@ -99,79 +108,51 @@ export const mainMigrateFactory = async (files: Array<string> | string, dir: str
   );
 };
 
-
 /**
  * 给用户选择，是否把不符合pkgm的记录下来
  */
- const askDeveloperOpinion = async (agree: boolean = false) => {
-   // todo .... 需要优化
-  if (typeFiles.length !== 0) {
-    typeFiles.map((val) => {
-      log(chalk.underline.yellow(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${typeDRule} ${tip}`);
-    if (result) {
-      await migragteFactory(typeFiles)(typeDRule, opinionFile);
+const askDeveloperOpinion = async (agree: boolean = false) => {
+  let ask = false; // 用来标记是不是第一次写入，如果是第二次写入会变成true，打开插入文本模式
+  warpAsk(typeFiles,typeDRule,'yellow');
+  warpAsk(nodeFiles,nodeRule,'yellow');
+  warpAsk(indexFiles,indexRule,'blue');
+  warpAsk(warringTestTypeFiles,warringTestTypeRule,'yellow');
+  warpAsk(declareFiles,typeDeclareRule,'red');
+  warpAsk(privateImportFiles,privateImportRule,'red');
+  warpAsk(importFiles,importRule,'red');
+  async function warpAsk(files: string[], rule: string, style: string) {
+    if (files.length !== 0) {
+      ask && log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
+      ask = true;
+      const chalkColor = getChalkColor(style);
+      files.map((val) => {
+        log(chalkColor(val));
+      });
+      const result = agree ? true : await getUserCmdConfirm(`${rule} ${tip}`);
+      if (result) {
+        await migragteFactory(files,ask)(rule, opinionFile);
+      }
     }
   }
-  if (nodeFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    nodeFiles.map((val) => {
-      log(chalk.underline.yellow(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${nodeRule} ${tip}`);
-    if (result) {
-      await migragteFactory(nodeFiles, true)(nodeRule, opinionFile);
-    }
-  }
-  if (indexFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    indexFiles.map((val) => {
-      log(chalk.underline.blue(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${indexRule} ${tip}`);
-    if (result) {
-      await migragteFactory(indexFiles, true)(indexRule, opinionFile);
-    }
-  }
-  if (privateImportFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    privateImportFiles.map((val) => {
-      log(chalk.underline.blue(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${privateImportRule} ${tip}`);
-    if (result) {
-      await migragteFactory(privateImportFiles, true)(privateImportRule, opinionFile);
-    }
-  }
-  if (declareFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    declareFiles.map((val) => {
-      log(chalk.underline.red(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${typeDeclareRule} ${tip}`);
-    if (result) {
-      await migragteFactory(declareFiles, true)(typeDeclareRule, opinionFile);
-    }
-  }
-  if (warringTestTypeFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    warringTestTypeFiles.map((val) => {
-      log(chalk.underline.red(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${warringTestTypeRule} ${tip}`);
-    if (result) {
-      await migragteFactory(warringTestTypeFiles, true)(warringTestTypeRule, opinionFile);
-    }
-  }
-  if (importFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    importFiles.map((val) => {
-      log(chalk.underline.red(val));
-    });
-    const result = agree ? true : await getUserCmdConfirm(`${importRule} ${tip}`);
-    if (result) {
-      await migragteFactory(importFiles, true)(importRule, opinionFile);
-    }
+};
+
+export const getChalkColor = (color: string) => {
+  switch (color) {
+    case "yellow":
+      return function (text: string) {
+        return chalk.underline.yellow(text);
+      };
+    case "red":
+      return function (text: string) {
+        return chalk.underline.red(text);
+      };
+    case "blue":
+      return function (text: string) {
+        return  chalk.underline.blue(text);
+      };
+    default:
+      return function (text: string) {
+        return  chalk.underline.black(text);
+      };
   }
 };
