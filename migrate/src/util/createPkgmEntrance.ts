@@ -1,7 +1,6 @@
 import { Worker, isMainThread, workerData } from "worker_threads";
 import { excludePath, readSrcDirAllFile, writeContext } from "./fileFactory";
 import path from 'path';
-import os from 'os';
 
 const cwd = process.cwd();
 export const createPkgmEntrance = (packages: string[]) => {

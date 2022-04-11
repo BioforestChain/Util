@@ -3,7 +3,7 @@ import path from 'path';
 /**
  * 判断是bfsp还是bfsw
  * @param folder
- * @returns bfsw return true/bfsp return false
+ * @returns packages
  */
 export const judgeBfspBfsw = async (folder: string) => {
   const allFile = await readSrcDirAllFile(folder);
