@@ -6,7 +6,7 @@ import {
   isDirectory,
   readSrcDirAllFile,
 } from "./fileFactory";
-import { getUserCmdInput, getUserCmdConfirm } from "./cli";
+import { getUserCmdConfirm } from "./cli";
 import os from "os";
 import {
   fileFilterFactory,
@@ -18,6 +18,7 @@ import {
   typeDRule,
   warringTestTypeRule,
 } from "./rule";
+import { judgeBfspBfsw } from "./judge";
 
 const log = console.log;
 let workspaceRoot = path.join(process.cwd());
@@ -29,40 +30,33 @@ export const declareFiles: string[] = []; // @types.ts 这种文件，只用来d
 export const indexFiles: string[] = []; // index.ts只允许作为入口文件
 export const privateImportFiles: string[] = []; //"'#'开头是pkgm私有导入的写法,不允许在旧项目出现文件名带#";
 export const warringTestTypeFiles: string[] = []; // '*.test.ts在bfsp中属于测试文件';
-export const importFiles: string[] = []; // import mod from '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现
+export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现
 
 /**
  *
  * @param agree 是否同意直接写入
  * @param writeFileName 自定义文件名
- * @param currentDirectory 是否直接同意直接在当前目录检索
  * @returns
  */
 export const beforeInit = async (
   agree: boolean = false,
   writeFileName?: string,
-  currentDirectory?: boolean,
 ) => {
   // 如果用户使用了自定义文件名
   if (writeFileName !== undefined) {
     opinionFile = path.join(process.cwd(), `${writeFileName}.md`);
   }
-  // 用户在命令行直接同意在当前目录检索，则不再询问用户
-  const result = currentDirectory
-    ? true
-    : await getUserCmdConfirm(
-        `此工具将会帮助您的代码风格向pkgm靠拢 ${os.EOL} 您现在是否在您的工作目录下？`,
-      );
-  if (result) {
-    return init(agree);
+  const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
+  //有包地址，代表是bfsw
+  if (observerWorkspack.length !== 0) {
+    observerWorkspack.map(async packageName => {
+      workspaceRoot = path.join(workspaceRoot,packageName)
+      await init(agree);
+    })
+    return;
   }
-  const workspaces = await getUserCmdInput("请输入您工作区的位置(相对路径)：");
-  workspaceRoot = path.join(process.cwd(), workspaces);
+  // 没有包地址，代表是bfsp
   init(agree);
-};
-/**用户同意自动化记录时，启用此函数 */
-export const agreeRecordAllData = async (writeFileName?: string) => {
-  beforeInit(true, writeFileName);
 };
 
 export const init = async (agree: boolean = false) => {
@@ -113,13 +107,13 @@ export const mainMigrateFactory = async (files: Array<string> | string, dir: str
  */
 const askDeveloperOpinion = async (agree: boolean = false) => {
   let ask = false; // 用来标记是不是第一次写入，如果是第二次写入会变成true，打开插入文本模式
-  warpAsk(typeFiles,typeDRule,'yellow');
-  warpAsk(nodeFiles,nodeRule,'yellow');
-  warpAsk(indexFiles,indexRule,'blue');
-  warpAsk(warringTestTypeFiles,warringTestTypeRule,'yellow');
-  warpAsk(declareFiles,typeDeclareRule,'red');
-  warpAsk(privateImportFiles,privateImportRule,'red');
-  warpAsk(importFiles,importRule,'red');
+  await warpAsk(typeFiles,typeDRule,'yellow');
+  await warpAsk(nodeFiles,nodeRule,'yellow');
+  await warpAsk(indexFiles,indexRule,'blue');
+  await warpAsk(warringTestTypeFiles,warringTestTypeRule,'yellow');
+  await warpAsk(declareFiles,typeDeclareRule,'red');
+  await warpAsk(privateImportFiles,privateImportRule,'red');
+  await warpAsk(importFiles,importRule,'red');
   async function warpAsk(files: string[], rule: string, style: string) {
     if (files.length !== 0) {
       ask && log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));

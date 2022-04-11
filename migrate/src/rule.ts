@@ -16,7 +16,7 @@ export const typeDeclareRule =
 export const nodeRule = "警告项：.node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts";
 export const indexRule = "建议项：index.ts只允许作为入口文件";
 export const importRule =
-  "禁止项：import mod from '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现";
+  "禁止项：import mod fr/om '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现";
 export const privateImportRule = "禁止项：'#'开头是pkgm私有导入的写法,不允许在旧项目出现文件名带#";
 export const warringTestTypeRule = "警告项：*.test.ts在bfsp中属于测试文件";
 
@@ -50,14 +50,14 @@ export const fileFilterFactory = async (filesDir: string) => {
       await indexFilesRule(filesDir);
     }
 
-    // import mod from '#mod' 这种以#开头导入的文件为pkgm语法
+    // impo/rt mod fr/om '\#mod' 这种以#开头导入的文件为pkgm语法
     await importFilesRule(filesDir);
     resolve(filesDir);
   });
 };
 
 /**
- * 处理import mod from '#mod'
+ * 处理imp/ort mod f/rom '#mod'
  * @param filesDir
  * @returns
  */

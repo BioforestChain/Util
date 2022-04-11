@@ -1,13 +1,11 @@
 {
   "packages": [
-    "packages/*"
+    "packages/*",
+    "bfchain/*"
   ],
   "useWorkspaces": true,
   "npmClient": "yarn",
   "version": "independent",
-  "publishConifg": {
-    "registry": "http://192.168.110.189:4873/"
-  },
   "exact": true,
   "command": {
     "init": {

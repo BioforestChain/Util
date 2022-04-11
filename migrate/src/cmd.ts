@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { agreeRecordAllData, beforeInit } from "./migrate";
+import { beforeInit } from "./migrate";
 const program = new Command();
 
 program.command("doctor", "Like ESLint",{
@@ -10,6 +10,7 @@ program.command("doctor", "Like ESLint",{
  
 program
   .version("@bfchain/migrate2.0.0", "-v, --version")
+  .option("-p, --bfsp", "auto create #bfsp.ts or #bfsw.ts") // 创建#bfsp.ts或者#bfsw.ts
   .option("-y, --yes", "Direct consent to write data") //默认记录文件名
   .option("-f, --file <string>", "Custom write filename") // 自定义文件名称
   .option("-yy, --yy", "Defaults to the current directory and Direct consent to write data"); //默认同意在当前目录，并且记录文件名
@@ -18,7 +19,7 @@ program.parse(process.argv);
 
 const options = program.opts();
 
-// console.log(process.argv)
+//  console.log(process.argv)
 const rocket = () => {
   // 如果没有同意在当前目录，并且记录文件名
   if (options.yy === undefined) {
@@ -27,11 +28,11 @@ const rocket = () => {
     }
 
     if (options.yes === true) {
-      agreeRecordAllData(options.file);
+      beforeInit(true, options.file);
     }
   } else {
     // 当默认同意在当前目录，并且记录文件名
-    beforeInit(true, options.file, true);
+    beforeInit(true, options.file);
   }
 };
 

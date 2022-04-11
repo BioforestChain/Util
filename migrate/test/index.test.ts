@@ -9,7 +9,7 @@ const {
   indexFiles,
 } = require("../dist/migrate");
 
-let projectPath = path.join(__dirname, "testProject");
+let projectPath = path.join(__dirname, "bfsp");
 
 beforeAll(async () => {
   await mainMigrateFactory(path.join(projectPath, "src"), projectPath);

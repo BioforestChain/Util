@@ -22,10 +22,11 @@ migrate
 
 ### 支持的命令
 
-该命令将监听整个项目，动态协助您迁移到pkgm风格，类似ESLint
+该命令将监听整个项目，动态协助您迁移到pkgm风格，类似ESLint。
+
+该命令通过判断lerna.json来确定是bfsp还是bfsw项目。
 
 ```
-// 运行监听命令，会询问用户监听目录，直接回车在当前目录监听
 migrate doctor 
 ```
 
