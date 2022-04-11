@@ -1,11 +1,9 @@
 ## 将代码风格向 pkgm 靠拢
 
-### 使用方法
+### 安装方法
 
 ```bash
 yarn add @bfchain/migrate -g
-
-migrate
 ```
 
 #### 或者
@@ -16,8 +14,12 @@ git clone
 git install
 
 npm link
+```
 
-migrate
+#### 不想安装
+
+```
+npx migrate
 ```
 
 ### 支持的命令
@@ -30,26 +32,26 @@ migrate
 migrate doctor 
 ```
 
-直接同意写入全部匹配文件
+同意将不匹配规则的文件记录下来，如果不加这个命令，会进行询问
 
 ```
 migrate -y
 ```
 
-自定义写入文件的名称
+当您需要把不匹配规则的文件记录下来的时候，这个命令能让您自定义创建文件名（格式为markdown）
 
 ```
 migrate -f <fileName>
 ```
 
-同意在当前文件夹下，并且进行记录
+自动识别并创建#bfsp.ts和##bfsw.ts文件
 ```
-migtate -yy 
+migrate -p
 ```
 
-自动创建#bfsp.ts文件
+同意将不匹配规则的文件记录下来，并且自动识别并创建#bfsp.ts和##bfsw.ts文件
 ```
-migrate -b
+migtate -yy 
 ```
 
 ### 判定规则
@@ -70,7 +72,6 @@ migrate -b
 
 7. 警告：*.test.ts在bfsp中属于测试文件
 
-8. 建议：.prod/dev  .node/web 等文件可以使用profile功能完成
 
 
 
