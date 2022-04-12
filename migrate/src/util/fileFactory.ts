@@ -9,6 +9,7 @@ export const excludePath: { [key: string]: boolean } = {
   build: true,
   test: true,
   dist: true,
+  coverage:true
 };
 
 /**

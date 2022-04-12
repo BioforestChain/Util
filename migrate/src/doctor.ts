@@ -6,12 +6,16 @@ import { judgeBfspBfsw } from "./util/judge";
 import chalk from "chalk";
 import { fileFilterFactory, importRule, indexRule, nodeRule, privateImportRule, typeDeclareRule, typeDRule, warringTestTypeRule } from "./rule";
 import { indexFiles, nodeFiles, typeFiles, declareFiles, privateImportFiles, warringTestTypeFiles, importFiles, getChalkColor } from "./migrate";
+import { beforeInCopyFile } from "./output";
 
 const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
 let observerWorkspack: string[] = [];
 
-const warpWatchFactory = async (folder:string) => {
+export const warpWatchFactory = async (folder:string) => {
+  // 创建新文件，把工作目录转移为新目录
+  beforeInCopyFile(workspaceRoot,folder);
+  workspaceRoot = path.join(workspaceRoot,folder);
   //如果有东西 锁定为bfsw
   if((await judgeBfspBfsw(folder)).length !== 0) {
     return watchFactory(folder, observerWorkspack); // 观察所有packages位置
@@ -19,7 +23,6 @@ const warpWatchFactory = async (folder:string) => {
   //如果没有东西 锁定为bfsp
   watchFactory(folder); // 没有packages观察当前目录
 }
- warpWatchFactory(workspaceRoot);
 
 
 

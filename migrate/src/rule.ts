@@ -10,7 +10,7 @@ import {
   importFiles,
 } from "./migrate";
 
-export const typeDRule = "警告项：@types.ts相对应pkgm的代码风格，就是 *.type.ts 文件";
+export const typeDRule = "警告项：*@types.ts相对应pkgm的代码风格，就是 *.type.ts 文件";
 export const typeDeclareRule =
   "禁止项： @types.ts 这种文件，只能用来declare，不可以出现import <spe>";
 export const nodeRule = "警告项：.node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts";
@@ -28,7 +28,7 @@ export const fileFilterFactory = async (filesDir: string) => {
   return new Promise(async (resolve) => {
     const fileName = path.basename(filesDir);
     // 匹配@types.ts
-    if (/@type[s]?\.[t,j,m,c]s[x]?$/.test(fileName)) {
+    if (/\w*@type[s]?\.[t,j,m,c]s[x]?$/.test(fileName)) {
       typeFiles.push(filesDir);
       await declareFilesRule(filesDir);
     }

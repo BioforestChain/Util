@@ -20,9 +20,10 @@ import {
 } from "./rule";
 import { judgeBfspBfsw } from "./util/judge";
 import { createPkgmEntrance } from "./util/createPkgmEntrance";
+import { beforeInCopyFile } from "./output";
 
 const log = console.log;
-let opinionFile = path.join(process.cwd(), "opinionFile.md");
+let opinionFile =  "opinionFile.md";
 const tip = "是否要把以上文件记录下来?";
 export const typeFiles: string[] = []; // type类型匹配到的文件
 export const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
@@ -32,21 +33,22 @@ export const privateImportFiles: string[] = []; //"'#'开头是pkgm私有导入�
 export const warringTestTypeFiles: string[] = []; // '*.test.ts在bfsp中属于测试文件';
 export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现
 
-/**
- *
- * @param agree 是否同意直接写入
- * @param writeFileName 自定义文件名
- * @returns
- */
+
 export const beforeInit = async (
   agree: boolean = false,
   writeFileName?: string,
   createBfsp: boolean = false,
-  workspaceRoot = process.cwd()
+  workspaceRoot = process.cwd(),
+  outputFolder = 'pkgm'
 ) => {
+  // 创建新文件，把工作目录转移为新目录
+  beforeInCopyFile(workspaceRoot,outputFolder);
+  workspaceRoot = path.join(workspaceRoot,outputFolder);
   // 如果用户使用了自定义文件名
   if (writeFileName !== undefined) {
-    opinionFile = path.join(process.cwd(), `${writeFileName}.md`);
+    opinionFile = path.join(workspaceRoot, `${writeFileName}.md`);
+  } else {
+    opinionFile = path.join(workspaceRoot,opinionFile);
   }
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
   createBfsp && createPkgmEntrance(observerWorkspack);

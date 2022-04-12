@@ -32,6 +32,12 @@ npx migrate
 migrate doctor 
 ```
 
+migrate会自动输出新目录，默认文件名为pkgm,您可以在像以下这样自定义文件名
+
+```
+migrate doctor customizeFolder
+```
+
 同意将不匹配规则的文件记录下来，如果不加这个命令，会进行询问
 
 ```
@@ -58,7 +64,7 @@ migtate -yy
 
 ##### 规则按级别划分为 禁止/警告/建议
 
-1. 警告：判断是否有@types.ts 类型文件 : 相对应pkgm的代码风格，就是 *.type.ts 属于类型文件
+1. 警告：判断是否有*@types.ts 类型文件 : 相对应pkgm的代码风格，就是 *.type.ts 属于类型文件
 
 2. 警告：判断是否有/\..+\.ts$/（.node.ts|.web.ts）文件: .node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts
 
