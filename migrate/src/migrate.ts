@@ -22,7 +22,6 @@ import { judgeBfspBfsw } from "./util/judge";
 import { createPkgmEntrance } from "./util/createPkgmEntrance";
 
 const log = console.log;
-let workspaceRoot = path.join(process.cwd());
 let opinionFile = path.join(process.cwd(), "opinionFile.md");
 const tip = "是否要把以上文件记录下来?";
 export const typeFiles: string[] = []; // type类型匹配到的文件
@@ -42,7 +41,8 @@ export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#�
 export const beforeInit = async (
   agree: boolean = false,
   writeFileName?: string,
-  createBfsp: boolean = false
+  createBfsp: boolean = false,
+  workspaceRoot = process.cwd()
 ) => {
   // 如果用户使用了自定义文件名
   if (writeFileName !== undefined) {
@@ -54,16 +54,16 @@ export const beforeInit = async (
   if (observerWorkspack.length !== 0) {
     observerWorkspack.map(async packageName => {
       workspaceRoot = path.join(workspaceRoot,packageName);
-      // await init(agree);
+       await init(agree,workspaceRoot);
     })
     return;
   }
   // 没有包地址，代表是bfsp
-  // init(agree);
+  init(agree,workspaceRoot);
 };
 
-export const init = async (agree: boolean = false) => {
-  const { fileDirs, filesArrs } = await getWorkspaceContext(workspaceRoot);
+export const init = async (agree: boolean = false,workspace:string) => {
+  const { fileDirs, filesArrs } = await getWorkspaceContext(workspace);
   fileDirs.forEach(
     async (dir, index) => await mainMigrateFactory(filesArrs[index] as string[] | string, dir),
   );
@@ -108,7 +108,7 @@ export const mainMigrateFactory = async (files: Array<string> | string, dir: str
 /**
  * 给用户选择，是否把不符合pkgm的记录下来
  */
-const askDeveloperOpinion = async (agree: boolean = false) => {
+export const askDeveloperOpinion = async (agree: boolean = false) => {
   let ask = false; // 用来标记是不是第一次写入，如果是第二次写入会变成true，打开插入文本模式
   await warpAsk(typeFiles,typeDRule,'yellow');
   await warpAsk(nodeFiles,nodeRule,'yellow');

@@ -12,7 +12,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "./dist",
-    "types" : [ " node " , " jest " ],
+    "types" : [ "node","jest"],
     "declaration": true, // 是否生成声明文件
     "declarationDir": "dist/type", // 声明文件打包的位置
     "lib": ["esnext", "dom", "dom.iterable", "scripthost", "es6"]

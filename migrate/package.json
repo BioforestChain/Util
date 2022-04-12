@@ -11,7 +11,7 @@
     "dev": "cross-env nodemon --watch src -e ts --exec tsc",
     "build": "tsc",
     "dev:test": "cross-env nodemon --watch test -e ts --exec tsc",
-    "test": "jest"
+    "test": "jest --silent"
   },
   "keywords": [
     "BFChain"

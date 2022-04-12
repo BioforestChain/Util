@@ -1,34 +1,34 @@
 import path from "node:path";
 import * as fs from "fs";
 import os from "os";
+import { unlink } from "fs/promises";
 import { IWriteStreamFlag } from "typings/file";
 
-export const excludePath:{[key:string]:boolean} = {
-  "node_modules": true,
-  "build": true,
-  "test": true,
-  "dist": true,
-}
+export const excludePath: { [key: string]: boolean } = {
+  node_modules: true,
+  build: true,
+  test: true,
+  dist: true,
+};
 
 /**
  * 创建文件并写入内容
- * @param path 
- * @param writeData 
- * @returns 
+ * @param path
+ * @param writeData
+ * @returns
  */
-export const writeContext = (path:string,writeData:string) => {
-  return new Promise((resolve,reject) => {
+export const writeContext = (path: string, writeData: string) => {
+  return new Promise((resolve, reject) => {
     const input = fs.createWriteStream(path, { encoding: "utf8" });
     input.write(writeData, () => {});
-    input.end('', () => {
+    input.end("", () => {
       resolve(true);
     });
     input.once("error", (err) => {
-      console.log(err)
       reject(err);
     });
-  })
-}
+  });
+};
 
 /**
  * 把匹配的规则写入文件
@@ -76,12 +76,12 @@ export const createReadStream = (FilePath: string): Promise<string | Buffer> => 
     const out = fs.createReadStream(path.normalize(FilePath));
     out.setEncoding("utf8");
     out.on("data", (dataChunk) => {
-       return resolve(dataChunk);
+      return resolve(dataChunk);
     });
-    out.on('readable', () => {
+    out.on("readable", () => {
       // 如果是空文件
       if (out.read() === null) {
-        return resolve('')
+        return resolve("");
       }
     });
     out.on("error", (err) => {
@@ -106,40 +106,41 @@ export const readSrcDirAllFile = (srcDir: string): Promise<string[]> => {
   });
 };
 
-
 /**
  * 获取src工作区下的所有文件
  * @param {*} workspaceRoot
  * @returns
  */
 export const getWorkspaceContext = async (workspaceRoot: string) => {
+  const filesArrs: string[] = [],
+  fileDirs: string[] = [];
   if (!fsExistsSync(workspaceRoot)) {
-    throw new Error("工作目录不存在");
+    return {
+      fileDirs,
+      filesArrs,
+    };
   }
-  const filesArrs: string[]= [],
-    fileDirs: string[] = [];
-  async function deepWorkspace(folderAddress:string) {
-      for (const pathName of fs.readdirSync(folderAddress)) {
-        const fileAddress = path.join(folderAddress, pathName);
-          if (excludePath[pathName] || /(^|[\/\\])\../.test(pathName)) continue; // 排除不要的(ps:正则是排除开头为.的文件夹)
-          if (isDirectory(fileAddress)) {
-           await deepWorkspace(path.join(fileAddress));
-           continue;
-          }
-          // 依赖收集
-          if (/\.ts$/.test(fileAddress)) { 
-            fileDirs.push(folderAddress);
-            filesArrs.push(fileAddress);
-          }
+  async function deepWorkspace(folderAddress: string) {
+    for (const pathName of fs.readdirSync(folderAddress)) {
+      const fileAddress = path.join(folderAddress, pathName);
+      if (excludePath[pathName] || /(^|[\/\\])\../.test(pathName)) continue; // 排除不要的(ps:正则是排除开头为.的文件夹)
+      if (isDirectory(fileAddress)) {
+        await deepWorkspace(path.join(fileAddress));
+        continue;
       }
+      // 依赖收集
+      if (/\.ts$/.test(fileAddress)) {
+        fileDirs.push(folderAddress);
+        filesArrs.push(fileAddress);
+      }
+    }
   }
-  await deepWorkspace(workspaceRoot)
+  await deepWorkspace(workspaceRoot);
   return {
     fileDirs,
     filesArrs,
   };
 };
-
 
 /**检测文件或者文件夹存在 */
 export const fsExistsSync = (path: string) => {
@@ -159,9 +160,9 @@ export const isDirectory = (path: string) => {
 
 /**
  * 写文件的适配器
- * @param typeFiles 
- * @param insert 
- * @returns 
+ * @param typeFiles
+ * @param insert
+ * @returns
  */
 export const migragteFactory = (typeFiles: string[], insert = false) => {
   return async function (opinion: string, opinionFile: string) {
@@ -173,3 +174,39 @@ export const migragteFactory = (typeFiles: string[], insert = false) => {
   };
 };
 
+/**
+ * 删除某一个包下面的需要符合格式的文件。
+ * @param  {String} url  文件路径，绝对路径
+ * @param  {String} name 需要删除的文件名称
+ * @return {Null}
+ * @author huangh 20170123
+ */
+export const deleteFile = (url: string, name: string) => {
+    //判断给定的路径是否存在
+    for(const file of fs.readdirSync(url)) {
+      const curPath = path.join(url, file);
+      // 排除目录
+      if (excludePath[file] || /(^|[\/\\])\../.test(file)) continue;
+        if (fs.statSync(curPath).isDirectory()) {
+          //同步读取文件夹文件，如果是文件夹，则函数回调
+          deleteFile(curPath, name);
+        } else {
+          if (file === name) {
+            //是指定文件，则删除
+           process.nextTick(() => {
+            fs.unlinkSync(curPath);
+           })
+          }
+        }
+    }
+}
+
+/**
+ * 删除某个文件
+ * @param url 
+ */
+export const deleteOneFile = (url:string) => {
+  if (fsExistsSync(url)) {
+    unlink(url);
+  }
+}
