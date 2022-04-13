@@ -12,7 +12,7 @@ import {
 
 export const typeDRule = "警告项：*@types.ts相对应pkgm的代码风格，就是 *.type.ts 文件";
 export const typeDeclareRule =
-  "禁止项： @types.ts 这种文件，只能用来declare，不可以出现import <spe>";
+  "禁止项： @types.ts 这种文件，只能用来declare，不可以出现import * from * ";
 export const nodeRule = "警告项：.node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts";
 export const indexRule = "建议项：index.ts只允许作为入口文件";
 export const importRule =
@@ -64,7 +64,7 @@ export const fileFilterFactory = async (filesDir: string) => {
 const importFilesRule = async (filesDir: string) => {
   return new Promise<boolean>(async (resolve) => {
     const dataChunk = await createReadStream(filesDir);
-    if (/import.+\s+from\s{1}('#+\w+'|"#+\w+")/g.test(dataChunk as string)) {
+    if (/import\s+.+\s+from\s{1}('#+\w+'|"#+\w+")/.test(dataChunk as string)) {
       importFiles.push(filesDir);
     }
     resolve(true);
@@ -72,14 +72,14 @@ const importFilesRule = async (filesDir: string) => {
 };
 
 /**
- * 处理@types.ts里有import的
+ * 处理@types.ts里有import * from *的
  * @param {string} filesDir
  * @returns
  */
 const declareFilesRule = async (filesDir: string) => {
   return new Promise<boolean>(async (resolve) => {
     const dataChunk = await createReadStream(filesDir);
-    if (/import\(.+\)/g.test(dataChunk as string)) {
+    if (/import\s+.+\s+from\s{1}(".+"|'.+')/.test(dataChunk as string)) {
       declareFiles.push(filesDir);
     }
     resolve(true);

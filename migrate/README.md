@@ -68,7 +68,7 @@ migtate -yy
 
 2. 警告：判断是否有/\..+\.ts$/（.node.ts|.web.ts）文件: .node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts
 
-3. 禁止：判断@type文件是否有 import <spe> 这样的语法: @types.ts 这种文件，只用来declare，不可以出现import <spe>
+3. 禁止：判断@type文件是否有 import <spe> 这样的语法: @types.ts 这种文件，只用来declare，不可以出现import * from * 
 
 4. 建议：判断是否有 index.ts 不是入口文件直接写 function
 
