@@ -1,70 +1,31 @@
-import { createReadStream, getWorkspaceContext, readSrcDirAllFile } from "./fileFactory";
+import { getWorkspaceContext } from "./util/fileFactory";
 import path from "path";
 import os from "os";
 import { watchFactory } from "./watch";
+import { judgeBfspBfsw } from "./util/judge";
 import chalk from "chalk";
 import { fileFilterFactory, importRule, indexRule, nodeRule, privateImportRule, typeDeclareRule, typeDRule, warringTestTypeRule } from "./rule";
 import { indexFiles, nodeFiles, typeFiles, declareFiles, privateImportFiles, warringTestTypeFiles, importFiles } from "./migrate";
+import { beforeInCopyFile } from "./output";
+import { getUnderlineColor } from "./util/cli";
 
 const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
 let observerWorkspack: string[] = [];
 
-const judgeBfspBfsw = async (folder: string) => {
-  const allFile = await readSrcDirAllFile(folder);
-  // 如果读取出来没有文件
-  if (!Array.isArray(allFile)) {
-    throw new Error("🚨目录下没有内容");
+export const warpWatchFactory = async (folder:string= 'pkgm') => {
+  // 创建新文件，把工作目录转移为新目录
+  beforeInCopyFile(workspaceRoot,folder);
+  workspaceRoot = path.join(workspaceRoot,folder);
+  //如果有东西 锁定为bfsw
+  if((await judgeBfspBfsw(folder)).length !== 0) {
+    return watchFactory(folder, observerWorkspack); // 观察所有packages位置
   }
-  
-  observerWorkspack = await lernaFactory(folder, allFile);
-  // 如果packagesNames有东西 锁定为bfsw
-  if (observerWorkspack.length !== 0) {
-    watchFactory(folder, observerWorkspack); // 观察所有packages位置
-    return;
-  };
-
-  // 如果packagesNames没有东西 锁定为bfsp
+  //如果没有东西 锁定为bfsp
   watchFactory(folder); // 没有packages观察当前目录
-};
-judgeBfspBfsw(workspaceRoot);
+}
 
-/**
- * 处理有lerna的包名
- * 因为monorepo风格包名不一定是packages
- * @param folder
- */
-const lernaFactory = async (folder: string, allFile: string[]) => {
-  let lernas: string[] | string = [];
-  await Promise.all(
-    allFile.map(async (fileOrFolder) => {
-      // 如果有lerna，锁定为Bfsw,并找出包名
-      if (fileOrFolder === "lerna.json") {
-        lernas = await identifyLerna(folder);
-      }
-    }),
-  );
-  return lernas;
-};
 
-/**
- * 提前包名，拼接包地址
- * @param folder
- * @returns
- */
-const identifyLerna = async (folder: string) => {
-  const lerna = await createReadStream(path.join(folder, "lerna.json"));
-  const jsonLerna = JSON.parse(lerna as string);
-  const packagesNames = jsonLerna["packages"];
-  if (!Array.isArray(packagesNames)) {
-    return packagesNames.match(/\b[A-Za-z]+\b/)[0];
-  }
-  const names: string[] = [];
-  packagesNames.forEach((name) => {
-    names.push(name.match(/\b[A-Za-z]+\b/)[0]);
-  });
-  return names;
-};
 
 const runDoctor = async () => {
   log(chalk.bgBlue(`${os.EOL} 开启动态对比模式： ${os.EOL}`))
@@ -90,53 +51,25 @@ const runDoctor = async () => {
 };
 
 const CommondNotification = () => {
-  if (typeFiles.length !== 0) {
-    log(chalk.bold.yellow(`${typeDRule}`));
-    typeFiles.map((val) => {
-      log(chalk.underline.yellow(val));
-    });
-  }
-  if (nodeFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.yellow(`${nodeRule}`));
-    nodeFiles.map((val) => {
-      log(chalk.underline.yellow(val));
-    });
-  }
-  if (declareFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.red(`${typeDeclareRule}`));
-    declareFiles.map((val) => {
-      log(chalk.underline.red(val));
-    });
-  }
-  if (indexFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.blue(`${indexRule}`));
-    indexFiles.map((val) => {
-      log(chalk.underline.blue(val));
-    });
-  }
-  if (privateImportFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.red(`${privateImportRule}`));
-    privateImportFiles.map((val) => {
-      log(chalk.underline.red(val));
-    });
-  }
-  if (warringTestTypeFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.yellow(`${warringTestTypeRule}`));
-    warringTestTypeFiles.map((val) => {
-      log(chalk.underline.yellow(val));
-    });
-  }
-  if (importFiles.length !== 0) {
-    log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-    log(chalk.bold.red(`${importRule}`));
-    importFiles.map((val) => {
-      log(chalk.underline.red(val));
-    });
+  let not = false; // 用来标记是不是第一次写入，用来显示分割线
+  warpNotification(typeFiles,typeDRule,'yellow');
+  warpNotification(nodeFiles,nodeRule,'yellow');
+  warpNotification(indexFiles,indexRule,'blue');
+  warpNotification(warringTestTypeFiles,warringTestTypeRule,'yellow');
+  warpNotification(declareFiles,typeDeclareRule,'red');
+  warpNotification(importFiles,importRule,'red');
+  warpNotification(privateImportFiles,privateImportRule,'red');
+
+  function warpNotification(Files:string[],rule:string,color:string) {
+    if (Files.length !== 0) {
+      not &&  log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
+      not = true;
+      log(`${rule}`);
+      const chalkColor = getUnderlineColor(color);
+      Files.map((val) => {
+        log(chalkColor(val));
+      });
+    }
   }
 };
 

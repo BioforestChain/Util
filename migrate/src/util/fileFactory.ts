@@ -1,10 +1,38 @@
 import path from "node:path";
 import * as fs from "fs";
 import os from "os";
+import { unlink } from "fs/promises";
 import { IWriteStreamFlag } from "typings/file";
 
+export const excludePath: { [key: string]: boolean } = {
+  node_modules: true,
+  build: true,
+  test: true,
+  dist: true,
+  coverage: true,
+};
+
 /**
- * 写入文件
+ * 创建文件并写入内容
+ * @param path
+ * @param writeData
+ * @returns
+ */
+export const writeContext = (path: string, writeData: string) => {
+  return new Promise((resolve, reject) => {
+    const input = fs.createWriteStream(path, { encoding: "utf8" });
+    input.write(writeData, () => {});
+    input.end("", () => {
+      resolve(true);
+    });
+    input.once("error", (err) => {
+      reject(err);
+    });
+  });
+};
+
+/**
+ * 把匹配的规则写入文件
  * @param {*} path
  * @param {*} data
  * @returns promise<Booblean>
@@ -49,34 +77,16 @@ export const createReadStream = (FilePath: string): Promise<string | Buffer> => 
     const out = fs.createReadStream(path.normalize(FilePath));
     out.setEncoding("utf8");
     out.on("data", (dataChunk) => {
-       return resolve(dataChunk);
+      return resolve(dataChunk);
     });
-    out.on('readable', () => {
+    out.on("readable", () => {
       // 如果是空文件
       if (out.read() === null) {
-        return resolve('')
+        return resolve("");
       }
     });
     out.on("error", (err) => {
       reject(err);
-    });
-  });
-};
-
-/**
- * 替换文件名
- * @param {oldFileName } oldFile
- * @param {newFileName} newFile
- * @returns Promise<Boolean>
- */
-export const reFileNameFactory = (oldFile: string, newFile: string) => {
-  return new Promise((resolve, reject) => {
-    fs.rename(oldFile, newFile, (err) => {
-      if (err) {
-        reject(false);
-        throw err;
-      }
-      resolve(true);
     });
   });
 };
@@ -97,45 +107,41 @@ export const readSrcDirAllFile = (srcDir: string): Promise<string[]> => {
   });
 };
 
-const excludePath:{[key:string]:boolean} = {
-  "node_modules": true,
-  "build": true,
-  "test": true,
-  "dist": true,
-}
 /**
  * 获取src工作区下的所有文件
  * @param {*} workspaceRoot
  * @returns
  */
 export const getWorkspaceContext = async (workspaceRoot: string) => {
-  if (!fsExistsSync(workspaceRoot)) {
-    throw new Error("工作目录不存在");
-  }
-  const filesArrs: string[]= [],
+  const filesArrs: string[] = [],
     fileDirs: string[] = [];
-  async function deepWorkspace(folderAddress:string) {
-      for (const pathName of fs.readdirSync(folderAddress)) {
-        const fileAddress = path.join(folderAddress, pathName);
-          if (excludePath[pathName] || /(^|[\/\\])\../.test(pathName)) continue; // 排除不要的(ps:正则是排除开头为.的文件夹)
-          if (isDirectory(fileAddress)) {
-           await deepWorkspace(path.join(fileAddress));
-           continue;
-          }
-          // 依赖收集
-          if (/\.ts$/.test(fileAddress)) { 
-            fileDirs.push(folderAddress);
-            filesArrs.push(fileAddress);
-          }
-      }
+  if (!fsExistsSync(workspaceRoot)) {
+    return {
+      fileDirs,
+      filesArrs,
+    };
   }
-  await deepWorkspace(workspaceRoot)
+  async function deepWorkspace(folderAddress: string) {
+    for (const pathName of fs.readdirSync(folderAddress)) {
+      const fileAddress = path.join(folderAddress, pathName);
+      if (excludePath[pathName] || /(^|[\/\\])\../.test(pathName)) continue; // 排除不要的(ps:正则是排除开头为.的文件夹)
+      if (isDirectory(fileAddress)) {
+        await deepWorkspace(path.join(fileAddress));
+        continue;
+      }
+      // 依赖收集
+      if (/\.ts$/.test(fileAddress)) {
+        fileDirs.push(folderAddress);
+        filesArrs.push(fileAddress);
+      }
+    }
+  }
+  await deepWorkspace(workspaceRoot);
   return {
     fileDirs,
     filesArrs,
   };
 };
-
 
 /**检测文件或者文件夹存在 */
 export const fsExistsSync = (path: string) => {
@@ -155,9 +161,9 @@ export const isDirectory = (path: string) => {
 
 /**
  * 写文件的适配器
- * @param typeFiles 
- * @param insert 
- * @returns 
+ * @param typeFiles
+ * @param insert
+ * @returns
  */
 export const migragteFactory = (typeFiles: string[], insert = false) => {
   return async function (opinion: string, opinionFile: string) {

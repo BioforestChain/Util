@@ -1,11 +1,9 @@
 ## 将代码风格向 pkgm 靠拢
 
-### 使用方法
+### 安装方法
 
 ```bash
 yarn add @bfchain/migrate -g
-
-migrate
 ```
 
 #### 或者
@@ -16,50 +14,66 @@ git clone
 git install
 
 npm link
+```
 
-migrate
+#### 不想安装
+
+```
+npx migrate
 ```
 
 ### 支持的命令
 
-该命令将监听整个项目，动态协助您迁移到pkgm风格，类似ESLint
+该命令将监听整个项目，动态协助您迁移到pkgm风格，类似ESLint。
+
+该命令通过判断lerna.json来确定是bfsp还是bfsw项目。
 
 ```
-// 运行监听命令，会询问用户监听目录，直接回车在当前目录监听
 migrate doctor 
 ```
 
-直接同意写入全部匹配文件
+migrate会自动输出新目录，默认文件名为pkgm,您可以在像以下这样自定义文件名
+
+```
+migrate doctor customizeFolder
+```
+
+同意将不匹配规则的文件记录下来，如果不加这个命令，会进行询问
 
 ```
 migrate -y
 ```
 
-自定义写入文件的名称
+当您需要把不匹配规则的文件记录下来的时候，这个命令能让您自定义创建文件名（格式为markdown）
 
 ```
 migrate -f <fileName>
 ```
 
-同意在当前文件夹下，并且进行记录
+指定输出的目录的文件夹名称，默认为pkgm
 ```
-migtate -yy 
+migrate -F [customizeFolder]
 ```
 
-自动创建#bfsp.ts文件
+自动识别并创建#bfsp.ts和##bfsw.ts文件,指定输出的目录的文件夹名称
 ```
-migrate -b
+migrate -p [customizeFolder]
+```
+
+同意将不匹配规则的文件记录下来，并且自动识别并创建#bfsp.ts和##bfsw.ts文件
+```
+migtate -yy 
 ```
 
 ### 判定规则
 
 ##### 规则按级别划分为 禁止/警告/建议
 
-1. 警告：判断是否有@types.ts 类型文件 : 相对应pkgm的代码风格，就是 *.type.ts 属于类型文件
+1. 警告：判断是否有*@types.ts 类型文件 : 相对应pkgm的代码风格，就是 *.type.ts 属于类型文件
 
 2. 警告：判断是否有/\..+\.ts$/（.node.ts|.web.ts）文件: .node.ts 或者 .web.ts类型应该定义为*#node.ts 与 *#web.ts
 
-3. 禁止：判断@type文件是否有 import <spe> 这样的语法: @types.ts 这种文件，只用来declare，不可以出现import <spe>
+3. 禁止：判断@type文件是否有 import <spe> 这样的语法: @types.ts 这种文件，只用来declare，不可以出现import * from * 
 
 4. 建议：判断是否有 index.ts 不是入口文件直接写 function
 
@@ -69,7 +83,12 @@ migrate -b
 
 7. 警告：*.test.ts在bfsp中属于测试文件
 
-8. 建议：.prod/dev  .node/web 等文件可以使用profile功能完成
 
+#### 单元测试
+
+运行以下命令，因为包含一个交互命令，会提示按回车😁
+```
+yarn run test
+```
 
 
