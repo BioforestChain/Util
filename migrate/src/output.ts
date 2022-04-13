@@ -2,8 +2,9 @@ import path from "path";
 import fs from "fs";
 import { excludePath, fsExistsSync, isDirectory } from "./util/fileFactory";
 
-export const beforeInCopyFile = (pwd = process.cwd(), outputName = "pkgm") => {
-  copyFile(pwd, outputName);
+export const beforeInCopyFile = (pwd:string, outputName:string) => {
+  const outputDir = path.join(pwd,outputName)
+  copyFile(pwd, outputDir);
 };
 
 /**
@@ -11,12 +12,12 @@ export const beforeInCopyFile = (pwd = process.cwd(), outputName = "pkgm") => {
  * @param srcPath
  * @param tarPath
  */
-export const copyFile = (srcPath: string, tarPath: string) => {
-  if (!fsExistsSync(tarPath)) {
-    fs.mkdirSync(tarPath);
+export const copyFile = (srcPath: string, outputDir: string) => {
+  if (!fsExistsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
   }
   const files =  fs.readdirSync(srcPath);
-  excludeCopyFile(files, srcPath, tarPath);
+  excludeCopyFile(files, srcPath, outputDir);
 };
 
 /**
@@ -29,7 +30,7 @@ const excludeCopyFile = (files: string[], srcPath: string, tarPath: string) => {
   files.forEach(function (filename) {
     let filedir = path.join(srcPath, filename);
     if (excludePath[filename] || /(^|[\/\\])\../.test(filename)) return; // 排除不要的(ps:正则是排除开头为.的文件夹)
-    if (filename === tarPath) return; // 防止递归创建文件
+    if (filename === path.basename(tarPath)) return; // 防止递归创建文件
     fsStatus(filedir,tarPath,filename)
   });
 };

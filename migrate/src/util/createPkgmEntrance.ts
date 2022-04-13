@@ -24,13 +24,13 @@ export const createBfsp = (workspace:string,paths?:string[],packageName?:string)
 };
 
 /**
- * 
+ * 创建bfsw
  * @param packages 
  * @param workspace 
  */
 export const createBfsw = async (packages: string[],workspace:string) => {
   packages.forEach(async (packName) => {
-    let writeBfsps = await readSrcDirAllFile(packName);
+    let writeBfsps = await readSrcDirAllFile(path.join(workspace,packName));
     writeBfsps = writeBfsps.filter((name) => {
     return !excludePath[name]
     });
@@ -41,10 +41,10 @@ export const createBfsw = async (packages: string[],workspace:string) => {
 
 /**
  * 子线程入口
- * @param isTest 测试模拟子线程的时候传true
+ * @param testWorkspace 测试模拟子线程的时候传地址
  */
-export const init = (isTest = false) => {
-  if (!isMainThread || isTest) {
+export const init = (testWorkspace = '') => {
+  if (!isMainThread) {
     // 子进程去处理写文件的逻辑
     const {packages,workspace} = workerData;
     if (packages && packages.length !== 0) {
@@ -52,6 +52,9 @@ export const init = (isTest = false) => {
     } else {
       createBfsp(workspace);
     }
+  }
+  if (testWorkspace) {
+    return createBfsp(testWorkspace)
   }
 }
 init()

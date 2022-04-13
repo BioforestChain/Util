@@ -38,7 +38,7 @@ export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#�
  * @param agree 是否同意直接写入
  * @param createBfsp 是否创建bfsp和bfsw
  * @param workspaceRoot 工作路径
- * @param outputFolder 输出文件名
+ * @param outputFolder 输出文件夹名称
  * @param writeFileName 自定义写文件名
  * @returns 
  */
