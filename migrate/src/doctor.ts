@@ -5,8 +5,9 @@ import { watchFactory } from "./watch";
 import { judgeBfspBfsw } from "./util/judge";
 import chalk from "chalk";
 import { fileFilterFactory, importRule, indexRule, nodeRule, privateImportRule, typeDeclareRule, typeDRule, warringTestTypeRule } from "./rule";
-import { indexFiles, nodeFiles, typeFiles, declareFiles, privateImportFiles, warringTestTypeFiles, importFiles, getChalkColor } from "./migrate";
+import { indexFiles, nodeFiles, typeFiles, declareFiles, privateImportFiles, warringTestTypeFiles, importFiles } from "./migrate";
 import { beforeInCopyFile } from "./output";
+import { getUnderlineColor } from "./util/cli";
 
 const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
@@ -64,7 +65,7 @@ const CommondNotification = () => {
       not &&  log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
       not = true;
       log(`${rule}`);
-      const chalkColor = getChalkColor(color);
+      const chalkColor = getUnderlineColor(color);
       Files.map((val) => {
         log(chalkColor(val));
       });

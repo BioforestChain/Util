@@ -1,4 +1,5 @@
 import prompts from "prompts";
+import chalk from "chalk";
 
 /**
  * 请求用户是否要做出更改
@@ -10,9 +11,31 @@ export const getUserCmdConfirm = (tips: string): Promise<boolean> => {
     const response = await prompts({
       type: "confirm",
       name: "value",
-      message: tips,
+      message: chalk.inverse.black(tips),
       initial: true,
     });
     resolve(response.value);
   });
+};
+
+
+export const getUnderlineColor = (color: string) => {
+  switch (color) {
+    case "yellow":
+      return function (text: string) {
+        return chalk.underline.yellow(text);
+      };
+    case "red":
+      return function (text: string) {
+        return chalk.underline.red(text);
+      };
+    case "blue":
+      return function (text: string) {
+        return  chalk.underline.blue(text);
+      };
+    default:
+      return function (text: string) {
+        return  chalk.underline.black(text);
+      };
+  }
 };

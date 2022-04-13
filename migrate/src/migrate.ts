@@ -6,7 +6,7 @@ import {
   isDirectory,
   readSrcDirAllFile,
 } from "./util/fileFactory";
-import { getUserCmdConfirm } from "./util/cli";
+import { getUnderlineColor, getUserCmdConfirm } from "./util/cli";
 import os from "os";
 import {
   fileFilterFactory,
@@ -49,25 +49,18 @@ export const beforeInit = async (
   outputFolder = 'pkgm',
   writeFileName?: string,
 ) => {
-  // 创建新文件，把工作目录转移为新目录
+  // 创建新文件
   beforeInCopyFile(workspaceRoot,outputFolder);
+  // 把工作目录转移为新目录
   workspaceRoot = path.join(workspaceRoot,outputFolder);
-
-  writeFileNameFn(workspaceRoot,writeFileName)
-
+  // 自定义文件名
+  writeFileNameFn(workspaceRoot,writeFileName);
+  // 判断是bfsp还是bfsw
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
   // 创建bfsw和bfsp
   createBfsp && createPkgmEntrance(observerWorkspack,workspaceRoot);
-  //有包地址，代表是bfsw
-  if (observerWorkspack.length !== 0) {
-    observerWorkspack.map(async packageName => {
-      workspaceRoot = path.join(workspaceRoot,packageName);
-       await init(agree,workspaceRoot);
-    })
-    return;
-  }
-  // 没有包地址，代表是bfsp
-  init(agree,workspaceRoot);
+  // 开始初始化
+  warpInit(observerWorkspack,workspaceRoot,agree);
 };
 
 
@@ -83,7 +76,7 @@ export const init = async (agree: boolean = false,workspace:string) => {
   } else {
     await askDeveloperOpinion();
   }
-  log("风格标记结束");
+  log(chalk.bgBlackBright("风格标记结束"));
 };
 
 /**
@@ -131,7 +124,7 @@ export const askDeveloperOpinion = async (agree: boolean = false) => {
     if (files.length !== 0) {
       ask && log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
       ask = true;
-      const chalkColor = getChalkColor(style);
+      const chalkColor = getUnderlineColor(style);
       files.map((val) => {
         log(chalkColor(val));
       });
@@ -143,27 +136,13 @@ export const askDeveloperOpinion = async (agree: boolean = false) => {
   }
 };
 
-export const getChalkColor = (color: string) => {
-  switch (color) {
-    case "yellow":
-      return function (text: string) {
-        return chalk.underline.yellow(text);
-      };
-    case "red":
-      return function (text: string) {
-        return chalk.underline.red(text);
-      };
-    case "blue":
-      return function (text: string) {
-        return  chalk.underline.blue(text);
-      };
-    default:
-      return function (text: string) {
-        return  chalk.underline.black(text);
-      };
-  }
-};
 
+
+/**
+ * 创建自定义文件名
+ * @param workspaceRoot 
+ * @param writeFileName 
+ */
 function writeFileNameFn(workspaceRoot:string,writeFileName?:string) {
   // 如果用户使用了自定义文件名
   if (writeFileName !== undefined) {
@@ -171,4 +150,25 @@ function writeFileNameFn(workspaceRoot:string,writeFileName?:string) {
   } else {
     opinionFile = path.join(workspaceRoot,opinionFile);
   }
+}
+
+/**
+ * 
+ * @param observerWorkspack 
+ * @param workspaceRoot 
+ * @param agree 
+ * @returns 
+ */
+
+function warpInit(observerWorkspack:string[],workspaceRoot:string,agree:boolean) {
+    //有包地址，代表是bfsw
+    if (observerWorkspack.length !== 0) {
+      observerWorkspack.map(async packageName => {
+        workspaceRoot = path.join(workspaceRoot,packageName);
+         await init(agree,workspaceRoot);
+      })
+      return;
+    }
+    // 没有包地址，代表是bfsp
+    init(agree,workspaceRoot);
 }

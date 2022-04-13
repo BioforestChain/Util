@@ -1,5 +1,4 @@
 import { Command } from "commander";
-import path from "path";
 import { warpWatchFactory } from "./doctor";
 import { beforeInit } from "./migrate";
 const program = new Command();
@@ -13,7 +12,7 @@ program
 
 program
   .version("@bfchain/migrate2.0.0", "-v, --version")
-  .option("-p, --bfsp [string]", "auto create #bfsp.ts or #bfsw.ts") // 创建#bfsp.ts或者#bfsw.ts
+  .option("-p, --bfsp [string]", "auto create #bfsp.ts or #bfsw.ts [and output folder name]") // 创建#bfsp.ts或者#bfsw.ts,后面为输出的目录地址
   .option("-y, --yes", "Direct consent to write data") //直接将不匹配规则的文件记录下来
   .option("-f, --file <string>", "Custom write filename") // 自定义文件名称
   .option("-yy, --yy", "Defaults to the current directory and Direct consent to write data") //直接将不匹配规则的文件记录下来，并且创建#bfsp.ts或者#bfsw.ts

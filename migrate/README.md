@@ -50,7 +50,12 @@ migrate -y
 migrate -f <fileName>
 ```
 
-自动识别并创建#bfsp.ts和##bfsw.ts文件,可以指定创建文件的目录
+指定输出的目录的文件夹名称，默认为pkgm
+```
+migrate -F [customizeFolder]
+```
+
+自动识别并创建#bfsp.ts和##bfsw.ts文件,指定输出的目录的文件夹名称
 ```
 migrate -p [customizeFolder]
 ```
