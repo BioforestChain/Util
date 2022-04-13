@@ -2,30 +2,41 @@ import { Worker, isMainThread, workerData } from "worker_threads";
 import { excludePath, readSrcDirAllFile, writeContext } from "./fileFactory";
 import path from 'path';
 
-const cwd = process.cwd();
-export const createPkgmEntrance = (packages: string[]) => {
-  new Worker(__filename, { workerData: packages }); // 创建子进程，去生成入口文件
+export const createPkgmEntrance = (packages: string[],workspace:string) => {
+  new Worker(__filename, { workerData: {packages,workspace} }); // 创建子进程，去生成入口文件
 };
 
-export const createBfsp = (paths?:string[],packageName?:string) => {
+/**
+ * 
+ * @param workspace 创建目录地址
+ * @param paths 需要创建bfsp的项目文件名，如果是数组则是bfsw来的
+ * @param packageName lerna.json 里的packages
+ * @returns 
+ */
+export const createBfsp = (workspace:string,paths?:string[],packageName?:string) => {
     // 没有传入路径，表明在一个单独的项目里
     if(!paths) {
-        writeContext(path.join(cwd,'#bfsp.ts'),__returnBfspContext( path.basename(cwd)));
+        writeContext(path.join(workspace,'#bfsp.ts'),__returnBfspContext( path.basename(workspace)));
         return;
     }
     // 不在单独的项目里，需要给多个项目加#bfsp.ts文件
-    paths.forEach(async (project) => writeContext(path.join(cwd, packageName!, project, '#bfsp.ts'),__returnBfspContext(project)))
+    paths.forEach(async (project) => writeContext(path.join(workspace, packageName!, project, '#bfsp.ts'),__returnBfspContext(project)))
 };
 
-export const createBfsw = async (packages: string[]) => {
+/**
+ * 
+ * @param packages 
+ * @param workspace 
+ */
+export const createBfsw = async (packages: string[],workspace:string) => {
   packages.forEach(async (packName) => {
     let writeBfsps = await readSrcDirAllFile(packName);
     writeBfsps = writeBfsps.filter((name) => {
     return !excludePath[name]
     });
-    createBfsp(writeBfsps,packName)
+    createBfsp(workspace,writeBfsps,packName);
   });
- await writeContext(path.join(cwd,'#bfsw.ts'), __returnBfswContext());
+ await writeContext(path.join(workspace,'#bfsw.ts'), __returnBfswContext());
 };
 
 /**
@@ -35,11 +46,11 @@ export const createBfsw = async (packages: string[]) => {
 export const init = (isTest = false) => {
   if (!isMainThread || isTest) {
     // 子进程去处理写文件的逻辑
-    const packages = workerData;
+    const {packages,workspace} = workerData;
     if (packages && packages.length !== 0) {
-      createBfsw(packages);
+      createBfsw(packages,workspace);
     } else {
-      createBfsp();
+      createBfsp(workspace);
     }
   }
 }

@@ -12,7 +12,7 @@ const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
 let observerWorkspack: string[] = [];
 
-export const warpWatchFactory = async (folder:string) => {
+export const warpWatchFactory = async (folder:string= 'pkgm') => {
   // 创建新文件，把工作目录转移为新目录
   beforeInCopyFile(workspaceRoot,folder);
   workspaceRoot = path.join(workspaceRoot,folder);

@@ -50,9 +50,9 @@ migrate -y
 migrate -f <fileName>
 ```
 
-自动识别并创建#bfsp.ts和##bfsw.ts文件
+自动识别并创建#bfsp.ts和##bfsw.ts文件,可以指定创建文件的目录
 ```
-migrate -p
+migrate -p [customizeFolder]
 ```
 
 同意将不匹配规则的文件记录下来，并且自动识别并创建#bfsp.ts和##bfsw.ts文件

@@ -33,25 +33,31 @@ export const privateImportFiles: string[] = []; //"'#'开头是pkgm私有导入�
 export const warringTestTypeFiles: string[] = []; // '*.test.ts在bfsp中属于测试文件';
 export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#开头导入的文件为pkgm语法，未迁移的项目不允许出现
 
-
+/**
+ *  入口函数
+ * @param agree 是否同意直接写入
+ * @param createBfsp 是否创建bfsp和bfsw
+ * @param workspaceRoot 工作路径
+ * @param outputFolder 输出文件名
+ * @param writeFileName 自定义写文件名
+ * @returns 
+ */
 export const beforeInit = async (
   agree: boolean = false,
-  writeFileName?: string,
   createBfsp: boolean = false,
   workspaceRoot = process.cwd(),
-  outputFolder = 'pkgm'
+  outputFolder = 'pkgm',
+  writeFileName?: string,
 ) => {
   // 创建新文件，把工作目录转移为新目录
   beforeInCopyFile(workspaceRoot,outputFolder);
   workspaceRoot = path.join(workspaceRoot,outputFolder);
-  // 如果用户使用了自定义文件名
-  if (writeFileName !== undefined) {
-    opinionFile = path.join(workspaceRoot, `${writeFileName}.md`);
-  } else {
-    opinionFile = path.join(workspaceRoot,opinionFile);
-  }
+
+  writeFileNameFn(workspaceRoot,writeFileName)
+
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
-  createBfsp && createPkgmEntrance(observerWorkspack);
+  // 创建bfsw和bfsp
+  createBfsp && createPkgmEntrance(observerWorkspack,workspaceRoot);
   //有包地址，代表是bfsw
   if (observerWorkspack.length !== 0) {
     observerWorkspack.map(async packageName => {
@@ -63,6 +69,8 @@ export const beforeInit = async (
   // 没有包地址，代表是bfsp
   init(agree,workspaceRoot);
 };
+
+
 
 export const init = async (agree: boolean = false,workspace:string) => {
   const { fileDirs, filesArrs } = await getWorkspaceContext(workspace);
@@ -155,3 +163,12 @@ export const getChalkColor = (color: string) => {
       };
   }
 };
+
+function writeFileNameFn(workspaceRoot:string,writeFileName?:string) {
+  // 如果用户使用了自定义文件名
+  if (writeFileName !== undefined) {
+    opinionFile = path.join(workspaceRoot, `${writeFileName}.md`);
+  } else {
+    opinionFile = path.join(workspaceRoot,opinionFile);
+  }
+}
