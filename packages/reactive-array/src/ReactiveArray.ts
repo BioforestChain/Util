@@ -6,6 +6,7 @@ interface Sub {
   changed: boolean | PromiseOut<void>;
 }
 
+const ABORT_SIGNAL = Symbol("abort-signal");
 export class ReactiveArray<T> extends Array<T> {
   constructor() {
     super();
@@ -30,17 +31,16 @@ export class ReactiveArray<T> extends Array<T> {
   }
   private _subs?: Set<Sub>;
 
-  async *subscription(start: number = 0, end: number = Infinity, takeCurrent = true) {
+  async *_subscription(sub: Sub) {
     if (this._subs === undefined) {
       this._subs = new Set();
     }
-    const sub: Sub = { start, end, changed: takeCurrent };
     this._subs.add(sub);
     try {
       do {
         if (sub.changed === true) {
           sub.changed = false;
-          yield this.slice(start, end);
+          yield this.slice(sub.start, sub.end);
         }
         if (sub.changed === false) {
           sub.changed = new PromiseOut();
@@ -49,12 +49,25 @@ export class ReactiveArray<T> extends Array<T> {
         }
       } while (true);
     } catch (err) {
-      if (err !== 0 /* aborter */) {
+      if (err !== ABORT_SIGNAL) {
         throw err;
       }
     } finally {
       this._subs.delete(sub);
     }
+  }
+  subscription(start: number = 0, end: number = Infinity, takeCurrent = true) {
+    const sub: Sub = { start, end, changed: takeCurrent };
+    const subject = this._subscription(sub);
+    const _return = subject.return;
+    /// 重写 return 函数，确保能够直接地释放掉这个订阅
+    subject.return = (arg: any) => {
+      if (sub.changed instanceof PromiseOut) {
+        sub.changed.reject(ABORT_SIGNAL);
+      }
+      return _return.call(subject, arg);
+    };
+    return sub;
   }
 
   push(...args: T[]) {
@@ -93,6 +106,7 @@ export class ReactiveArray<T> extends Array<T> {
     if (Number.isFinite(deleteCount) === false || deleteCount < 0) {
       deleteCount = 0;
     }
+    /// deleteCount > 0 || items.length > 0
     if (deleteCount + items.length > 0) {
       /// 已经影响到数组后面的所有元素
       if (deleteCount !== items.length) {
