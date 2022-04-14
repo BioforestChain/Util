@@ -1,6 +1,6 @@
 {
   "name": "@bfchain/util-reactive-array",
-  "version": "4.12.44",
+  "version": "4.12.45",
   "description": "",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
