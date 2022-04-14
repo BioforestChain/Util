@@ -3,3 +3,6 @@ export interface IWriteStreamFlag {
   flags?: string;
 }
 
+export interface ICompilerOptions {
+  rootDir:  string[]
+}

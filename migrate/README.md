@@ -1,5 +1,7 @@
 ## 将代码风格向 pkgm 靠拢
 
+
+
 ### 安装方法
 
 ```bash
@@ -50,14 +52,10 @@ migrate -y
 migrate -f <fileName>
 ```
 
-指定输出的目录的文件夹名称，默认为pkgm
+指定输出的目录的文件夹名称，不指定也会创建,默认文件夹名称为pkgm
+
 ```
 migrate -F [customizeFolder]
-```
-
-自动识别并创建#bfsp.ts和##bfsw.ts文件,指定输出的目录的文件夹名称
-```
-migrate -p [customizeFolder]
 ```
 
 同意将不匹配规则的文件记录下来，并且自动识别并创建#bfsp.ts和##bfsw.ts文件
