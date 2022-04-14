@@ -67,7 +67,7 @@ export class ReactiveArray<T> extends Array<T> {
       }
       return _return.call(subject, arg);
     };
-    return sub;
+    return subject;
   }
 
   push(...args: T[]) {
