@@ -1,11 +1,11 @@
-import path from "path";
+import chalk from "chalk";
 import fs from "fs";
 import ora from "ora";
+import path from "path";
 import { fsExistsSync, isDirectory } from "./fileFactory";
 import { getNeedCopyFile } from "./tsconfigFactory";
-import chalk from "chalk";
 
-let copyTree;
+let copyTree:string[];
 const log = console.log;
 /**
  *
@@ -24,7 +24,6 @@ export const beforeInCopyFile = async (
   const outputDir = path.join(pwd, outputName);
   // 拿出需要复制的AST树
   copyTree = await getNeedCopyFile(pwd, observerWorkspack);
-  // console.log(copyTree)
   if (Object.keys(copyTree).length === 0) {
     log(chalk.red(`${pwd}没有需要复制的文件`));
   }
@@ -55,10 +54,9 @@ async function copyFile(srcPath: string, outputDir: string) {
 function excludeCopyFile(files: string[], srcPath: string, tarPath: string) {
   files.forEach(function (filename) {
     const filedir = path.join(srcPath, filename);
-    const current = path.basename(srcPath);
     // 如果没有包含在需要复制的文件里
-    // if (!includeFile(copyTree[current], filename)) return;
-    // fsStatus(filedir, tarPath, filename);
+    if (!includeFile(copyTree, filename)) return;
+     fsStatus(filedir, tarPath, filename);
   });
 }
 
@@ -85,8 +83,10 @@ function fsStatus(filedir: string, tarPath: string, filename: string) {
 
 function includeFile(copyArr: string[], current: string) {
   if (!copyArr) return false;
-  if (copyArr.indexOf(current) !== -1) {
-    return true;
-  }
+ for (const file of copyArr) {
+   if (file.indexOf(current) !== -1) {
+    return true
+   }
+ }
   return false;
 }
