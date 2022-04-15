@@ -2,6 +2,11 @@
   "extends": "./tsconfig",
   "mixin": ["./tsconfig.json", "../../config/tsconfig_base/base.tsconfig.esm.json"],
   "compilerOptions": {
+    "target": "es2020",
+    "module": "ESNext",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
     "outDir": "./build/esm"
   },
   "references": [
