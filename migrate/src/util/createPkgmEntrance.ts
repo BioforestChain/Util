@@ -16,11 +16,11 @@ export const createPkgmEntrance = (packages: string[],workspace:string) => {
 export const createBfsp = (workspace:string,paths?:string[],packageName?:string) => {
     // 没有传入路径，表明在一个单独的项目里
     if(!paths) {
-        writeContext(path.join(workspace,'#bfsp.ts'),__returnBfspContext( path.basename(workspace)));
+        writeContext(path.join(workspace,'#bfsp.ts'),createBfspContext( path.basename(workspace)));
         return;
     }
     // 不在单独的项目里，需要给多个项目加#bfsp.ts文件
-    paths.forEach(async (project) => writeContext(path.join(workspace, packageName!, project, '#bfsp.ts'),__returnBfspContext(project)))
+    paths.forEach(async (project) => writeContext(path.join(workspace, packageName!, project, '#bfsp.ts'),createBfspContext(project)))
 };
 
 /**
@@ -36,7 +36,7 @@ export const createBfsw = async (packages: string[],workspace:string) => {
     });
     createBfsp(workspace,writeBfsps,packName);
   });
- await writeContext(path.join(workspace,'#bfsw.ts'), __returnBfswContext());
+ await writeContext(path.join(workspace,'#bfsw.ts'), createBfswContext());
 };
 
 /**
@@ -58,7 +58,7 @@ export const init = (testWorkspace = '') => {
   }
 }
 init()
-function __returnBfspContext(name: string) {
+export const createBfspContext = (name: string) => {
   const bfsp = `
 import { defineConfig } from "@bfchain/pkgm-bfsp";
 export default defineConfig((info) => {
@@ -77,7 +77,7 @@ export default defineConfig((info) => {
 `;
   return bfsp;
 }
-function __returnBfswContext() {
+export const  createBfswContext = () => {
   const bfsw = `
 import { defineWorkspace } from "@bfchain/pkgm-bfsw";
 export default defineWorkspace(() => {

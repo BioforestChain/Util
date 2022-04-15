@@ -6,7 +6,7 @@ import {
   isDirectory,
   readSrcDirAllFile,
 } from "./util/fileFactory";
-import { getUnderlineColor, getUserCmdConfirm } from "./util/cli";
+import { getUnderlineColor } from "./util/cli";
 import os from "os";
 import {
   fileFilterFactory,
