@@ -28,9 +28,7 @@ export const beforeInCopyFile = async (
     log(chalk.red(`${pwd}没有需要复制的文件`));
   }
   await copyFile(pwd, outputDir);
-  spinner.color = "green";
-  spinner.text = '迁移完成'
-  spinner.stop();
+  spinner.succeed('迁移完成');
 };
 
 /**

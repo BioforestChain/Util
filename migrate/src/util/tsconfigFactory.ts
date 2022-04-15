@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import path from "path";
+import os from 'os';
 import { ICompilerOptions } from "typings/file";
 import {
   createReadStream,
@@ -64,11 +65,19 @@ async function getTsconfigFiles(rootPath: string) {
   try {
     configJson = JSON.parse(dataChunk as string);
   } catch (e) {
-    console.log(chalk.red(`请检查 ${tsconfigPath} 文件是否符合json标准格式:${e}`));
+    console.log(chalk.red(`${os.EOL}请检查 ${tsconfigPath} 文件是否符合json标准格式:${e}`));
   }
-  if (configJson && configJson.files) {
+
+  if (!configJson) {
+    const workspace = path.join(rootPath, "src");
+    const { filesArrs } = await getWorkspaceContext(workspace);
+    return needCopy.push(...filesArrs);
+  }
+
+  if (configJson.files) {
     return filesFactory(rootPath, configJson.files);
   }
+
   await compilerOptionsFactory(rootPath, configJson.compilerOptions);
 }
 
@@ -89,7 +98,7 @@ function filesFactory(rootPath: string, files: string[]) {
  * @returns
  */
 async function compilerOptionsFactory(rootPath: string, compilerOptions: ICompilerOptions) {
-  const rootDir = compilerOptions ? compilerOptions.rootDir : false;
+  const rootDir =  compilerOptions.rootDir;
   if (!rootDir) {
     // 如果什么都没有直接给个src目录
     const workspace = path.join(rootPath, "src");

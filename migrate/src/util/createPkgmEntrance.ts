@@ -1,6 +1,7 @@
 import { Worker, isMainThread, workerData } from "worker_threads";
 import { excludePath, readSrcDirAllFile, writeContext } from "./fileFactory";
 import path from 'path';
+import { createBfspContext, createBfswContext } from "./createDependencies";
 
 export const createPkgmEntrance = (packages: string[],workspace:string) => {
   new Worker(__filename, { workerData: {packages,workspace} }); // 创建子进程，去生成入口文件
@@ -58,34 +59,3 @@ export const init = (testWorkspace = '') => {
   }
 }
 init()
-export const createBfspContext = (name: string) => {
-  const bfsp = `
-import { defineConfig } from "@bfchain/pkgm-bfsp";
-export default defineConfig((info) => {
-  const config: Bfsp.UserConfig = {
-    name: "${name}",
-    exports: {
-      ".": "./index.ts",
-    },
-    packageJson: {
-      license: "MIT",
-      author: "BFChainer",
-    },
-  };
-  return config;
-});
-`;
-  return bfsp;
-}
-export const  createBfswContext = () => {
-  const bfsw = `
-import { defineWorkspace } from "@bfchain/pkgm-bfsw";
-export default defineWorkspace(() => {
-  const config: Bfsw.Workspace = {
-    projects: [],
-  };
-  return config;
-});
-`;
-  return bfsw;
-}

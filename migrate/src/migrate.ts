@@ -24,7 +24,6 @@ import { beforeInCopyFile } from "./util/output";
 
 const log = console.log;
 let opinionFile = "opinionFile.md";
-const tip = "是否要把以上文件记录下来?";
 export const typeFiles: string[] = []; // type类型匹配到的文件
 export const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
 export const declareFiles: string[] = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法
