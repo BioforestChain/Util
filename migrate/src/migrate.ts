@@ -49,7 +49,7 @@ export const beforeInit = async (
   // 判断是bfsp还是bfsw
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
   // 创建新文件
-  beforeInCopyFile(workspaceRoot, outputFolder, observerWorkspack);
+  await beforeInCopyFile(workspaceRoot, outputFolder, observerWorkspack);
   // 把工作目录转移为新目录
   workspaceRoot = path.join(workspaceRoot, outputFolder);
   // 自定义文件名

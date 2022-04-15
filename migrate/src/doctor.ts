@@ -35,7 +35,7 @@ export const warpWatchFactory = async (folder: string = "pkgm") => {
   // 判断是bfsp还是bfsw
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
   // 创建新文件
-  beforeInCopyFile(workspaceRoot, folder, observerWorkspack);
+  await beforeInCopyFile(workspaceRoot, folder, observerWorkspack);
   //把工作目录转移为新目录
   workspaceRoot = path.join(workspaceRoot, folder);
   // 创建bfsw和bfsp
