@@ -40,11 +40,6 @@ migrate会自动输出新目录，默认文件名为pkgm,您可以在像以下�
 migrate doctor customizeFolder
 ```
 
-同意将不匹配规则的文件记录下来，如果不加这个命令，会进行询问
-
-```
-migrate -y
-```
 
 当您需要把不匹配规则的文件记录下来的时候，这个命令能让您自定义创建文件名（格式为markdown）
 
@@ -56,11 +51,6 @@ migrate -f <fileName>
 
 ```
 migrate -F [customizeFolder]
-```
-
-同意将不匹配规则的文件记录下来，并且自动识别并创建#bfsp.ts和##bfsw.ts文件
-```
-migtate -yy 
 ```
 
 ### 判定规则

@@ -35,7 +35,6 @@ export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#�
 
 /**
  *  入口函数
- * @param agree 是否同意直接写入
  * @param createBfsp 是否创建bfsp和bfsw
  * @param workspaceRoot 工作路径
  * @param outputFolder 输出文件夹名称
@@ -43,7 +42,6 @@ export const importFiles: string[] = []; // impor\t mod f\rom '#mod' 这种以#�
  * @returns
  */
 export const beforeInit = async (
-  agree: boolean = false,
   workspaceRoot = process.cwd(),
   outputFolder = "pkgm",
   writeFileName?: string,
@@ -51,29 +49,26 @@ export const beforeInit = async (
   // 判断是bfsp还是bfsw
   const observerWorkspack = await judgeBfspBfsw(workspaceRoot);
   // 创建新文件
-  beforeInCopyFile(workspaceRoot, outputFolder,observerWorkspack);
+  beforeInCopyFile(workspaceRoot, outputFolder, observerWorkspack);
   // 把工作目录转移为新目录
   workspaceRoot = path.join(workspaceRoot, outputFolder);
   // 自定义文件名
-  writeFileNameFn(workspaceRoot,writeFileName);
+  writeFileNameFn(workspaceRoot, writeFileName);
   // 创建bfsw和bfsp
-  createPkgmEntrance(observerWorkspack,workspaceRoot);
+  createPkgmEntrance(observerWorkspack, workspaceRoot);
   // 开始初始化
-  warpInit(observerWorkspack,workspaceRoot,agree);
+  warpInit(observerWorkspack, workspaceRoot);
 };
 
-export const init = async (agree: boolean = false, workspace: string) => {
+export const init = async (workspace: string) => {
   const { fileDirs, filesArrs } = await getWorkspaceContext(workspace);
-  fileDirs.forEach(
+  const pending =  fileDirs.map(
     async (dir, index) => await mainMigrateFactory(filesArrs[index] as string[] | string, dir),
   );
-  // agree=true 表示用户需要全部记录下来
-  if (agree) {
-    await askDeveloperOpinion(agree);
-  } else {
-    await askDeveloperOpinion();
-  }
-  log(chalk.bgBlackBright("风格标记结束"));
+  await Promise.all(pending);
+  await askDeveloperOpinion();
+
+  log(os.EOL,chalk.bgBlackBright("风格标记结束"));
 };
 
 /**
@@ -106,9 +101,9 @@ export const mainMigrateFactory = async (files: Array<string> | string, dir: str
 };
 
 /**
- * 给用户选择，是否把不符合pkgm的记录下来
+ * 打印所有需要合并的请求
  */
-export const askDeveloperOpinion = async (agree: boolean = false) => {
+export const askDeveloperOpinion = async () => {
   let ask = false; // 用来标记是不是第一次写入，如果是第二次写入会变成true，打开插入文本模式
   await warpAsk(typeFiles, typeDRule, "yellow");
   await warpAsk(nodeFiles, nodeRule, "yellow");
@@ -125,10 +120,8 @@ export const askDeveloperOpinion = async (agree: boolean = false) => {
       files.map((val) => {
         log(chalkColor(val));
       });
-      const result = agree ? true : await getUserCmdConfirm(`${rule} ${tip}`);
-      if (result) {
-        await migragteFactory(files, ask)(rule, opinionFile);
-      }
+      log(rule,os.EOL);
+      await migragteFactory(files, ask)(rule, opinionFile);
     }
   }
 };
@@ -155,15 +148,15 @@ function writeFileNameFn(workspaceRoot: string, writeFileName?: string) {
  * @returns
  */
 
-function warpInit(observerWorkspack: string[], workspaceRoot: string, agree: boolean) {
+function warpInit(observerWorkspack: string[], workspaceRoot: string) {
   //有包地址，代表是bfsw
   if (observerWorkspack.length !== 0) {
     observerWorkspack.map(async (packageName) => {
       workspaceRoot = path.join(workspaceRoot, packageName);
-      await init(agree, workspaceRoot);
+      await init(workspaceRoot);
     });
     return;
   }
   // 没有包地址，代表是bfsp
-  init(agree, workspaceRoot);
+  init(workspaceRoot);
 }
