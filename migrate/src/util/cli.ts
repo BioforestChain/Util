@@ -1,7 +1,10 @@
-import prompts from "prompts";
 import chalk from "chalk";
 
-
+/**
+ * 返回对应文字的颜色
+ * @param color 
+ * @returns function getColor()
+ */
 export const getUnderlineColor = (color: string) => {
   switch (color) {
     case "yellow":

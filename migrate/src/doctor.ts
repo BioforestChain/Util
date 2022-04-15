@@ -26,6 +26,7 @@ import {
 import { beforeInCopyFile } from "./util/output";
 import { getUnderlineColor } from "./util/cli";
 import { createPkgmEntrance } from "./util/createPkgmEntrance";
+import { createTableTui } from "./util/terminalUI";
 
 const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
@@ -72,7 +73,7 @@ const runDoctor = async () => {
 };
 
 const CommondNotification = () => {
-  let not = false; // 用来标记是不是第一次写入，用来显示分割线
+  let logContext = '';
   warpNotification(typeFiles, typeDRule, "yellow");
   warpNotification(nodeFiles, nodeRule, "yellow");
   warpNotification(indexFiles, indexRule, "blue");
@@ -80,17 +81,17 @@ const CommondNotification = () => {
   warpNotification(declareFiles, typeDeclareRule, "red");
   warpNotification(importFiles, importRule, "red");
   warpNotification(privateImportFiles, privateImportRule, "red");
-
   function warpNotification(Files: string[], rule: string, color: string) {
     if (Files.length !== 0) {
-      not && log(chalk.blackBright(`${os.EOL}-----------我是分割线-------------${os.EOL}`));
-      not = true;
-      log(`${rule}`);
       const chalkColor = getUnderlineColor(color);
-      Files.map((val) => {
-        log(chalkColor(val));
+      logContext = `${logContext}${os.EOL}${rule}${os.EOL}`;
+      Files.map((file) => {
+        logContext = `${logContext}${chalkColor(file)}${os.EOL}`;
       });
     }
+  }
+  if (logContext !== '') {
+    createTableTui(logContext)
   }
 };
 
