@@ -18,7 +18,6 @@
   "files": [
     "src/@types.ts",
     "src/Aborter.ts",
-    "src/index.ts",
-    "src/common/index.ts"
+    "src/index.ts"
   ]
 }

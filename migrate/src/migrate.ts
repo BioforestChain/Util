@@ -55,11 +55,11 @@ export const beforeInit = async (
   // 把工作目录转移为新目录
   workspaceRoot = path.join(workspaceRoot, outputFolder);
   // 自定义文件名
-  // writeFileNameFn(workspaceRoot,writeFileName);
+  writeFileNameFn(workspaceRoot,writeFileName);
   // 创建bfsw和bfsp
-  // createPkgmEntrance(observerWorkspack,workspaceRoot);
+  createPkgmEntrance(observerWorkspack,workspaceRoot);
   // 开始初始化
-  // warpInit(observerWorkspack,workspaceRoot,agree);
+  warpInit(observerWorkspack,workspaceRoot,agree);
 };
 
 export const init = async (agree: boolean = false, workspace: string) => {

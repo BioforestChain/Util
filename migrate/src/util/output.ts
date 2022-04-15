@@ -22,7 +22,7 @@ export const beforeInCopyFile = async (
   spinner.color = "yellow";
 
   const outputDir = path.join(pwd, outputName);
-  // 拿出需要复制的AST树
+  // 拿出需要复制的文件
   copyTree = await getNeedCopyFile(pwd, observerWorkspack);
   if (Object.keys(copyTree).length === 0) {
     log(chalk.red(`${pwd}没有需要复制的文件`));

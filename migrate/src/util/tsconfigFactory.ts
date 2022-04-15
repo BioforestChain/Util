@@ -1,17 +1,14 @@
+import chalk from "chalk";
 import path from "path";
 import { ICompilerOptions } from "typings/file";
-import { createReadStream, fsExistsSync, readSrcDirAllFile } from "./fileFactory";
+import {
+  createReadStream,
+  fsExistsSync,
+  getWorkspaceContext,
+  readSrcDirAllFile,
+} from "./fileFactory";
 
-/**这里面的内容主要是根据tsconfig构建复制树 */
-/**
- *  util:[{
- * name:packages,
- * child:[
- * {name:module1,child:[{}]},
- * {name:module2,child:[{}]}
- * ],
- * }]
- */
+/**这里面的内容主要是提取tsconfig内容 */
 
 let needCopy: string[] = [];
 /**
@@ -52,7 +49,6 @@ async function getChildTsconfig(packageProject: string) {
   );
 }
 
-
 /**
  * 拿到tsconfig
  * @param rootPath
@@ -64,12 +60,16 @@ async function getTsconfigFiles(rootPath: string) {
   // 如果没有tsconfig,摆烂
   if (!fsExistsSync(tsconfigPath)) return;
   const dataChunk = await createReadStream(tsconfigPath);
-  const configJson = JSON.parse(dataChunk as string);
-
-  if (configJson.files) {
-    return filesFactory(rootPath,configJson.files);
+  let configJson;
+  try {
+    configJson = JSON.parse(dataChunk as string);
+  } catch (e) {
+    console.log(chalk.red(`请检查 ${tsconfigPath} 文件是否符合json标准格式:${e}`));
   }
-  compilerOptionsFactory(configJson.compilerOptions);
+  if (configJson && configJson.files) {
+    return filesFactory(rootPath, configJson.files);
+  }
+  await compilerOptionsFactory(rootPath, configJson.compilerOptions);
 }
 
 /**
@@ -77,22 +77,37 @@ async function getTsconfigFiles(rootPath: string) {
  * @param files
  * @returns
  */
-function filesFactory(rootPath:string,files: string[]) {
-    files.map((file => {
-      needCopy.push(path.join(rootPath,file))
-    }))
+function filesFactory(rootPath: string, files: string[]) {
+  files.map((file) => {
+    needCopy.push(path.join(rootPath, file));
+  });
 }
 
-  
 /**
  * 处理rootDir
  * @param compilerOptions
  * @returns
  */
-function compilerOptionsFactory(compilerOptions: ICompilerOptions) {
-  const rootDir = compilerOptions.rootDir;
-  if (rootDir) {
-    return compilerOptions.rootDir;
+async function compilerOptionsFactory(rootPath: string, compilerOptions: ICompilerOptions) {
+  const rootDir = compilerOptions ? compilerOptions.rootDir : false;
+  if (!rootDir) {
+    // 如果什么都没有直接给个src目录
+    const workspace = path.join(rootPath, "src");
+    const { filesArrs } = await getWorkspaceContext(workspace);
+    return needCopy.push(...filesArrs);
   }
-  return ["./src"];
+  // 处理非数组情况
+  if (!Array.isArray(rootDir)) {
+    const workspace = path.join(rootPath, rootDir);
+    const { filesArrs } = await getWorkspaceContext(workspace);
+    return needCopy.push(...filesArrs);
+  }
+  // 处理数组
+  await Promise.all(
+    rootDir.map(async (dir) => {
+      const workspace = path.join(rootPath, dir);
+      const { filesArrs } = await getWorkspaceContext(workspace);
+      needCopy.push(...filesArrs);
+    }),
+  );
 }
