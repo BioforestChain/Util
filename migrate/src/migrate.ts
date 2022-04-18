@@ -54,7 +54,7 @@ export const beforeInit = async (
   // 自定义文件名
   writeFileNameFn(workspaceRoot, writeFileName);
   // 创建bfsw和bfsp
-  createPkgmEntrance(observerWorkspack, workspaceRoot);
+  await createPkgmEntrance(observerWorkspack, workspaceRoot);
   // 开始初始化
   warpInit(observerWorkspack, workspaceRoot);
 };

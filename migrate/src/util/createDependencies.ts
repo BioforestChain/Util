@@ -2,12 +2,12 @@ import { fsExistsSync } from "./fileFactory";
 import fs from 'fs';
 import path from "path";
 
-function createConfig(workspaceRoot:string) {
-    const configDir = path.join(workspaceRoot,'config')
-    if (!fsExistsSync(workspaceRoot)) {
-        fs.mkdirSync(configDir);
-      }
-}
+// function createConfig(workspaceRoot:string) {
+//     const configDir = path.join(workspaceRoot,'config')
+//     if (!fsExistsSync(workspaceRoot)) {
+//         fs.mkdirSync(configDir);
+//       }
+// }
 
 
 export const createBfspContext = (name: string) => {

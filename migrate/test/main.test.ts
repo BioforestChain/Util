@@ -27,6 +27,6 @@ test("test 文件检测数量", async () => {
   const mainMigrateFactory = await jest.spyOn(migrate, "mainMigrateFactory");
   const askDeveloperOpinion = await jest.spyOn(migrate, "askDeveloperOpinion");
   await migrate.init(path.join(__dirname,'bfsp'))
-  await expect(mainMigrateFactory).toHaveBeenCalledTimes(12);
-  await expect(askDeveloperOpinion).toHaveBeenCalledTimes(1);
+  await expect(mainMigrateFactory).toHaveBeenCalledTimes(13);
+  await expect(askDeveloperOpinion).toHaveBeenCalledTimes(2);
 });
