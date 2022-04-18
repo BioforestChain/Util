@@ -26,11 +26,13 @@ import {
 import { beforeInCopyFile } from "./util/output";
 import { getUnderlineColor } from "./util/cli";
 import { createPkgmEntrance } from "./util/createPkgmEntrance";
-import { createTableTui } from "./util/terminalUI";
+import { adapterTui,attachData } from "./util/terminalUI";
+import { IAlarmLevel } from "typings/file";
 
-const log = console.log;
 let workspaceRoot = process.cwd(); // 用户当前位置
 let observerWorkspack: string[] = [];
+let fileCount = 0;
+
 
 export const warpWatchFactory = async (folder: string = "pkgm") => {
   // 判断是bfsp还是bfsw
@@ -50,10 +52,10 @@ export const warpWatchFactory = async (folder: string = "pkgm") => {
 };
 
 const runDoctor = async () => {
-  log(chalk.bgBlue(`${os.EOL} 开启动态对比模式： ${os.EOL}`));
   // observerWorkspack为0表示为bfsp
   if (observerWorkspack.length === 0) {
     const { filesArrs } = await getWorkspaceContext(workspaceRoot);
+    fileCount = filesArrs.length;
     const resolveFn = filesArrs.map(async (file, index) => {
       return await fileFilterFactory(file);
     });
@@ -64,6 +66,7 @@ const runDoctor = async () => {
   // bfsw
   observerWorkspack.map(async (pathName) => {
     const { filesArrs } = await getWorkspaceContext(path.join(workspaceRoot, pathName));
+    fileCount = filesArrs.length;
     const resolveFn = filesArrs.map(async (file, index) => {
       return await fileFilterFactory(file);
     });
@@ -81,8 +84,10 @@ const CommondNotification = () => {
   warpNotification(declareFiles, typeDeclareRule, "red");
   warpNotification(importFiles, importRule, "red");
   warpNotification(privateImportFiles, privateImportRule, "red");
+
   function warpNotification(Files: string[], rule: string, color: string) {
     if (Files.length !== 0) {
+      createAttachData(Files.length,color); 
       const chalkColor = getUnderlineColor(color);
       logContext = `${logContext}${os.EOL}${rule}${os.EOL}`;
       Files.map((file) => {
@@ -91,7 +96,7 @@ const CommondNotification = () => {
     }
   }
   if (logContext !== '') {
-    createTableTui(logContext)
+    adapterTui(logContext,attachData)
   }
 };
 
@@ -113,3 +118,13 @@ export const operatingRoom = async (type: string, packages: string | Error) => {
     return runDoctor();
   }
 };
+
+
+ /**预处理修改进度数据 */
+ function createAttachData(filesNumber:number,color:string) {
+   const percent  = attachData[color].percent;
+  if (percent === 0) {
+    attachData[color].percent = Math.round((filesNumber/fileCount)*100)/100
+  }
+  attachData[color].percent = Math.round(((percent+ filesNumber)/fileCount)*100)/100
+}

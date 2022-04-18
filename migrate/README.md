@@ -1,7 +1,5 @@
 ## 将代码风格向 pkgm 靠拢
 
-
-
 ### 安装方法
 
 ```bash
@@ -39,6 +37,7 @@ migrate会自动输出新目录，默认文件名为pkgm,您可以在像以下�
 ```
 migrate doctor customizeFolder
 ```
+![doctor](http://qiniu-waterbang.waterbang.top/migrate.png)
 
 
 当您需要把不匹配规则的文件记录下来的时候，这个命令能让您自定义创建文件名（格式为markdown）
