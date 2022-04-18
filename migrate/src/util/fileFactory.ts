@@ -1,7 +1,6 @@
+import fs from "fs";
 import path from "node:path";
-import * as fs from "fs";
 import os from "os";
-import { unlink } from "fs/promises";
 import { IWriteStreamFlag } from "typings/file";
 
 export const excludePath: { [key: string]: boolean } = {

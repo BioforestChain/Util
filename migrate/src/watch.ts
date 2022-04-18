@@ -17,7 +17,7 @@ export const watchFactory = (watchPath: string,packages?:string[]) => {
   return new Promise((resolve, reject) => {
     // Initialize watcher.
     const watcher = chokidar.watch(watchRules, {
-      ignored: [/(^|[\/\\])\../, "**/node_modules/**", "**/dist/**", "**/test/**", "**/build/**"], // ignore dotfiles
+      ignored: [/(^|[\/\\])\../, "**/node_modules/**", "**/dist/**", "**/test/**", "**/build/**","**/#bfsp.ts","**/#bfsw.ts"], // ignore dotfiles
       persistent: true,
       cwd:watchPath
     });

@@ -37,7 +37,7 @@ export const fileFilterFactory = async (filesDir: string) => {
       nodeFiles.push(filesDir);
     }
     // 匹配mod#web.ts
-    if (/\w*#+\w*\.[t,j,m,c]s[x]?$/.test(fileName)) {
+    if (/(?!#bfsw|#bfsp)(\w*#+\w*)\.[t,j,m,c]s[x]?$/.test(fileName)) {
       privateImportFiles.push(filesDir);
     }
 

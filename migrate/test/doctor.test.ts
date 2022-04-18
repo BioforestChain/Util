@@ -18,7 +18,7 @@ test('test create bfsp and bfsw',async () => {
     const spyCreateBfsp = jest.spyOn(createPkgm,'createBfsp');
     const spyCreateBfsw = jest.spyOn(createPkgm,'createBfsw');
     const workspace =  path.join(__dirname,'bfsw','pkgm')
-    await createPkgm.createBfsw(['packages'],workspace)
+    await createPkgm.createPkgmEntrance(['packages'],workspace)
     expect(spyCreateBfsp).toHaveBeenCalledTimes(1);
     expect(spyCreateBfsw).toHaveBeenCalledTimes(1);
 })
@@ -26,8 +26,14 @@ test('test create bfsp and bfsw',async () => {
 test('test 模拟子线程调用创建#bfsp.ts',async () => {
     const spyCreateBfsp = jest.spyOn(createPkgm,'createBfsp');
     const workspace =  path.join(__dirname,'bfsp','pkgm')
-    await createPkgm.init(workspace)
+    await createPkgm.createPkgmEntrance([],workspace)
     await expect(spyCreateBfsp).toHaveBeenCalledTimes(1);
+})
+test('test 模拟子线程调用创建#bfsw.ts',async () => {
+  const spyCreateBfsw = jest.spyOn(createPkgm,'createBfsw');
+  const workspace =  path.join(__dirname,'bfsw','pkgm')
+  await createPkgm.createPkgmEntrance(['packages'],workspace)
+  await expect(spyCreateBfsw).toHaveBeenCalledTimes(1);
 })
 
 
