@@ -89,7 +89,7 @@ const declareFilesRule = async (filesDir: string) => {
 const indexFilesRule = async (filesDir: string) => {
   return new Promise<boolean>(async (resolve) => {
     const dataChunk = await createReadStream(filesDir);
-    if (/(function)/g.test(dataChunk as string)) {
+    if (/function\s/g.test(dataChunk as string)) {
       indexFiles.push(filesDir);
     }
     resolve(true);
