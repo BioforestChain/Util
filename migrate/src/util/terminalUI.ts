@@ -52,11 +52,20 @@ const donut =  grid.set(1, 5, 7, 4, contrib.donut,{
   yPadding: 2,
 });
 
+/**
+ * tui适配器
+ * @param content 
+ * @param attachData 
+ */
 export const adapterTui = (content:string, attachData:IAlarmLevel) => {
   createLoggerTui(content);
   createAttachTui(attachData);
 }
 
+/**
+ * 渲染日志模块
+ * @param content 
+ */
 function createLoggerTui (content: string) {
   logger.focus();
   logger.log(content);
@@ -64,6 +73,10 @@ function createLoggerTui (content: string) {
   screen.render();
 };
 
+/**
+ * 渲染进度模块
+ * @param attachData 
+ */
 function createAttachTui (attachData:IAlarmLevel) {
   screen.append(donut);
   donut.setData([
@@ -72,3 +85,12 @@ function createAttachTui (attachData:IAlarmLevel) {
     attachData.blue
   ]);
 };
+
+/**
+ * 初始化attach数据
+ */
+export const InitAttachData = () => {
+  Object.keys(attachData).map(item => {
+    attachData[item].percent = 0;
+  })
+}
