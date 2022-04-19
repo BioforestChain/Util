@@ -86,6 +86,11 @@ const declareFilesRule = async (filesDir: string) => {
   });
 };
 
+/**
+ * 处理index规则
+ * @param filesDir 
+ * @returns 
+ */
 const indexFilesRule = async (filesDir: string) => {
   return new Promise<boolean>(async (resolve) => {
     const dataChunk = await createReadStream(filesDir);

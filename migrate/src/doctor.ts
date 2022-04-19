@@ -26,8 +26,7 @@ import {
 import { beforeInCopyFile } from "./util/output";
 import { getUnderlineColor } from "./util/cli";
 import { createPkgmEntrance } from "./util/createPkgmEntrance";
-import { adapterTui,attachData } from "./util/terminalUI";
-import { IAlarmLevel } from "typings/file";
+import { adapterTui,attachData, InitAttachData } from "./util/terminalUI";
 
 let workspaceRoot = process.cwd(); // 用户当前位置
 let observerWorkspack: string[] = [];
@@ -75,8 +74,13 @@ const runDoctor = async () => {
   });
 };
 
+/**
+ * 渲染到terminal
+ */
 const CommondNotification = () => {
   let logContext = '';
+  InitAttachData();
+
   warpNotification(typeFiles, typeDRule, "yellow");
   warpNotification(nodeFiles, nodeRule, "yellow");
   warpNotification(indexFiles, indexRule, "blue");
