@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import path from "path";
-import os from 'os';
+import os from "os";
 import { ICompilerOptions } from "typings/file";
 import {
   createReadStream,
@@ -82,7 +82,7 @@ async function getTsconfigFiles(rootPath: string) {
 }
 
 /**
- * 处理tsconfig.js files
+ * 处理tsconfig.js files,会先查找files的文件
  * @param files
  * @returns
  */
@@ -93,12 +93,12 @@ function filesFactory(rootPath: string, files: string[]) {
 }
 
 /**
- * 处理rootDir
+ * 处理rootDir，没有的话再找rootDir
  * @param compilerOptions
  * @returns
  */
 async function compilerOptionsFactory(rootPath: string, compilerOptions: ICompilerOptions) {
-  const rootDir =  compilerOptions.rootDir;
+  const rootDir = compilerOptions.rootDir;
   if (!rootDir) {
     // 如果什么都没有直接给个src目录
     const workspace = path.join(rootPath, "src");
