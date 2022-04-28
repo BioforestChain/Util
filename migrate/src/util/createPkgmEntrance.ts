@@ -27,7 +27,7 @@ export const createBfsp = async (workspace: string, paths?: string[], packageNam
   paths.forEach(async (project) =>
     writeContext(
       path.join(workspace, packageName!, project, "#bfsp.ts"),
-      await createBfspContext(workspace),
+      await createBfspContext(workspace, packageName!, project),
     ),
   );
 };
