@@ -5,7 +5,7 @@ import path from "path";
 import { fsExistsSync, isDirectory } from "./fileFactory";
 import { getNeedCopyFile } from "./tsconfigFactory";
 
-let copyTree:string[];
+let copyTree: string[];
 const log = console.log;
 /**
  *
@@ -28,7 +28,7 @@ export const beforeInCopyFile = async (
     log(chalk.red(`${pwd}没有需要复制的文件`));
   }
   await copyFile(pwd, outputDir);
-  spinner.succeed('迁移完成');
+  spinner.succeed("迁移完成");
 };
 
 /**
@@ -55,7 +55,7 @@ function excludeCopyFile(files: string[], srcPath: string, tarPath: string) {
     const filedir = path.join(srcPath, filename);
     // 如果没有包含在需要复制的文件里
     if (!includeFile(copyTree, filename)) return;
-     fsStatus(filedir, tarPath, filename);
+    fsStatus(filedir, tarPath, filename);
   });
 }
 
@@ -82,10 +82,10 @@ function fsStatus(filedir: string, tarPath: string, filename: string) {
 
 function includeFile(copyArr: string[], current: string) {
   if (!copyArr) return false;
- for (const file of copyArr) {
-   if (file.indexOf(current) !== -1) {
-    return true
-   }
- }
+  for (const file of copyArr) {
+    if (file.indexOf(current) !== -1) {
+      return true;
+    }
+  }
   return false;
 }
