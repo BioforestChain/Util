@@ -10,8 +10,6 @@ import chalk from "chalk";
  * @returns
  */
 async function createDependencies(rootPath: string): Promise<IPackages> {
-  // 这里的格式已经是指向新的目录了所以需要回退
-  rootPath = path.resolve(rootPath, "..");
   const packageJsonPath = path.join(rootPath, "package.json");
   let index: string = "./index.ts";
   // 先找一下src有没有index.ts
@@ -38,7 +36,16 @@ async function createDependencies(rootPath: string): Promise<IPackages> {
   };
 }
 
-export const createBfspContext = async (workspace: string) => {
+export const createBfspContext = async (
+  workspace: string,
+  packageName?: string,
+  project?: string,
+) => {
+  // 这里的格式已经是指向新的目录了所以需要回退
+  workspace = path.resolve(workspace, "..");
+  if (packageName && project) {
+    workspace = path.join(workspace, packageName, project);
+  }
   const dep = await createDependencies(workspace);
   const bfsp = `
   import { defineConfig } from "@bfchain/pkgm-bfsp";
