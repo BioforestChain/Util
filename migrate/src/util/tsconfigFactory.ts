@@ -8,6 +8,7 @@ import {
   getWorkspaceContext,
   readSrcDirAllFile,
 } from "./fileFactory";
+export const PROJECTSNAME: string[] = [];
 
 /**这里面的内容主要是提取tsconfig内容 */
 
@@ -45,6 +46,8 @@ async function getChildTsconfig(packageProject: string) {
   await Promise.all(
     files.map(async (project) => {
       const childProject = path.join(packageProject, project);
+      // 收集一下每个项目的文件名，在构建#bfsp的时候，如果有互相依赖的需要移动到deps里面去
+      await getPackagesName(childProject);
       await getTsconfigFiles(childProject);
     }),
   );
@@ -119,4 +122,24 @@ async function compilerOptionsFactory(rootPath: string, compilerOptions: ICompil
       needCopy.push(...filesArrs);
     }),
   );
+}
+
+/**
+ * 收集项目名
+ * @param projectPath
+ */
+async function getPackagesName(projectPath: string) {
+  const packagePath = path.join(projectPath, "package.json");
+  // 如果没有tsconfig,摆烂
+  if (!fsExistsSync(packagePath)) return;
+  const dataChunk = await createReadStream(packagePath);
+  let configJson;
+  try {
+    configJson = JSON.parse(dataChunk as string);
+  } catch (e) {
+    console.log(chalk.red(`${os.EOL}请检查 ${packagePath} 文件是否符合json标准格式:${e}`));
+  }
+  if (configJson.name) {
+    PROJECTSNAME.push(configJson.name);
+  }
 }

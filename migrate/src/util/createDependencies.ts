@@ -3,6 +3,7 @@ import os from "os";
 import path from "path";
 import { IPackages } from "typings/packages";
 import chalk from "chalk";
+import { PROJECTSNAME } from "./tsconfigFactory";
 
 /**
  * 创建依赖，为写入#bfsp做准备
@@ -16,20 +17,37 @@ async function createDependencies(rootPath: string): Promise<IPackages> {
   if (fsExistsSync(path.join(rootPath, "src", "index.ts"))) {
     index = "./src/index.ts";
   }
-
   // 如果没有packages.json,摆烂
-  if (!fsExistsSync(packageJsonPath)) return { packageName: "", index: "./index.ts" };
+  if (!fsExistsSync(packageJsonPath)) return { name: "", index: "./index.ts" };
   const dataChunk = await createReadStream(packageJsonPath);
-  let configJson;
+  let configJson: IPackages = {
+    name: "",
+    index: "",
+  };
   try {
     configJson = JSON.parse(dataChunk as string);
   } catch (e) {
     console.log(chalk.red(`${os.EOL}请检查 ${packageJsonPath} 文件是否符合json标准格式:${e}`));
   }
+  // 如果有互相依赖的需要移动到deps里面去
+  const deps: string[] = [];
+  const dependencies = ["dependencies", "devDependencies", "peerDependencies"];
+  dependencies.map((item) => {
+    if (configJson[item] && Object.keys(configJson[item]).length !== 0) {
+      Object.keys(configJson[item]).forEach((dep) => {
+        if (PROJECTSNAME.indexOf(dep) !== -1) {
+          deps.push(`'${dep}'`);
+          delete configJson[item]![dep];
+        }
+      });
+    }
+  });
+
   // 拿到每个项目的依赖
   return {
-    packageName: configJson.name,
+    name: configJson.name,
     index: index,
+    deps: deps,
     dependencies: configJson.dependencies ?? {},
     devDependencies: configJson.devDependencies ?? {},
     peerDependencies: configJson.peerDependencies ?? {},
@@ -51,10 +69,11 @@ export const createBfspContext = async (
   import { defineConfig } from "@bfchain/pkgm-bfsp";
   export default defineConfig((info) => {
     const config: Bfsp.UserConfig = {
-      name: "${dep.packageName}",
+      name: "${dep.name}",
       exports: {
         ".":"${dep.index}",
       },
+      deps:[${dep.deps}],
       packageJson: {
         license: "MIT",
         author: "BFChainer",

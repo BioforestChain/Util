@@ -24,6 +24,8 @@ import { beforeInCopyFile } from "./util/output";
 
 const log = console.log;
 let opinionFile = "opinionFile.md";
+const PROJECTSNAME: string[] = [];
+
 export const typeFiles: string[] = []; // type类型匹配到的文件
 export const nodeFiles: string[] = []; // .node.ts 类型匹配到的文件
 export const declareFiles: string[] = []; // @types.ts 这种文件，只用来declare，不可以出现import <spe> 这样的语法
@@ -61,13 +63,13 @@ export const beforeInit = async (
 
 export const init = async (workspace: string) => {
   const { fileDirs, filesArrs } = await getWorkspaceContext(workspace);
-  const pending =  fileDirs.map(
+  const pending = fileDirs.map(
     async (dir, index) => await mainMigrateFactory(filesArrs[index] as string[] | string, dir),
   );
   await Promise.all(pending);
   await askDeveloperOpinion();
 
-  log(os.EOL,chalk.bgBlackBright("风格标记结束"));
+  log(os.EOL, chalk.bgBlackBright("风格标记结束"));
 };
 
 /**
@@ -119,7 +121,7 @@ export const askDeveloperOpinion = async () => {
       files.map((val) => {
         log(chalkColor(val));
       });
-      log(rule,os.EOL);
+      log(rule, os.EOL);
       await migragteFactory(files, ask)(rule, opinionFile);
     }
   }
