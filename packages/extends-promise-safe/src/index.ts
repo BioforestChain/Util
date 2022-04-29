@@ -1,5 +1,4 @@
 import "@bfchain/util-typings";
-import type {} from "@bfchain/util-extends-promise-out";
-import "./@types";
+import "@bfchain/util-extends-promise-out";
 export * from "./safePromiseThen";
 export * from "./safePromiseRace";

@@ -1,5 +1,4 @@
 import "@bfchain/util-typings";
-import "./@types";
 export * from "./constants";
 export { cacheGetter } from "@bfchain/util-decorator";
 export { renameFunction } from "@bfchain/util-extends-function";

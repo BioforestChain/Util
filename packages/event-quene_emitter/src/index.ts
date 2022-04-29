@@ -1,3 +1,3 @@
 import "@bfchain/util-typings";
-import "./@types";
+// import "@bfchain/util-event-base";
 export * from "./QueneEventEmitter";

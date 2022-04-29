@@ -1,3 +1,4 @@
+///<reference lib="dom" />
 /* !
  * type-detect
  * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
@@ -14,17 +15,26 @@ const setExists = typeof Set !== "undefined";
 const weakMapExists = typeof WeakMap !== "undefined";
 const weakSetExists = typeof WeakSet !== "undefined";
 const dataViewExists = typeof DataView !== "undefined";
-const symbolIteratorExists = symbolExists && typeof Symbol.iterator !== "undefined";
-const symbolToStringTagExists = symbolExists && typeof Symbol.toStringTag !== "undefined";
-const setEntriesExists = setExists && typeof Set.prototype.entries === "function";
-const mapEntriesExists = mapExists && typeof Map.prototype.entries === "function";
-const setIteratorPrototype = setEntriesExists && Object.getPrototypeOf(new Set().entries());
-const mapIteratorPrototype = mapEntriesExists && Object.getPrototypeOf(new Map().entries());
+const symbolIteratorExists =
+  symbolExists && typeof Symbol.iterator !== "undefined";
+const symbolToStringTagExists =
+  symbolExists && typeof Symbol.toStringTag !== "undefined";
+const setEntriesExists =
+  setExists && typeof Set.prototype.entries === "function";
+const mapEntriesExists =
+  mapExists && typeof Map.prototype.entries === "function";
+const setIteratorPrototype =
+  setEntriesExists && Object.getPrototypeOf(new Set().entries());
+const mapIteratorPrototype =
+  mapEntriesExists && Object.getPrototypeOf(new Map().entries());
 const arrayIteratorExists =
-  symbolIteratorExists && typeof Array.prototype[Symbol.iterator] === "function";
-const arrayIteratorPrototype = arrayIteratorExists && Object.getPrototypeOf([][Symbol.iterator]());
+  symbolIteratorExists &&
+  typeof Array.prototype[Symbol.iterator] === "function";
+const arrayIteratorPrototype =
+  arrayIteratorExists && Object.getPrototypeOf([][Symbol.iterator]());
 const stringIteratorExists =
-  symbolIteratorExists && typeof String.prototype[Symbol.iterator] === "function";
+  symbolIteratorExists &&
+  typeof String.prototype[Symbol.iterator] === "function";
 const stringIteratorPrototype =
   stringIteratorExists && Object.getPrototypeOf(""[Symbol.iterator]());
 const toStringLeftSliceLength = 8;
@@ -95,7 +105,10 @@ export function typeDetect(obj: any) {
    * Post:
    *   array literal      x 22,479,650 ops/sec ±0.96% (81 runs sampled)
    */
-  if (Array.isArray(obj) && (symbolToStringTagExists === false || !(Symbol.toStringTag in obj))) {
+  if (
+    Array.isArray(obj) &&
+    (symbolToStringTagExists === false || !(Symbol.toStringTag in obj))
+  ) {
     return "Array";
   }
 
@@ -143,7 +156,10 @@ export function typeDetect(obj: any) {
        * Test: `Object.prototype.toString.call(navigator.mimeTypes)``
        *  - IE <=10 === "[object MSMimeTypesCollection]"
        */
-      if (typeof window.navigator.mimeTypes === "object" && obj === window.navigator.mimeTypes) {
+      if (
+        typeof window.navigator.mimeTypes === "object" &&
+        obj === window.navigator.mimeTypes
+      ) {
         return "MimeTypeArray";
       }
 
@@ -153,13 +169,17 @@ export function typeDetect(obj: any) {
        * Test: `Object.prototype.toString.call(navigator.plugins)``
        *  - IE <=10 === "[object MSPluginsCollection]"
        */
-      if (typeof window.navigator.plugins === "object" && obj === window.navigator.plugins) {
+      if (
+        typeof window.navigator.plugins === "object" &&
+        obj === window.navigator.plugins
+      ) {
         return "PluginArray";
       }
     }
 
     if (
-      (typeof window.HTMLElement === "function" || typeof window.HTMLElement === "object") &&
+      (typeof window.HTMLElement === "function" ||
+        typeof window.HTMLElement === "object") &&
       obj instanceof window.HTMLElement
     ) {
       /* ! Spec Conformance

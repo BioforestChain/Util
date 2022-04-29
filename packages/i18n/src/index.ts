@@ -1,7 +1,3 @@
-import type {} from "@bfchain/util-typings";
-import type {} from "@bfchain/util-dep-inject";
-import type {} from "@bfchain/util-exception-error-code";
-
-import "./@types";
+import "@bfchain/util-exception-error-code";
 
 export * from "./i18n";

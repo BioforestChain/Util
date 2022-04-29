@@ -1,80 +1,50 @@
 {
-  "name": "@bfchain/util",
-  "version": "mono",
+  "name": "bfsp-workspace",
   "private": true,
+  "packageManager": "yarn@1.22.18",
   "workspaces": [
-    "packages/*"
-  ],
-  "description": "",
-  "main": "./build/cjs/src/index.js",
-  "module": "./build/esm/src/index.js",
-  "type": "./build/cjs/src/index.d.ts",
-  "files": [
-    "build/cjs",
-    "build/esm"
-  ],
-  "scripts": {
-    "mono": "bdk-mono",
-    "up": "yarn upgrade-interactive",
-    "upl": "yarn upgrade-interactive --latest",
-    "tslint": "node ./script/tslint.js",
-    "format": "bdk-format",
-    "format:all": "prettier --write ./packages/",
-    "lsts": "bdk-lsts --path ./tsconfig.json --out",
-    "postinstall": "node --experimental-modules ./script/postinstall.mjs",
-    "test": "ndb ./node_modules/ava/cli.js",
-    "publ": "lerna publish",
-    "publ:force": "lerna publish --force-publish",
-    "clear": "node ./script/rmBuild.js",
-    "rebuild": "yarn clear & yarn build",
-    "build": "bdk-tsc --build tsconfig.all.json",
-    "dev:esm-es5": "bdk-tsc --build tsconfig.esm-es5.json -w",
-    "dev:esm": "tsc --build tsconfig.esm.json -w",
-    "dev:all": "tsc --build tsconfig.all.json -w",
-    "dev": "tsc --build -w"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://xmn-tfs-isn01:22/tfs/DefaultCollection/BFChain/_git/BFChain-Util"
-  },
-  "bdkMono": {
-    "generateConfigFiles": [
-      {
-        "packages": "*",
-        "type": "mergejson",
-        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.tslint.json",
-        "to": "$PACKAGE/tsconfig.tslint.json"
-      },
-      {
-        "packages": "*,-test_",
-        "type": "mergejson",
-        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.cjs.json",
-        "to": "$PACKAGE/tsconfig.json"
-      },
-      {
-        "packages": "*,-test,-test_*",
-        "type": "mergejson",
-        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.esm.json",
-        "to": "$PACKAGE/tsconfig.esm.json"
-      },
-      {
-        "packages": "*,-test,-test_*,-exception,-exception-*,-extends-error,-extends-map",
-        "type": "mergejson",
-        "from": "$ROOT_PROJECT/config/tsconfig_template/tsconfig.esm-es5.json",
-        "to": "$PACKAGE/tsconfig.esm-es5.json"
-      }
-    ]
-  },
-  "keywords": [
-    "util"
-  ],
-  "author": "Gaubee",
-  "license": "ISC",
-  "devDependencies": {
-    "@bfchain/devkit": "^0.0.1-alpha.3",
-    "lerna": "4.0.0",
-    "prettier": "^2.6.2",
-    "tslib": "^2.3.1",
-    "typescript": "^4.6.3"
-  }
+    "./packages/extends-map",
+    "./packages/event-base",
+    "./packages/logger",
+    "./packages/exception-logger",
+    "./packages/typings",
+    "./packages/extends-error",
+    "./packages/extends-function",
+    "./packages/extends-object",
+    "./packages/ms",
+    "./packages/platform",
+    "./packages/env",
+    "./packages/decorator",
+    "./packages/binary-tree-map",
+    "./packages/extends-set",
+    "./packages/dep_inject",
+    "./packages/i18n",
+    "./packages/event-map_emitter",
+    "./packages/event-quene_emitter",
+    "./packages/event",
+    "./packages/extends-promise",
+    "./packages/exception",
+    "./packages/reactive-stream",
+    "./packages/extends-async_iterator",
+    "./packages/util",
+    "./packages/exception-error-code",
+    "./packages/extends-iterator",
+    "./packages/extends-promise-out",
+    "./packages/buffer",
+    "./packages/deepmix",
+    "./packages/encoding-binary",
+    "./packages/encoding-hex",
+    "./packages/extends-array",
+    "./packages/extends-iterator-is",
+    "./packages/extends-promise-is",
+    "./packages/lock-atom",
+    "./packages/type_detect",
+    "./packages/extends-promise-safe",
+    "./packages/aborter",
+    "./packages/deepcopy",
+    "./packages/exception-generator",
+    "./packages/fast_deep_equal",
+    "./packages/reactive-array",
+    "./packages/encoding-utf8"
+  ]
 }

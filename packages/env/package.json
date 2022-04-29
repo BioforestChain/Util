@@ -1,25 +1,38 @@
 {
   "name": "@bfchain/util-env",
-  "version": "4.12.44",
-  "description": "",
-  "main": "build/cjs/index.js",
-  "module": "build/esm/index.js",
-  "type": "commonjs",
+  "main": "./dist/default/esm/index.mjs",
+  "types": "./typings/default/src/index.d.ts",
+  "type": "module",
+  "version": "4.13.0",
+  "private": true,
+  "engines": {
+    "node": ">=14.19.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/default/cjs/index.cjs",
+      "import": "./dist/default/esm/index.mjs",
+      "types": "./typings/default/src/index.d.ts"
+    }
+  },
+  "imports": {},
+  "scripts": {
+    "dev": "bfsp dev",
+    "build": "bfsp build",
+    "test": "bfsp test"
+  },
   "files": [
-    "build"
+    "dist",
+    "typings"
   ],
-  "keywords": [
-    "util"
-  ],
-  "author": "Gaubee",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "ssh://xmn-tfs-isn01:22/tfs/DefaultCollection/BFChain/_git/BFChain-Util"
-  },
   "dependencies": {
-    "@bfchain/util-platform": "4.12.44",
-    "@bfchain/util-typings": "4.12.44"
+    "@bfchain/util-platform": "^4.13.0"
   },
-  "types": "build/cjs/index.d.ts"
+  "devDependencies": {
+    "tslib": "^2.3.1"
+  },
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "license": "CC-BY-NC-SA-4.0",
+  "author": "Gaubee"
 }

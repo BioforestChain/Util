@@ -47,7 +47,7 @@ export class Exception extends CustomError {
     sourceMessage: string | ErrorCode<string, string> = "",
     public detail?: any,
     CODE?: string,
-    SEVERIFY?: EXCEPTION_SEVERIFY,
+    SEVERIFY?: EXCEPTION_SEVERIFY
   ) {
     // super(
     //   detail
@@ -65,19 +65,39 @@ export class Exception extends CustomError {
             })
         : sourceMessage instanceof ErrorCode
         ? sourceMessage.message
-        : sourceMessage,
+        : sourceMessage
     );
     const ExceptionCtor = this.constructor as BFChainUtil.ExceptionConstructor;
     const { ERROR_CODE_MAP } = ExceptionCtor;
 
     Object.defineProperties(this, {
       detail: { value: detail, enumerable: false, writable: false },
-      sourceMessage: { value: sourceMessage, enumerable: false, writable: false },
+      sourceMessage: {
+        value: sourceMessage,
+        enumerable: false,
+        writable: false,
+      },
       type: { value: ExceptionCtor.TYPE, enumerable: false, writable: false },
-      PLATFORM: { value: ExceptionCtor.PLATFORM, enumerable: false, writable: false },
-      CHANNEL: { value: ExceptionCtor.CHANNEL, enumerable: false, writable: false },
-      BUSINESS: { value: ExceptionCtor.BUSINESS, enumerable: false, writable: false },
-      MODULE: { value: ExceptionCtor.MODULE, enumerable: false, writable: false },
+      PLATFORM: {
+        value: ExceptionCtor.PLATFORM,
+        enumerable: false,
+        writable: false,
+      },
+      CHANNEL: {
+        value: ExceptionCtor.CHANNEL,
+        enumerable: false,
+        writable: false,
+      },
+      BUSINESS: {
+        value: ExceptionCtor.BUSINESS,
+        enumerable: false,
+        writable: false,
+      },
+      MODULE: {
+        value: ExceptionCtor.MODULE,
+        enumerable: false,
+        writable: false,
+      },
       FILE: { value: ExceptionCtor.FILE, enumerable: false, writable: false },
       // CODE: {
       //   value:
@@ -90,7 +110,9 @@ export class Exception extends CustomError {
           CODE ??
           (sourceMessage instanceof ErrorCode
             ? sourceMessage.code
-            : ERROR_CODE_MAP.get(sourceMessage) || ERROR_CODE_MAP.get("unknown error") || ""),
+            : ERROR_CODE_MAP.get(sourceMessage) ||
+              ERROR_CODE_MAP.get("unknown error") ||
+              ""),
         enumerable: false,
         writable: false,
       },
@@ -103,7 +125,7 @@ export class Exception extends CustomError {
   }
   static is<E extends BFChainUtil.Exception>(
     this: BFChainUtil.ExceptionConstructor<E>,
-    err: any,
+    err: any
   ): err is E {
     return !!(err && err.type === this.TYPE);
   }
@@ -130,7 +152,7 @@ export function ExceptionGenerator(
   BUSINESS: string,
   MODULE: string,
   FILE: string,
-  ERROR_CODE_MAP: Map<string, string>,
+  ERROR_CODE_MAP: Map<string, string>
 ) {
   function getException<E extends BFChainUtil.ExceptionConstructor>(Con: E) {
     Con.PLATFORM = PLATFORM;
@@ -149,91 +171,111 @@ export function ExceptionGenerator(
     get Exception() {
       const E = Exception;
       {
-        return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.Exception>>(
-          class Exception extends E {},
-        );
+        return getException<
+          BFChainUtil.ExceptionConstructor<BFChainUtil.Exception>
+        >(class Exception extends E {});
       }
     },
 
     /**范围溢出错误 */
     get OutOfRangeException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.OutOfRangeException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.OutOfRangeException>
+      >(
         class OutOfRangeException extends Exception {
           static TYPE = "OutOfRangeException";
-        },
+        }
       );
     },
     /**非法参数 */
     get ArgumentException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.ArgumentException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.ArgumentException>
+      >(
         class ArgumentException extends Exception {
           static TYPE = "ArgumentException";
-        },
+        }
       );
     },
     /**非法参数：参数类型、结构错误 */
     get ArgumentIllegalException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.ArgumentIllegalException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.ArgumentIllegalException>
+      >(
         class ArgumentIllegalException extends Exception /* ArgumentException */ {
           static TYPE = "ArgumentIllegalException";
-        },
+        }
       );
     },
     /**非法参数：不符合预期的定义，比如要>0，比如只能是"A"与"B" */
     get ArgumentFormatException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.ArgumentFormatException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.ArgumentFormatException>
+      >(
         class ArgumentFormatException extends Exception /* ArgumentException */ {
           static TYPE = "ArgumentFormatException";
-        },
+        }
       );
     },
     /**找不到该有的 */
     get NoFoundException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.NoFoundException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.NoFoundException>
+      >(
         class NoFoundException extends Exception {
           static TYPE = "NoFoundException";
-        },
+        }
       );
     },
     /**没有可用响应的异常 */
     get ResponseException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.ResponseException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.ResponseException>
+      >(
         class ResponseException extends Exception {
           static TYPE = "ResponseException";
-        },
+        }
       );
     },
 
     /**IO错误 */
     get IOException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.IOException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.IOException>
+      >(
         class IOException extends Exception {
           static TYPE = "IOException";
-        },
+        }
       );
     },
     /**网络IO错误 */
     get NetworkIOException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.NetworkIOException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.NetworkIOException>
+      >(
         class NetworkIOException extends Exception /* IOException */ {
           static TYPE = "NetworkIOException";
-        },
+        }
       );
     },
     /**繁忙IO错误 */
     get BusyIOException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.BusyIOException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.BusyIOException>
+      >(
         class BusyIOException extends Exception /* IOException */ {
           static TYPE = "BusyIOException";
-        },
+        }
       );
     },
     /**数据库IO错误 */
     get DatebaseIOException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.DatebaseIOException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.DatebaseIOException>
+      >(
         class DatebaseIOException extends Exception /* IOException */ {
           static TYPE = "DatebaseIOException";
-        },
+        }
       );
     },
 
@@ -241,10 +283,12 @@ export function ExceptionGenerator(
      * 流程异常中断时应该打印或者抛出这个错误，而后执行接下来的处理逻辑
      */
     get InterruptedException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.InterruptedException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.InterruptedException>
+      >(
         class InterruptedException extends Exception {
           static TYPE = "InterruptedException";
-        },
+        }
       );
     },
     /**
@@ -252,49 +296,61 @@ export function ExceptionGenerator(
      * 再执行某些任务时有一些前置工作还没准备好时提供这个错误
      */
     get IllegalStateException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.IllegalStateException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.IllegalStateException>
+      >(
         class IllegalStateException extends Exception {
           static TYPE = "IllegalStateException";
-        },
+        }
       );
     },
     get TimeOutException() {
       /**响应超时的异常 */
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.TimeOutException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.TimeOutException>
+      >(
         class TimeOutException extends Exception {
           static TYPE = "TimeOutException";
-        },
+        }
       );
     } /**繁忙的异常 */,
     get BusyException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.BusyException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.BusyException>
+      >(
         class BusyException extends Exception {
           static TYPE = "BusyException";
-        },
+        }
       );
     },
     /**共识异常 */
     get ConsensusException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.ConsensusException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.ConsensusException>
+      >(
         class ConsensusException extends Exception {
           static TYPE = "ConsensusException";
-        },
+        }
       );
     },
     /**中断 */
     get AbortException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.AbortException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.AbortException>
+      >(
         class AbortException extends Exception {
           static TYPE = "AbortException";
-        },
+        }
       );
     },
     /**响应拒绝异常 */
     get RefuseException() {
-      return getException<BFChainUtil.ExceptionConstructor<BFChainUtil.RefuseException>>(
+      return getException<
+        BFChainUtil.ExceptionConstructor<BFChainUtil.RefuseException>
+      >(
         class RefuseException extends Exception {
           static TYPE = "RefuseException";
-        },
+        }
       );
     },
   };

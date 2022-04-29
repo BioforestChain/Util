@@ -1,5 +1,0 @@
-{
-  "files": [],
-  "include": [],
-  "references": [{ "path": "./packages/util/tsconfig.esm.json" }]
-}

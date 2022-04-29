@@ -8,7 +8,7 @@ export * from "@bfchain/util-extends-iterator-is";
 export async function* mixSortAsyncIterator<T>(
   iteratorA: AsyncIterableIterator<T> | IterableIterator<T>,
   iteratorB: AsyncIterableIterator<T> | IterableIterator<T>,
-  compareFu: (a: T, b: T) => number,
+  compareFu: (a: T, b: T) => number
 ) {
   let itemAp = iteratorA.next();
   let itemA = itemAp instanceof Promise ? await itemAp : itemAp;
@@ -52,7 +52,7 @@ export async function* mixSortAsyncIterator<T>(
 export function* mixSortIterator<T>(
   iteratorA: IterableIterator<T>,
   iteratorB: IterableIterator<T>,
-  compareFu: (a: T, b: T) => number,
+  compareFu: (a: T, b: T) => number
 ) {
   let itemA = iteratorA.next();
   let itemB = iteratorB.next();
@@ -94,7 +94,7 @@ export async function* limitAsyncIterator<T>(
   limitOpts: {
     limit: number;
     tryKeepAborter?: (item: T, preItem?: T) => boolean;
-  },
+  }
 ) {
   const { limit, tryKeepAborter } = limitOpts;
 
@@ -130,7 +130,7 @@ export function* limitIterator<T>(
   limitOpts: {
     limit: number;
     tryKeepAborter?: (item: T, preItem?: T) => boolean;
-  },
+  }
 ) {
   const { limit, tryKeepAborter } = limitOpts;
 
@@ -163,7 +163,7 @@ export function* limitIterator<T>(
  */
 export async function* filterAsyncIterator<T>(
   iteratorSource: AsyncIterable<T> | Iterable<T>,
-  filter: (item: T) => boolean,
+  filter: (item: T) => boolean
 ) {
   for await (const item of iteratorSource) {
     if (filter(item)) {
@@ -176,7 +176,10 @@ export async function* filterAsyncIterator<T>(
  * @param iteratorSource
  * @param mapper
  */
-export function* filterIterator<T>(iteratorSource: Iterable<T>, filter: (item: T) => boolean) {
+export function* filterIterator<T>(
+  iteratorSource: Iterable<T>,
+  filter: (item: T) => boolean
+) {
   for (const item of iteratorSource) {
     if (filter(item)) {
       yield item;
@@ -190,7 +193,7 @@ export function* filterIterator<T>(iteratorSource: Iterable<T>, filter: (item: T
  */
 export async function* mapAsyncIterator<I, O>(
   iteratorSource: AsyncIterable<I> | Iterable<I>,
-  mapper: (item: I) => O,
+  mapper: (item: I) => O
 ) {
   for await (const item of iteratorSource) {
     yield mapper(item);
@@ -202,7 +205,10 @@ export async function* mapAsyncIterator<I, O>(
  * @param iteratorSource
  * @param mapper
  */
-export function* mapIterator<I, O>(iteratorSource: Iterable<I>, mapper: (item: I) => O) {
+export function* mapIterator<I, O>(
+  iteratorSource: Iterable<I>,
+  mapper: (item: I) => O
+) {
   for (const item of iteratorSource) {
     yield mapper(item);
   }

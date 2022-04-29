@@ -1,16 +1,42 @@
 {
-  "extends": "../../config/tsconfig_base/base.tsconfig.cjs",
   "compilerOptions": {
-    "outDir": "./build/cjs",
-    "rootDir": "./src"
+    "composite": true,
+    "noEmit": true,
+    "declaration": true,
+    "sourceMap": false,
+    "target": "es2020",
+    "module": "es2020",
+    "lib": [
+      "ES2020"
+    ],
+    "importHelpers": true,
+    "isolatedModules": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "emitDeclarationOnly": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "build\\@bfchain\\util-extends-error\\typings\\default",
+    "paths": {}
   },
-  "files": [
-    "src/CustomError.ts",
-    "src/index.ts"
-  ],
   "references": [
     {
-      "path": "../typings/tsconfig.json"
+      "path": "./tsconfig.isolated.json"
+    },
+    {
+      "path": "./tsconfig.typings.json"
     }
-  ]
+  ],
+  "files": []
 }

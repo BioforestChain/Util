@@ -1,4 +1,3 @@
-import type {} from "@bfchain/util-typings";
-import "./@types";
+import "@bfchain/util-typings";
 export * from "./ReactiveStream";
 export * from "./operators/index";

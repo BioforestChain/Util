@@ -1,4 +1,10 @@
-import { Injectable, Inject, ModuleStroge, Resolve } from "@bfchain/util-dep-inject";
+///<reference lib="dom" />
+import {
+  Injectable,
+  Inject,
+  ModuleStroge,
+  Resolve,
+} from "@bfchain/util-dep-inject";
 
 export const enum I18N_LANGUAGE_TYPE {
   /**汉语 */
@@ -12,7 +18,7 @@ export const ERROR_CODE_LANG = Symbol("errorCodeLang");
 @Injectable()
 export class I18N<
   T extends BFChainUtil.SourceErrorCodeList = BFChainUtil.SourceErrorCodeList,
-  U extends BFChainUtil.TranslatedErrorCodeListMap = BFChainUtil.TranslatedErrorCodeListMap,
+  U extends BFChainUtil.TranslatedErrorCodeListMap = BFChainUtil.TranslatedErrorCodeListMap
 > {
   private __lang: I18N_LANGUAGE_TYPE;
   private __store = new Map<
@@ -25,18 +31,24 @@ export class I18N<
 
   constructor(
     @Inject(ERROR_CODE_LANG, { optional: true })
-    lang: I18N_LANGUAGE_TYPE = I18N_LANGUAGE_TYPE.ENGLISH,
+    lang: I18N_LANGUAGE_TYPE = I18N_LANGUAGE_TYPE.ENGLISH
   ) {
     this.__checkLanguage(lang);
     this.__lang = lang;
   }
 
   static from(lang: I18N_LANGUAGE_TYPE, moduleMap = new ModuleStroge()) {
-    return Resolve(I18N, moduleMap.installMask(new ModuleStroge([[ERROR_CODE_LANG, lang]])));
+    return Resolve(
+      I18N,
+      moduleMap.installMask(new ModuleStroge([[ERROR_CODE_LANG, lang]]))
+    );
   }
 
   private __checkLanguage(lang: I18N_LANGUAGE_TYPE) {
-    if (lang !== I18N_LANGUAGE_TYPE.CHINESE && lang !== I18N_LANGUAGE_TYPE.ENGLISH) {
+    if (
+      lang !== I18N_LANGUAGE_TYPE.CHINESE &&
+      lang !== I18N_LANGUAGE_TYPE.ENGLISH
+    ) {
       throw new Error(`Invalid lang type ${lang}`);
     }
   }
@@ -52,7 +64,9 @@ export class I18N<
   formatErrorCodeList(sourceErrorCodeList: T, translatedErrorCodeListMap: U) {
     const errorCodeList = translatedErrorCodeListMap.get(this.__lang);
     if (!errorCodeList) {
-      console.debug(`Translated error code list not found, language ${this.__lang}`);
+      console.debug(
+        `Translated error code list not found, language ${this.__lang}`
+      );
       return sourceErrorCodeList;
     }
     for (const key in sourceErrorCodeList) {
@@ -62,7 +76,11 @@ export class I18N<
     return sourceErrorCodeList;
   }
 
-  addErrorCodeList(uuid: string, sourceErrorCodeList: T, translatedErrorCodeListMap: U) {
+  addErrorCodeList(
+    uuid: string,
+    sourceErrorCodeList: T,
+    translatedErrorCodeListMap: U
+  ) {
     this.formatErrorCodeList(sourceErrorCodeList, translatedErrorCodeListMap);
     this.__store.set(uuid, {
       sourceErrorCodeList,
@@ -76,7 +94,10 @@ export class I18N<
     }
     this.__checkLanguage(newLang);
     this.__lang = newLang;
-    for (const { sourceErrorCodeList, translatedErrorCodeListMap } of this.__store.values()) {
+    for (const {
+      sourceErrorCodeList,
+      translatedErrorCodeListMap,
+    } of this.__store.values()) {
       this.formatErrorCodeList(sourceErrorCodeList, translatedErrorCodeListMap);
     }
   }

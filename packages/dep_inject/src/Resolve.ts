@@ -9,10 +9,17 @@ import {
   INJECTPROP_ONINIT_MATE_KEY,
 } from "./_inner";
 import { ModuleStroge } from "./ModuleStroge";
-import { InjectionToken, OnInit, AfterInit, getInjectionGroups } from "./common";
+import {
+  InjectionToken,
+  OnInit,
+  AfterInit,
+  getInjectionGroups,
+} from "./common";
 
 const _EMPTY_MAP = new Map();
-function getFactoryCustomInjectModuleMap(target: any): BFChainUtil.FactoryCustomInjectModule {
+function getFactoryCustomInjectModuleMap(
+  target: any
+): BFChainUtil.FactoryCustomInjectModule {
   do {
     const map = FACTORY_CUSTOM_INJECT_MODULE_MAP.get(target);
     if (map) {
@@ -33,12 +40,12 @@ function getFactoryCustomInjectModuleMap(target: any): BFChainUtil.FactoryCustom
  */
 export function Resolve<T extends {}>(
   Factory: BFChainUtil.Constructor<T>,
-  moduleMap = new ModuleStroge(),
+  moduleMap = new ModuleStroge()
 ) {
   /**这个构造器的标识名称 */
-  const moduleName: BFChainUtil.MODULE_ID_TYPE | undefined = (Factory as InjectionToken<T>)[
-    INJECTION_TOKEN_SYMNOL
-  ];
+  const moduleName: BFChainUtil.MODULE_ID_TYPE | undefined = (
+    Factory as InjectionToken<T>
+  )[INJECTION_TOKEN_SYMNOL];
   const isSingleton = (Factory as InjectionToken<T>)[SINGLETON_TOKEN_SYMNOL];
   const groups = getInjectionGroups(Factory);
 
@@ -61,13 +68,16 @@ export function Resolve<T extends {}>(
           /**自定义依赖。通过在这里的自定义依赖来实现依赖反转 */
           const custom_inject_param_module = modules && modules.get(i);
           if (custom_inject_param_module !== undefined) {
-            if (custom_inject_param_module.conf && custom_inject_param_module.conf.optional) {
+            if (
+              custom_inject_param_module.conf &&
+              custom_inject_param_module.conf.optional
+            ) {
               // skip empty check
             } else if (!moduleMap.has(custom_inject_param_module.id)) {
               throw new ReferenceError(
-                `Need Inject Module '${String(custom_inject_param_module.id)}' in ${String(
-                  moduleName,
-                )}`,
+                `Need Inject Module '${String(
+                  custom_inject_param_module.id
+                )}' in ${String(moduleName)}`
               );
             }
             return moduleMap.get(custom_inject_param_module.id);
@@ -101,10 +111,8 @@ export function Resolve<T extends {}>(
       instance.bfOnInit();
     }
     /// 为其它注册为 onInit 的属性进行初始化
-    const onInitMap: BFChainUtil.AutoResolveMatedata | undefined = Reflect.getMetadata(
-      INJECTPROP_ONINIT_MATE_KEY,
-      Factory.prototype,
-    );
+    const onInitMap: BFChainUtil.AutoResolveMatedata | undefined =
+      Reflect.getMetadata(INJECTPROP_ONINIT_MATE_KEY, Factory.prototype);
     if (onInitMap) {
       for (const [prop, data] of onInitMap) {
         (instance as any)[prop] = Resolve(data.injectModel, moduleMap);
@@ -118,10 +126,8 @@ export function Resolve<T extends {}>(
       });
     }
     /// 为其它注册为 afterInit 的属性进行初始化
-    const afterInitMap: BFChainUtil.AutoResolveMatedata | undefined = Reflect.getMetadata(
-      INJECTPROP_AFERTINIT_MATE_KEY,
-      Factory.prototype,
-    );
+    const afterInitMap: BFChainUtil.AutoResolveMatedata | undefined =
+      Reflect.getMetadata(INJECTPROP_AFERTINIT_MATE_KEY, Factory.prototype);
     if (afterInitMap) {
       queueMicrotask(() => {
         for (const [prop, data] of afterInitMap) {

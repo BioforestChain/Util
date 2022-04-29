@@ -1,3 +1,4 @@
+///<reference lib="dom" />
 export * from "./bindThis";
 export * from "./cacheGetter";
 export * from "./expirableCacheGetter";

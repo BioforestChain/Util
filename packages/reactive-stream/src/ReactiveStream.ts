@@ -9,7 +9,9 @@ export class ReactiveStream<T> /* implements AsyncIterableIterator<T>  */ {
   //   throw = this._src.throw?.bind(this._src);
   //   [Symbol.asyncIterator] = this._src[Symbol.asyncIterator].bind(this._src);
 
-  async *filter<R extends T = T>(filter: BFChainUtil.ReactiveStream.Filter<T, R>) {
+  async *filter<R extends T = T>(
+    filter: BFChainUtil.ReactiveStream.Filter<T, R>
+  ) {
     let index = 0;
     for await (const item of this._src) {
       if (await filter(item, index++, this)) {

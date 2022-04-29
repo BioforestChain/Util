@@ -9,7 +9,7 @@ import {
   isWebWorker,
 } from "@bfchain/util-platform";
 import { cacheGetter } from "@bfchain/util-decorator";
-import Perf from "@bfchain/util/performance";
+import Perf from "./performance";
 
 @Injectable()
 export class PlatformHelper {

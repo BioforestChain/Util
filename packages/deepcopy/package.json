@@ -1,30 +1,39 @@
 {
   "name": "@bfchain/util-deepcopy",
-  "version": "4.12.44",
-  "description": "The lodash method `_.cloneDeep` exported as a module.",
-  "homepage": "https://lodash.com/",
-  "icon": "https://lodash.com/icon.svg",
-  "license": "MIT",
-  "keywords": "lodash-modularized, clonedeep",
-  "author": "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",
-  "contributors": [
-    "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",
-    "Blaine Bublitz <blaine.bublitz@gmail.com> (https://github.com/phated)",
-    "Mathias Bynens <mathias@qiwi.be> (https://mathiasbynens.be/)"
-  ],
-  "repository": "lodash/lodash",
-  "scripts": {
-    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  "main": "./dist/default/esm/index.mjs",
+  "types": "./typings/default/src/index.d.ts",
+  "type": "module",
+  "version": "4.13.0",
+  "private": true,
+  "engines": {
+    "node": ">=14.19.0"
   },
-  "main": "build/cjs/index.js",
-  "type": "commonjs",
-  "module": "build/esm/index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/default/cjs/index.cjs",
+      "import": "./dist/default/esm/index.mjs",
+      "types": "./typings/default/src/index.d.ts"
+    }
+  },
+  "imports": {},
+  "scripts": {
+    "dev": "bfsp dev",
+    "build": "bfsp build",
+    "test": "bfsp test"
+  },
   "files": [
-    "build"
+    "dist",
+    "typings"
   ],
   "dependencies": {
-    "@bfchain/util-type-detect": "4.12.44",
-    "@bfchain/util-typings": "4.12.44"
+    "@bfchain/util-type-detect": "^4.13.0"
   },
-  "types": "build/cjs/index.d.ts"
+  "devDependencies": {
+    "tslib": "^2.3.1",
+    "@types/node": "latest"
+  },
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "license": "CC-BY-NC-SA-4.0",
+  "author": "Gaubee"
 }

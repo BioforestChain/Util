@@ -7,7 +7,11 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
   hasLabel(label: BFChainUtil.Aborter.Label) {
     return this._labels.has(label);
   }
-  private wait<R>(task: R, finallycb: Function, label?: BFChainUtil.Aborter.Label) {
+  private wait<R>(
+    task: R,
+    finallycb: Function,
+    label?: BFChainUtil.Aborter.Label
+  ) {
     const pTask = (
       (task instanceof Promise ? task : Promise.resolve(task)) as Promise<
         BFChainUtil.PromiseType<R>
@@ -23,7 +27,7 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
       (err) => {
         finallycb();
         throw err;
-      },
+      }
     );
     return pTask;
   }
@@ -35,7 +39,9 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
   wrapAsync<R>(
     task: R,
     label?: BFChainUtil.Aborter.Label,
-    stackIndex: number | { aborter: PromiseOut<never>; runtimErrorStack: string } = 0,
+    stackIndex:
+      | number
+      | { aborter: PromiseOut<never>; runtimErrorStack: string } = 0
   ) {
     const waitTask = this.wait(
       task,
@@ -43,7 +49,7 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
       () => {
         this._waitTaskAborterWM.delete(waitTask);
       },
-      label,
+      label
     );
     /// 写入到等待任务队列中
     if (typeof stackIndex === "number") {
@@ -63,7 +69,10 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
     // 等待race返回
     return safePromiseRace([waitTask, stackIndex.aborter.promise]);
   }
-  wrapAsyncRunner<ARGS extends any[], R>(task: (...args: ARGS) => R, label?: symbol) {
+  wrapAsyncRunner<ARGS extends any[], R>(
+    task: (...args: ARGS) => R,
+    label?: symbol
+  ) {
     return (...args: ARGS) => this.wrapAsync(task(...args), label, 1);
   }
   async *wrapAsyncIterator<I>(aIterator: AsyncIterator<I>) {
@@ -75,14 +84,20 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
       },
     };
     do {
-      const item = await this.wrapAsync(aIterator.next(), undefined, stackIndex);
+      const item = await this.wrapAsync(
+        aIterator.next(),
+        undefined,
+        stackIndex
+      );
       if (item.done) {
         break;
       }
       yield item.value;
     } while (true);
   }
-  async wrapAsyncIteratorReturn<R>(aIterator: AsyncIterator<unknown, R, unknown>) {
+  async wrapAsyncIteratorReturn<R>(
+    aIterator: AsyncIterator<unknown, R, unknown>
+  ) {
     do {
       const item = await this.wrapAsync(aIterator.next());
       if (item.done) {
@@ -115,7 +130,8 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
 
   private _afterAborted_po?: PromiseOut<REASON | undefined>;
   private get _afterAborted() {
-    const po = this._afterAborted_po || (this._afterAborted_po = new PromiseOut());
+    const po =
+      this._afterAborted_po || (this._afterAborted_po = new PromiseOut());
     if (this._isAborted) {
       po.resolve(this._abortReason);
     }
@@ -130,7 +146,8 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
   }
   private _abortedPromise_po?: PromiseOut<never>;
   private get _abortedPromise() {
-    const po = this._abortedPromise_po || (this._abortedPromise_po = new PromiseOut());
+    const po =
+      this._abortedPromise_po || (this._abortedPromise_po = new PromiseOut());
     if (this._isAborted) {
       po.reject(this._abortReason);
     }
@@ -149,15 +166,22 @@ export class Aborter<REASON = unknown> implements BFChainUtil.Aborter<REASON> {
     this._afterAborted_po?.resolve((this._abortReason = reason));
     this._abortedPromise_po?.reject(reason);
     /// 中断正在进行中的任务
-    for (const { aborter, runtimErrorStack } of this._waitTaskAborterWM.values()) {
+    for (const {
+      aborter,
+      runtimErrorStack,
+    } of this._waitTaskAborterWM.values()) {
       let err: Error | unknown;
       if (reason instanceof Error) {
-        const cloneErr = new (reason.constructor as typeof Error)(reason.message);
-        cloneErr.stack = (reason.stack ? reason.stack + "\n(abort)\n" : "") + runtimErrorStack;
+        const cloneErr = new (reason.constructor as typeof Error)(
+          reason.message
+        );
+        cloneErr.stack =
+          (reason.stack ? reason.stack + "\n(abort)\n" : "") + runtimErrorStack;
         err = cloneErr;
       } else if (typeof reason === "string") {
         const wrapError = new Error(reason);
-        wrapError.stack = (wrapError.stack || "").split("\n")[0] + "\n" + runtimErrorStack;
+        wrapError.stack =
+          (wrapError.stack || "").split("\n")[0] + "\n" + runtimErrorStack;
         err = wrapError;
       } else {
         err = reason;

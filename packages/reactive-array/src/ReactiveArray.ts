@@ -110,7 +110,10 @@ export class ReactiveArray<T> extends Array<T> {
     if (deleteCount + items.length > 0) {
       /// 已经影响到数组后面的所有元素
       if (deleteCount !== items.length) {
-        this.emitChanged(start, Math.max(start + deleteCount, start + items.length));
+        this.emitChanged(
+          start,
+          Math.max(start + deleteCount, start + items.length)
+        );
       }
       /// 只影响到被删除的几个元素
       else {

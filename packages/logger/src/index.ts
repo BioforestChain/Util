@@ -1,6 +1,5 @@
-import type {} from "@bfchain/util-typings";
-import "./@types";
+import "@bfchain/util-typings";
 export * from "./common";
-import DebugCreaterFactory from "@bfchain/util-logger/debug-creator";
+import DebugCreaterFactory from "./debug-creator";
 
 export const loggerCreater = DebugCreaterFactory();
