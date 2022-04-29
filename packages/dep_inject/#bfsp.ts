@@ -10,7 +10,7 @@ export default defineConfig((info) => {
     packageJson: {
       license: "CC-BY-NC-SA-4.0",
       author: "Gaubee",
-      version: "4.13.0",
+      version: "5.0.0",
       dependencies: {
         "reflect-metadata": "^0.1.13",
       },
