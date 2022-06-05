@@ -67,6 +67,13 @@ export class ReactiveArray<T> extends Array<T> {
       }
       return _return.call(subject, arg);
     };
+    const _throw = subject.throw;
+    subject.throw = (err: any) => {
+      if (sub.changed instanceof PromiseOut) {
+        sub.changed.reject(err);
+      }
+      return _throw.call(subject, err);
+    };
     return subject;
   }
 

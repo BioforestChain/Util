@@ -36,7 +36,7 @@ declare namespace BFChainUtil {
     : never;
 
   /**获取获取Promise内部的类型 */
-  type PromiseType<T> = T extends PromiseLike<infer R> ? R : T;
+  type PromiseType<T> = Awaited<T>;
   type PromiseOne<T> = PromiseLike<PromiseType<T>>;
   /**获取获取异步函数返回类型的内部类型 */
   type PromiseReturnType<T> = T extends (...args: any) => infer P
