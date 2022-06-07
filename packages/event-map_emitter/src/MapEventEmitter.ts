@@ -7,8 +7,11 @@ import {
   eventDebugStyle,
 } from "@bfchain/util-event-base";
 
-export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | EM2>
-  implements BFChainUtil.EventEmitterMix<EM, EM2>
+export class MapEventEmitter<
+  EM = {},
+  EM2 = never,
+  EMX extends EM | EM2 = EM | EM2
+> implements BFChainUtil.EventEmitterMix<EM, EM2>
 {
   /**导出类型 */
   TYPE!: EMX;
@@ -27,17 +30,17 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
   on<K extends keyof EM>(
     eventname: K,
     handler: BFChainUtil.MutArgEventHandler<EM[K]>,
-    opts?: BFChainUtil.EventOptions,
+    opts?: BFChainUtil.EventOptions
   ): void;
   on<K extends keyof EM2>(
     eventname: K,
     handler: BFChainUtil.MutArgEventHandler<EM2[K]>,
-    opts?: BFChainUtil.EventOptions,
+    opts?: BFChainUtil.EventOptions
   ): void;
   on<K extends keyof this["TYPE"]>(
     eventname: K,
     handler: any,
-    opts: BFChainUtil.EventOptions = {},
+    opts: BFChainUtil.EventOptions = {}
   ) {
     this._on(eventname, handler, opts.taskname, opts.once);
   }
@@ -46,14 +49,18 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
     eventname: EN,
     handler: BFChainUtil.MutArgEventHandler<EMX[EN]>,
     taskname?: string,
-    once?: boolean,
+    once?: boolean
   ) {
     const eventHanldersMap = this._e;
     let eventSet = eventHanldersMap[eventname];
     if (!eventSet) {
       eventSet = eventHanldersMap[eventname] = new Map();
     } else if (eventSet.has(handler)) {
-      console.warn(`hanlder '${handler.name}' already exits in event set ${eventname}.`);
+      console.warn(
+        `hanlder '${handler.name}' already exits in event set ${String(
+          eventname
+        )}.`
+      );
     }
     if (taskname === undefined) {
       taskname = GetCallerInfo(this.constructor);
@@ -68,17 +75,17 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
   once<K extends keyof EM>(
     eventname: K,
     handler: BFChainUtil.MutArgEventHandler<EM[K]>,
-    opts?: BFChainUtil.OnceEventOptions,
+    opts?: BFChainUtil.OnceEventOptions
   ): unknown;
   once<K extends keyof EM2>(
     eventname: K,
     handler: BFChainUtil.MutArgEventHandler<EM2[K]>,
-    opts?: BFChainUtil.OnceEventOptions,
+    opts?: BFChainUtil.OnceEventOptions
   ): unknown;
   once<K extends keyof this["TYPE"]>(
     eventname: K,
     handler: any,
-    opts: BFChainUtil.OnceEventOptions = {},
+    opts: BFChainUtil.OnceEventOptions = {}
   ) {
     this._on(eventname, handler, opts.taskname, true);
   }
@@ -88,14 +95,20 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
    * @param eventname
    * @param handler
    */
-  off<K extends keyof EM>(eventname: K, handler?: BFChainUtil.MutArgEventHandler<EM[K]>): boolean;
-  off<K extends keyof EM2>(eventname: K, handler?: BFChainUtil.MutArgEventHandler<EM2[K]>): boolean;
+  off<K extends keyof EM>(
+    eventname: K,
+    handler?: BFChainUtil.MutArgEventHandler<EM[K]>
+  ): boolean;
+  off<K extends keyof EM2>(
+    eventname: K,
+    handler?: BFChainUtil.MutArgEventHandler<EM2[K]>
+  ): boolean;
   off<K extends keyof this["TYPE"]>(eventname: K, handler?: any) {
     return this._off(eventname, handler);
   }
   private _off<EN extends keyof this["TYPE"]>(
     eventname: EN,
-    handler?: BFChainUtil.MutArgEventHandler<EMX[EN]>,
+    handler?: BFChainUtil.MutArgEventHandler<EMX[EN]>
   ) {
     const eventMap = this._e[eventname];
     let res = true;
@@ -118,25 +131,40 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
     return "";
   }
 
-  emit<K extends keyof EM>(eventname: K, ...data: BFChainUtil.MutArg<EM[K]>): void;
-  emit<K extends keyof EM2>(eventname: K, ...data: BFChainUtil.MutArg<EM2[K]>): void;
+  emit<K extends keyof EM>(
+    eventname: K,
+    ...data: BFChainUtil.MutArg<EM[K]>
+  ): void;
+  emit<K extends keyof EM2>(
+    eventname: K,
+    ...data: BFChainUtil.MutArg<EM2[K]>
+  ): void;
   emit<K extends keyof this["TYPE"]>(eventname: K, ...args: any) {
     this._emit(eventname, args);
   }
-  protected _emit<EN extends keyof this["TYPE"]>(eventname: EN, args: BFChainUtil.MutArg<EMX[EN]>) {
+  protected _emit<EN extends keyof this["TYPE"]>(
+    eventname: EN,
+    args: BFChainUtil.MutArg<EMX[EN]>
+  ) {
     /**
      * 触发针对性的监听任务
      */
     const eventMap = this._e[eventname];
     if (isDev) {
       console.group(
-        ...eventDebugStyle.head("%s EMIT [%s]", eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE),
+        ...eventDebugStyle.head(
+          "%s EMIT [%s]",
+          eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE
+        ),
         this[EVENT_DESCRIPTION_SYMBOL] || this,
-        eventname,
+        eventname
       );
       console.log(
-        ...eventDebugStyle.head("%s ARGS:", eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE),
-        ...(args as unknown[]),
+        ...eventDebugStyle.head(
+          "%s ARGS:",
+          eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE
+        ),
+        ...(args as unknown[])
       );
     }
     if (eventMap) {
@@ -145,9 +173,12 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
           if (isDev) {
             const { taskname = handler.name } = opts;
             console.log(
-              ...eventDebugStyle.head("%s RUN [%s]", eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE),
+              ...eventDebugStyle.head(
+                "%s RUN [%s]",
+                eventDebugStyle.MIDNIGHTBLUE_BOLD_UNDERLINE
+              ),
               this[EVENT_DESCRIPTION_SYMBOL] || this,
-              taskname,
+              taskname
             );
           }
           const res = handler(...args);
@@ -177,7 +208,7 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
   protected _emitErrorHanlder<K extends keyof this["TYPE"]>(
     err: unknown,
     eventname: K,
-    args: BFChainUtil.MutArg<EMX[K]>,
+    args: BFChainUtil.MutArg<EMX[K]>
   ) {
     if (this._hasEmitErrorHandlerSet) {
       for (const errorHandler of this._emitErrorHandlerSet) {
@@ -191,8 +222,10 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
     } else {
       isDev &&
         console.error(
-          `EventEmitter '${this.constructor.name}' emit '${eventname.toString()}' fail:`,
-          err,
+          `EventEmitter '${
+            this.constructor.name
+          }' emit '${eventname.toString()}' fail:`,
+          err
         );
       throw err;
     }
@@ -214,7 +247,7 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
     }
     if (this._emitErrorHandlerSet.has(errorHandler)) {
       console.warn(
-        `hanlder '${errorHandler.name}' already exits in custom error hanlder event set.`,
+        `hanlder '${errorHandler.name}' already exits in custom error hanlder event set.`
       );
     }
     this._emitErrorHandlerSet.add(errorHandler);
@@ -243,7 +276,7 @@ export class MapEventEmitter<EM = {}, EM2 = never, EMX extends EM | EM2 = EM | E
   clear(
     opts: {
       ignoreCustomErrorHanlder?: boolean;
-    } = {},
+    } = {}
   ) {
     /// 直接清理掉
     this._e = Object.create(null);

@@ -9,7 +9,7 @@ export default defineConfig((info) => {
     deps: [
       "@bfchain/util-extends-promise-out",
       "@bfchain/util-extends-promise-safe",
-      // "@bfchain/util-typings",
+      "@bfchain/util-typings",
     ],
     packageJson: {
       license: "CC-BY-NC-SA-4.0",

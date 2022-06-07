@@ -1,8 +1,10 @@
 // import { cacheGetter } from "@bfchain/util-decorator";
 
 type TREE = { [key: string]: TREE };
-export class BinaryTreeMap<V, K extends { [index: number]: number } = { [index: number]: number }>
-  implements Map<K, V>
+export class BinaryTreeMap<
+  V,
+  K extends { [index: number]: number } = { [index: number]: number }
+> implements Map<K, V>
 {
   private _tree: TREE = {};
   clear(): void {
@@ -11,7 +13,10 @@ export class BinaryTreeMap<V, K extends { [index: number]: number } = { [index: 
   delete(key: K): boolean {
     throw new Error("Method not implemented.");
   }
-  forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
+  forEach(
+    callbackfn: (value: V, key: K, map: Map<K, V>) => void,
+    thisArg?: any
+  ): void {
     throw new Error("Method not implemented.");
   }
   get(key: K): V | undefined {
@@ -37,5 +42,5 @@ export class BinaryTreeMap<V, K extends { [index: number]: number } = { [index: 
   values(): IterableIterator<V> {
     throw new Error("Method not implemented.");
   }
-  [Symbol.toStringTag]: string;
+  [Symbol.toStringTag]!: string;
 }
