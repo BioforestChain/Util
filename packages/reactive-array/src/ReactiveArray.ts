@@ -119,7 +119,7 @@ export class ReactiveArray<T> extends Array<T> {
       if (deleteCount !== items.length) {
         this.emitChanged(
           start,
-          Math.max(start + deleteCount, start + items.length)
+          Math.max(deleteCount, items.length, this.length - start)
         );
       }
       /// 只影响到被删除的几个元素
