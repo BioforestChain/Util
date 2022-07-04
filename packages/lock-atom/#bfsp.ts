@@ -1,17 +1,8 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-lock-atom",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
-    // deps: ["@bfchain/util-typings"],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-    },
+    ...genBfspConfig("@bfchain/util-lock-atom", info),
   };
   return config;
 });

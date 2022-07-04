@@ -1,23 +1,13 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-dep-inject",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
-    deps: ["@bfchain/util-typings", "@bfchain/util-extends-map"],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
+    ...genBfspConfig("@bfchain/util-dep-inject", info, {
       dependencies: {
         "reflect-metadata": "^0.1.13",
       },
-      devDependencies: {
-        "@types/node": "latest",
-      },
-    },
+    }),
+    deps: ["@bfchain/util-typings", "@bfchain/util-extends-map"],
   };
   return config;
 });

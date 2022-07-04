@@ -1,17 +1,8 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-encoding-binary",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
-    // deps: ["@bfchain/util-typings"],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-    },
-  };
+    ...genBfspConfig("@bfchain/util-encoding-binary", info),
+      };
   return config;
 });

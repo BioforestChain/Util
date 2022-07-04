@@ -1,12 +1,9 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-logger",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
-    profiles: ["node", "browser", "default"],
+    ...genBfspConfig("@bfchain/util-logger", info),
+    // profiles: ["node", "browser", "default"],
     deps: [
       "@bfchain/util-decorator",
       "@bfchain/util-env",
@@ -14,26 +11,6 @@ export default defineConfig((info) => {
       "@bfchain/util-ms",
       "@bfchain/util-platform",
       "@bfchain/util-typings",
-    ],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-      devDependencies: {
-        "@types/node": "latest",
-      },
-    },
-    build: [
-      {
-        name: "@bfchain/util-logger",
-        profiles: ["node"],
-        outSubPath: "node",
-      },
-      {
-        name: "@bfchain/util-logger",
-        profiles: ["browser"],
-        outSubPath: "browser",
-      },
     ],
   };
   return config;

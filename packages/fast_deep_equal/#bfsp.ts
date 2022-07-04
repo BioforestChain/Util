@@ -1,20 +1,12 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-fast-deep-equal",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
+    ...genBfspConfig("@bfchain/util-fast-deep-equal", info),
     deps: [
       "@bfchain/util-type-detect",
       // "@bfchain/util-typings"
     ],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-    },
   };
   return config;
 });

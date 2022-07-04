@@ -1,16 +1,12 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-typings",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-    },
+    ...genBfspConfig("@bfchain/util-typings", info, {
+      dependencies: {
+        tslib: "^2.4.0",
+      },
+    }),
   };
   return config;
 });

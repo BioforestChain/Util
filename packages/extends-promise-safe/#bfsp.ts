@@ -1,20 +1,9 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-extends-promise-safe",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
+    ...genBfspConfig("@bfchain/util-extends-promise-safe", info),
     deps: ["@bfchain/util-extends-promise-out", "@bfchain/util-typings"],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-      devDependencies: {
-        "@types/node": "latest",
-      },
-    },
   };
   return config;
 });

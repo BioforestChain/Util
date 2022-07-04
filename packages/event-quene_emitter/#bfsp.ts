@@ -1,11 +1,8 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-event-quene-emitter",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
+    ...genBfspConfig("@bfchain/util-event-quene-emitter", info),
     deps: [
       "@bfchain/util-decorator",
       "@bfchain/util-env",
@@ -16,11 +13,6 @@ export default defineConfig((info) => {
       "@bfchain/util-extends-promise-out",
       "@bfchain/util-typings",
     ],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-    },
   };
   return config;
 });

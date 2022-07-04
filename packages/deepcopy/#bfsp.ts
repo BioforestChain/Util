@@ -1,23 +1,12 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genNodeBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-deepcopy",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
+    ...genNodeBfspConfig("@bfchain/util-deepcopy", info),
     deps: [
       "@bfchain/util-type-detect",
       // "@bfchain/util-typings"
     ],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-      devDependencies: {
-        "@types/node": "latest",
-      },
-    },
   };
   return config;
 });

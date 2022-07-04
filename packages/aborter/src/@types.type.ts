@@ -1,8 +1,8 @@
 declare namespace BFChainUtil {
   interface AborterWrapper {
-    wrapAsync<R>(task: R,): Promise<PromiseType<R>>;
+    wrapAsync<R>(task: R): Promise<PromiseType<R>>;
     wrapAsyncRunner<ARGS extends any[], R>(
-      task: (...args: ARGS) => R,
+      task: (...args: ARGS) => R
     ): (...args: ARGS) => Promise<PromiseType<R>>;
     wrapAsyncIterator<I>(
       aIterator: AsyncIterableIterator<I>

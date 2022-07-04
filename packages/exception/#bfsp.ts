@@ -1,26 +1,19 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-exception",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
+    ...genBfspConfig("@bfchain/util-exception", info),
     deps: [
       "@bfchain/util-dep-inject",
       "@bfchain/util-exception-error-code",
       "@bfchain/util-exception-generator",
       "@bfchain/util-exception-logger",
       "@bfchain/util-extends-error",
+      "@bfchain/util-extends-object",
       "@bfchain/util-logger",
       "@bfchain/util-platform",
       "@bfchain/util-typings",
     ],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
-    },
   };
   return config;
 });

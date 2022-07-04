@@ -1,20 +1,12 @@
 import { defineConfig } from "@bfchain/pkgm-bfsp";
+import { genNodeBfspConfig } from "../../base.bfsp";
 export default defineConfig((info) => {
   const config: Bfsp.UserConfig = {
-    name: "@bfchain/util-type-detect",
-    exports: {
-      ".": "./src/index.ts",
-    },
-    formats: ["esm", "cjs"],
-    // deps: ["@bfchain/util-typings"],
-    packageJson: {
-      license: "CC-BY-NC-SA-4.0",
-      author: "Gaubee",
-      version: "5.0.0",
+    ...genNodeBfspConfig("@bfchain/util-type-detect", info, {
       devDependencies: {
         "@types/node": "latest",
       },
-    },
+    }),
   };
   return config;
 });

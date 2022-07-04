@@ -42,8 +42,10 @@ import reactiveArray from "./packages/reactive-array/#bfsp";
 import reactiveStream from "./packages/reactive-stream/#bfsp";
 import typeDetect from "./packages/type_detect/#bfsp";
 import util from "./packages/util/#bfsp";
+import { version } from "./base.bfsp";
 export default defineWorkspace(() => {
   const config: Bfsw.Workspace = {
+    // version,
     projects: [
       // typings,
       // // -------------------------------------------
