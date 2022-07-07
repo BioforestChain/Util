@@ -129,4 +129,9 @@ export class ReactiveArray<T> extends Array<T> {
     }
     return super.splice(start, deleteCount, ...items);
   }
+
+  sort(compareFn?: (a: T, b: T) => number) {
+    this.emitChanged(0, this.length);
+    return super.sort(compareFn);
+  }
 }
