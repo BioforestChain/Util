@@ -36,7 +36,7 @@ declare namespace BFChainUtil {
     FILE: string;
     CODE: string;
     detail?: unknown;
-    SEVERIFY: EXCEPTION_SEVERIFY;
+    SEVERIFY: unknown; // 使用枚举类型编译报错
   }
 
   class OutOfRangeException extends Exception {}

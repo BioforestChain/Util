@@ -18,7 +18,10 @@ export const enum EXCEPTION_SEVERIFY {
   MINOR = "minor",
 }
 
-export abstract class Exception extends CustomError {
+export abstract class Exception
+  extends CustomError
+  implements BFChainUtil.Exception
+{
   static TYPE = "Exception";
   static readonly PLATFORM = "";
   static readonly CHANNEL = "";
@@ -210,12 +213,6 @@ const ABS_EXCPTION_CTORS = new Set<Function>([
   RefuseException,
 ]);
 
-const A = new Proxy(
-  AbortException,
-  {}
-) as unknown as BFChainUtil.ExceptionConstructor<AbortException>;
-const a = new A();
-
 //#endregion
 
 if (typeof Error.stackTraceLimit === "number") {
@@ -239,16 +236,22 @@ export function ExceptionGenerator(
   FILE: string,
   ERROR_CODE_MAP: Map<string, string>
 ) {
-  const getException = <E extends BFChainUtil.ExceptionConstructor>(Con: E) => {
-    Con.PLATFORM = PLATFORM;
-    Con.CHANNEL = CHANNEL;
-    Con.BUSINESS = BUSINESS;
-    Con.MODULE = MODULE;
-    Con.FILE = FILE;
-    Con.ERROR_CODE_MAP = ERROR_CODE_MAP;
-    Object.freeze(Con);
+  const getException = <
+    E extends BFChainUtil.Exception,
+    C extends abstract new () => E
+  >(
+    Con: C
+  ) => {
+    const ExtCon = Con as unknown as BFChainUtil.ExceptionConstructor<E>;
+    ExtCon.PLATFORM = PLATFORM;
+    ExtCon.CHANNEL = CHANNEL;
+    ExtCon.BUSINESS = BUSINESS;
+    ExtCon.MODULE = MODULE;
+    ExtCon.FILE = FILE;
+    ExtCon.ERROR_CODE_MAP = ERROR_CODE_MAP;
+    Object.freeze(ExtCon);
 
-    return Con;
+    return ExtCon;
   };
   // const genException = <E extends BFChainUtil.ExceptionConstructor>(AbsCtor: E) => {
   //   return class Exc extends AbsCtor {
