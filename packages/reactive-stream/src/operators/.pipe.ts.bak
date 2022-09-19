@@ -1,3 +1,0 @@
-export const AG_Pipe = <S = AsyncGenerator>(source: S) => {
-    
-};

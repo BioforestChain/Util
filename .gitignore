@@ -7,6 +7,7 @@ node_modules
 *.tsbuildinfo
 .npmignore
 .*.ts
+.*.bak
 *.log
 *.tmp
 typings/dist
