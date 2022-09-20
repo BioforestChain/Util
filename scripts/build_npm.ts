@@ -26,7 +26,14 @@ const doBuid = async (config: {
     lib,
   } = config;
   console.log(`--- START BUILD: ${name}^${VERSION} ---`);
-  const pkgFilter = new Map<string, { entryPointName?: string }>([]);
+  const pkgFilter = new Map<string, { entryPointName?: string }>([
+    [
+      "util",
+      {
+        entryPointName: ".",
+      },
+    ],
+  ]);
 
   await emptyDir(buildToRootDir);
 
@@ -52,14 +59,14 @@ const doBuid = async (config: {
     // const buildToDir = `${BUILD_TO_ROOT_DIR}/${dirEntry.name}`;
 
     entryPoints.push({
-      name: config.entryPointName || packageBaseName,
+      name: config.entryPointName || "./" + packageBaseName,
       path: `${buildFromDir}/index.ts`,
     });
 
     // console.groupEnd();
   }
 
-  const orderMap = new Map([["util", 100]]);
+  const orderMap = new Map([[".", 100]]);
   {
     const getOrder = (ep: EntryPoint) => orderMap.get(ep.name) || 1;
     entryPoints.sort((a, b) => getOrder(b) - getOrder(a));
