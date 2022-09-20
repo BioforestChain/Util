@@ -1,7 +1,15 @@
-import { ExceptionGenerator, CustomErrorCodeMap } from "../exception-generator/index.ts";
+import {
+  ExceptionGenerator,
+  CustomErrorCodeMap,
+} from "../exception-generator/index.ts";
 import { LogGenerator } from "../exception-logger/index.ts";
 import { platformInfo } from "../platform/index.ts";
-import { Inject, ModuleStroge, Injectable, Resolve } from "../dep_inject/index.ts";
+import {
+  Inject,
+  ModuleStroge,
+  Injectable,
+  Resolve,
+} from "../dep_inject/index.ts";
 
 function MixExceptionGenerator(
   PLATFORM: string,
@@ -9,7 +17,7 @@ function MixExceptionGenerator(
   BUSINESS: string,
   MODULE: string,
   FILE: string,
-  ERROR_CODE_MAP: Map<string, string>,
+  ERROR_CODE_MAP: Map<string, string>
 ) {
   let loggerNsp = `${CHANNEL.toLowerCase()}-${BUSINESS.toLowerCase()}`;
   if (MODULE) {
@@ -20,7 +28,14 @@ function MixExceptionGenerator(
   }
 
   const logs = LogGenerator(loggerNsp);
-  const exps = ExceptionGenerator(PLATFORM, CHANNEL, BUSINESS, MODULE, FILE, ERROR_CODE_MAP);
+  const exps = ExceptionGenerator(
+    PLATFORM,
+    CHANNEL,
+    BUSINESS,
+    MODULE,
+    FILE,
+    ERROR_CODE_MAP
+  );
 
   return new Proxy({} as typeof logs & typeof exps, {
     get(t, p) {
@@ -60,7 +75,7 @@ export function RegisterExceptionGeneratorDefiner(opts: {
       platformName?: string;
       channelName?: string;
       businessName?: string;
-    },
+    }
   ) {
     return MixExceptionGenerator(
       opts.platformName || defaultPlatformName,
@@ -68,11 +83,11 @@ export function RegisterExceptionGeneratorDefiner(opts: {
       opts.businessName || defaultBusinessName,
       moduleName,
       fileName,
-      opts.errorCodeMap,
+      opts.errorCodeMap
     );
   };
 }
-@Injectable("bfchain-util:custom-exception", { singleton: true })
+@Injectable("#single-custom-exception", { singleton: true })
 export class SingleCustomException {
   constructor(public moduleMap: ModuleStroge) {}
   @Inject(EXCEPTION_INJECT_SYMBOL.PLATFORM, { dynamics: true, optional: true })
@@ -97,12 +112,15 @@ export function UtilExceptionGenerator(
     platformName?: string;
     channelName?: string;
     businessName?: string;
-  },
+  }
 ) {
   return myException.exceptionGeneratorDefiner(
     moduleName,
     fileName,
-    Object.assign({ errorCodeMap: CustomErrorCodeMap, businessName: "util" }, opts),
+    Object.assign(
+      { errorCodeMap: CustomErrorCodeMap, businessName: "util" },
+      opts
+    )
   );
 }
 

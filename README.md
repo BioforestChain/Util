@@ -1,6 +1,14 @@
-# BFChain-Util
+# Bnqkl-Util
 
 typescript util packages
+
+## 如何使用
+
+### 如何在 nodejs 中使用
+
+编译会分发出两个包： `@bnqkl/util-node` 与 `@bnqkl/util-web` 。不会再有其它子包（也就是说所有的自包现在已经全部聚合成一个包）。
+
+> 如果要兼容原本的用法： `npm i @bfchain/util@npm:@bnqkl/util-node` (`npm install <alias>@npm:<name>`)。或者在 pakcage.json/deps 中写： `"@bfchain/util": "npm:@bnqkl/util@^6.1.1"`
 
 ## 命名规范
 

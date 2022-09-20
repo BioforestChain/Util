@@ -6,7 +6,11 @@ import {
   LibName,
 } from "https://github.com/Gaubee/dnt/raw/feat-more-node-module-map/mod.ts";
 
-const VERSION = Deno.args[0] || "6.0.0";
+const VERSION = Deno.args[0] || "";
+if (/[\d]+\.[\d]+\.[\d]+/.test(VERSION) === false) {
+  console.warn("请输入正确的 npm 版本号");
+  Deno.exit(0);
+}
 const BUILD_FROM_ROOT_DIR = "./packages";
 
 const doBuid = async (config: {
@@ -53,7 +57,6 @@ const doBuid = async (config: {
       .replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())
       .replace(/^[\-]+/, "")
       .replace(/[\-]+/g, "-");
-    // const packageName = "@bfchain/" + packageBaseName;
 
     const buildFromDir = `${buildFromRootDir}/${dirEntry.name}`;
     // const buildToDir = `${BUILD_TO_ROOT_DIR}/${dirEntry.name}`;
@@ -96,7 +99,7 @@ const doBuid = async (config: {
       // package.json properties
       name: name,
       version: version,
-      description: `bfchain util -- copyright bnqkl`,
+      description: `bnqkl util`,
       license: "MIT",
       repository: {
         type: "git",

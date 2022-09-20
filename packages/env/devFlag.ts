@@ -1,6 +1,6 @@
 import { platformInfo } from "../platform/index.ts";
 
-const ENV = platformInfo.getGlobalFlag("BFCHAIN_ENV", "development");
+const ENV = platformInfo.getGlobalFlag("dev-flag", "development");
 ENV.split(",").map((flag) => flag.trim());
 const _envFlags = new Map<string, string | undefined>();
 
