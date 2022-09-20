@@ -4,6 +4,7 @@
         "!exception-logger/typeColor": "./packages/exception-logger/typeColor!node.ts",
         "!logger/debug-creator": "./packages/logger/debug-creator!node.ts",
         "!encoding-utf8/text": "./packages/encoding-utf8/text!node.ts",
-        "!platform/diff": "./packages/platform/diff!node.ts"
+        "!platform/diff": "./packages/platform/diff!node.ts",
+        "!util/performance": "./packages/uti/performance!node.ts"
     }
 }

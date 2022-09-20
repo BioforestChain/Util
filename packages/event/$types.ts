@@ -9,8 +9,8 @@ import { $PromiseOut } from "../extends-promise-out/$types.ts";
 import { QueneEventEmitter } from "./index.ts";
 
 /**
- * 将import写法改为BFChainUtil.PromiseOut，因为有引入@bfchain/util-extends-promise-out包
- * @bfchain/util-extends-promise-out的@types.type.d.ts包含PromiseOut，统一写法
+ * 将import写法改为BFChainUtil.PromiseOut，因为有引入../extends-promise-out包
+ * ../extends-promise-out的@types.type.d.ts包含PromiseOut，统一写法
  */
 export type $EventWaitterMap<EM> = {
   [key in keyof EM]?: $PromiseOut<EM[key]>;

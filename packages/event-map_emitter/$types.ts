@@ -7,7 +7,7 @@ import {
   $UnknownMutArg,
 } from "../event-base/$types.ts";
 
-export interface $$EventEmitter<EM = {}> {
+export interface $EventEmitter<EM = {}> {
   on<K extends keyof EM>(
     eventname: K,
     handler: $MutArgEventHandler<EM[K]>,

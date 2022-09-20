@@ -4,6 +4,7 @@
         "!exception-logger/typeColor": "./packages/exception-logger/typeColor!browser.ts",
         "!logger/debug-creator": "./packages/logger/debug-creator!browser.ts",
         "!encoding-utf8/text": "./packages/encoding-utf8/text!browser.ts",
-        "!platform/diff": "./packages/platform/diff!browser.ts"
+        "!platform/diff": "./packages/platform/diff!browser.ts",
+        "!util/performance": "./packages/uti/performance!browser.ts"
     }
 }
