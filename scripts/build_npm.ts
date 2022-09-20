@@ -4,7 +4,7 @@ import {
   emptyDir,
   EntryPoint,
   LibName,
-} from "https://github.com/Gaubee/dnt/raw/feat-more-compiler-options/mod.ts";
+} from "https://github.com/Gaubee/dnt/raw/feat-more-node-module-map/mod.ts";
 
 const VERSION = Deno.args[0] || "6.0.0";
 const BUILD_FROM_ROOT_DIR = "./packages";
@@ -25,7 +25,7 @@ const doBuid = async (config: {
     name,
     lib,
   } = config;
-  console.log(`--- START BUILD: ${name} ---`);
+  console.log(`--- START BUILD: ${name}^${VERSION} ---`);
   const pkgFilter = new Map<string, { entryPointName?: string }>([]);
 
   await emptyDir(buildToRootDir);
