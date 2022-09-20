@@ -3,94 +3,120 @@ import {
   build,
   emptyDir,
   EntryPoint,
-} from "https://deno.land/x/dnt@0.30.0/mod.ts";
+  LibName,
+} from "https://github.com/Gaubee/dnt/raw/feat-more-compiler-options/mod.ts";
 
+const VERSION = Deno.args[0] || "6.0.0";
 const BUILD_FROM_ROOT_DIR = "./packages";
-const BUILD_TO_ROOT_DIR = "./.npm";
-const version = Deno.args[0] || "6.0.0";
 
-const pkgFilter = new Map<string, { entryPointName?: string }>([]);
+const doBuid = async (config: {
+  version?: string;
+  buildFromRootDir?: string;
+  buildToRootDir: string;
+  importMap: string;
+  name: string;
+  lib?: (LibName | string)[];
+}) => {
+  const {
+    version = VERSION,
+    buildFromRootDir = BUILD_FROM_ROOT_DIR,
+    buildToRootDir,
+    importMap,
+    name,
+    lib,
+  } = config;
+  console.log(`--- START BUILD: ${name} ---`);
+  const pkgFilter = new Map<string, { entryPointName?: string }>([]);
 
-await emptyDir(BUILD_TO_ROOT_DIR);
+  await emptyDir(buildToRootDir);
 
-const entryPoints: EntryPoint[] = [];
+  const entryPoints: EntryPoint[] = [];
 
-for await (const dirEntry of Deno.readDir(BUILD_FROM_ROOT_DIR)) {
-  if (dirEntry.isDirectory === false) {
-    continue;
+  for await (const dirEntry of Deno.readDir(buildFromRootDir)) {
+    if (dirEntry.isDirectory === false) {
+      continue;
+    }
+
+    const config = pkgFilter.get(dirEntry.name) || {};
+
+    // console.group("entry-point:", dirEntry.name, config);
+
+    const packageBaseName = dirEntry.name
+      .replace(/[_]/g, "-")
+      .replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())
+      .replace(/^[\-]+/, "")
+      .replace(/[\-]+/g, "-");
+    // const packageName = "@bfchain/" + packageBaseName;
+
+    const buildFromDir = `${buildFromRootDir}/${dirEntry.name}`;
+    // const buildToDir = `${BUILD_TO_ROOT_DIR}/${dirEntry.name}`;
+
+    entryPoints.push({
+      name: config.entryPointName || packageBaseName,
+      path: `${buildFromDir}/index.ts`,
+    });
+
+    // console.groupEnd();
   }
 
-  const config = pkgFilter.get(dirEntry.name) || {};
+  const orderMap = new Map([["util", 100]]);
+  {
+    const getOrder = (ep: EntryPoint) => orderMap.get(ep.name) || 1;
+    entryPoints.sort((a, b) => getOrder(b) - getOrder(a));
+  }
 
-  console.group("entry-point:", dirEntry.name, config);
-
-  const packageBaseName = dirEntry.name
-    .replace(/[_]/g, "-")
-    .replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())
-    .replace(/^[\-]+/, "")
-    .replace(/[\-]+/g, "-");
-  // const packageName = "@bfchain/" + packageBaseName;
-
-  const buildFromDir = `${BUILD_FROM_ROOT_DIR}/${dirEntry.name}`;
-  // const buildToDir = `${BUILD_TO_ROOT_DIR}/${dirEntry.name}`;
-
-  entryPoints.push({
-    name: config.entryPointName || packageBaseName,
-    path: `${buildFromDir}/index.ts`,
+  await build({
+    importMap: importMap,
+    entryPoints: entryPoints,
+    outDir: buildToRootDir,
+    /**
+     * @TODO should ignore errors:
+     * 1. TS2691
+     */
+    typeCheck: true,
+    shims: {
+      // see JS docs for overview and more options
+      deno: "dev",
+    },
+    compilerOptions: {
+      target: "ES2020",
+      importHelpers: true,
+      isolatedModules: false,
+      lib: lib as LibName[],
+    },
+    packageManager: "pnpm",
+    package: {
+      // package.json properties
+      name: name,
+      version: version,
+      description: `bfchain util -- copyright bnqkl`,
+      license: "MIT",
+      repository: {
+        type: "git",
+        url: "git+https://github.com/BioforestChain/Util.git",
+      },
+      bugs: {
+        url: "https://github.com/BioforestChain/Util/issues",
+      },
+    },
   });
 
-  console.groupEnd();
-}
-
-const orderMap = new Map([["util", 100]]);
-{
-  const getOrder = (ep: EntryPoint) => orderMap.get(ep.name) || 1;
-  entryPoints.sort((a, b) => getOrder(b) - getOrder(a));
-}
-
-await build({
-  importMap: "./import_map.json",
-  entryPoints: entryPoints,
-  outDir: BUILD_TO_ROOT_DIR,
-  /**
-   * @TODO should ignore errors:
-   * 1. TS2691
-   */
-  typeCheck: true,
-  shims: {
-    // see JS docs for overview and more options
-    deno: true,
-  },
-  compilerOptions: {
-    target: "ES2020",
-    importHelpers: true,
-  },
-  packageManager: "pnpm",
-  package: {
-    // package.json properties
-    name: "@bfchain/util",
-    version: version,
-    description: `bfchain util -- copyright bnqkl`,
-    license: "MIT",
-    repository: {
-      type: "git",
-      url: "git+https://github.com/BioforestChain/Util.git",
-    },
-    bugs: {
-      url: "https://github.com/BioforestChain/Util/issues",
-    },
-  },
-});
-
-// post build steps
-for (const base of ["README.md", "LICENSE"]) {
-  const fromFilename = `${BUILD_FROM_ROOT_DIR}/${base}`;
-  const toFilename = `${BUILD_TO_ROOT_DIR}/${base}`;
-  try {
-    copySync(fromFilename, toFilename, { overwrite: true });
-  } catch (err) {
-    if (err instanceof Deno.errors.NotFound === false) {
-      throw err;
+  // post build steps
+  for (const base of ["README.md", "LICENSE"]) {
+    const fromFilename = `${buildFromRootDir}/${base}`;
+    const toFilename = `${buildToRootDir}/${base}`;
+    try {
+      copySync(fromFilename, toFilename, { overwrite: true });
+    } catch (err) {
+      if (err instanceof Deno.errors.NotFound === false) {
+        throw err;
+      }
     }
   }
+};
+
+import npmConfigs from "./npm.json" assert { type: "json" };
+
+for (const config of npmConfigs) {
+  await doBuid(config);
 }

@@ -34,7 +34,6 @@ export type $Pinter = { readonly enabled: boolean } & ((
 
 //#endregion
 
-// deno-lint-ignore no-namespace
 export namespace $Browser {
   export interface HtmlNamespace {
     buildHTML(style: string): void;

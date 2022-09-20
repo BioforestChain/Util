@@ -1,4 +1,3 @@
-// deno-lint-ignore no-namespace
 export namespace $MixAsyncIterator {
   export type AG<NextOut = unknown, Return = unknown, NextIn = unknown> = [
     NextOut,

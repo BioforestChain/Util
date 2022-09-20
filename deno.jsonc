@@ -5,9 +5,14 @@
       "deno.window"
     ],
     "strict": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-    // "strictNullChecks": true
+    "strictNullChecks": true
+  },
+  "lint": {
+    "rules": {
+      "exclude": [
+        "no-namespace"
+      ]
+    }
   },
   "fmt": {
     "options": {

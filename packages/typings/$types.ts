@@ -94,7 +94,6 @@ export type $ToJSONType<T> = T extends $JSONAble<infer U> ? U : T;
 
 export type $EmptyObject = Record<never, never>;
 
-// deno-lint-ignore no-namespace
 export namespace $NodeJS {
   export type Process = {
     env: { [key: string]: string };
