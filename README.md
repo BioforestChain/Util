@@ -8,7 +8,31 @@ typescript util packages
 
 编译会分发出两个包： `@bnqkl/util-node` 与 `@bnqkl/util-web` 。不会再有其它子包（也就是说所有的自包现在已经全部聚合成一个包）。
 
-> 如果要兼容原本的用法： `npm i @bfchain/util@npm:@bnqkl/util-node` (`npm install <alias>@npm:<name>`)。或者在 pakcage.json/deps 中写： `"@bfchain/util": "npm:@bnqkl/util@^6.1.1"`
+> 如果要兼容原本的用法： `npm i @bfchain/util@npm:@bnqkl/util-node` (`npm install <alias>@npm:<name>`)。或者在 pakcage.json/deps 中写： `"@bfchain/util": "npm:@bnqkl/util@^1.0.0"`
+
+### 如何在 dnt 中使用
+
+> [dnt](https://github.com/denoland/dnt) 是一个将 Deno 转化成 Node 的工具。本项目也使用这个工具进行开发。
+> 本项目之所以使用这个方案，是因为有多平台分发的需求，而 deno 的 importMap 可以很好的解决这个问题。
+> 如果您的项目也有类似的需求，需要将一套代码分发到多个包中，那么可以使用本项目的解决方案：
+
+1.  配置 [npm.json]('./scripts/npm.json')
+1.  编译 [build_npm.ts]('./scripts/build_npm.ts')
+1.  发布 [pub_npm.ts]('./scripts/pub_npm.ts')
+
+如果您也选择了这个方案，说明您的目标是编译到 nodejs 平台， 那么这里的建议是使用 `https://esm.sh/` 来获取 npm 包，比如：
+
+```ts
+import { Inject } from "https://esm.sh/@bnqkl/util-node@1.0.0";
+```
+
+然后再通过 [importMap](https://deno.land/manual@v1.25.3/linking_to_external_code/import_maps) 的配置来编译来将`https://esm.sh/@bnqkl/util-node` 修改成 `https://esm.sh/@bnqkl/util-web` 以分发到不同的包中。
+
+### 如何在 deno 中使用
+
+```ts
+import { Inject } from "https://deno.land/x/bnqkl_util@1.0.0/mod.ts";
+```
 
 ## 命名规范
 
@@ -40,3 +64,7 @@ typescript util packages
    // replacement function call
    const res = $someFun_return;
    ```
+
+```
+
+```
