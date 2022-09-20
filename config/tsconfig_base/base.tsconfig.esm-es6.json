@@ -1,9 +1,0 @@
-{
-  "extends": "./base.tsconfig.esm",
-  "compilerOptions": {
-    "declaration": true,
-    "declarationMap": false,
-    "sourceMap": false,
-    "transformPlugins": ["jsbi", "es2016"]
-  }
-}

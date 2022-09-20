@@ -1,0 +1,19 @@
+[
+    {
+        "buildToRootDir": "./.npm/util-node",
+        "importMap": "./import_map.json",
+        "name": "@bfchain/util-node",
+        "lib": [
+            "es2020"
+        ]
+    },
+    {
+        "buildToRootDir": "./.npm/util-web",
+        "importMap": "./import_map.browser.json",
+        "name": "@bfchain/util-web",
+        "lib": [
+            "es2020",
+            "dom"
+        ]
+    }
+]
