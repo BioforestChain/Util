@@ -8,7 +8,7 @@ import {
 
 const VERSION = Deno.args[0] || "";
 if (/[\d]+\.[\d]+\.[\d]+/.test(VERSION) === false) {
-  console.warn("请输入正确的 npm 版本号");
+  console.warn("请输入正确的 npm 待发布版本号");
   Deno.exit(0);
 }
 const BUILD_FROM_ROOT_DIR = "./packages";
@@ -94,7 +94,7 @@ const doBuid = async (config: {
       isolatedModules: false,
       lib: lib as LibName[],
     },
-    packageManager: "pnpm",
+    packageManager: "npm",
     package: {
       // package.json properties
       name: name,
