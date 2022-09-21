@@ -4,7 +4,7 @@ import {
   emptyDir,
   EntryPoint,
   LibName,
-} from "https://github.com/Gaubee/dnt/raw/feat-more-node-module-map/mod.ts";
+} from "https://deno.land/x/gaubee_dnt@0.30.0-3/mod.ts";
 
 export const doBuid = async (config: {
   name: string;
