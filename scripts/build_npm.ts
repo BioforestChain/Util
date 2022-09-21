@@ -6,30 +6,17 @@ import {
   LibName,
 } from "https://github.com/Gaubee/dnt/raw/feat-more-node-module-map/mod.ts";
 
-const VERSION = Deno.args[0] || "";
-if (/[\d]+\.[\d]+\.[\d]+/.test(VERSION) === false) {
-  console.warn("请输入正确的 npm 待发布版本号");
-  Deno.exit(0);
-}
-const BUILD_FROM_ROOT_DIR = "./packages";
-
-const doBuid = async (config: {
-  version?: string;
-  buildFromRootDir?: string;
+export const doBuid = async (config: {
+  version: string;
+  buildFromRootDir: string;
   buildToRootDir: string;
   importMap: string;
   name: string;
   lib?: (LibName | string)[];
 }) => {
-  const {
-    version = VERSION,
-    buildFromRootDir = BUILD_FROM_ROOT_DIR,
-    buildToRootDir,
-    importMap,
-    name,
-    lib,
-  } = config;
-  console.log(`--- START BUILD: ${name}^${VERSION} ---`);
+  const { version, buildFromRootDir, buildToRootDir, importMap, name, lib } =
+    config;
+  console.log(`--- START BUILD: ${name}^${version} ---`);
   const pkgFilter = new Map<string, { entryPointName?: string }>([
     [
       "util",
@@ -125,8 +112,70 @@ const doBuid = async (config: {
   }
 };
 
-import npmConfigs from "./npm.json" assert { type: "json" };
+import * as semver from "https://deno.land/std@0.156.0/semver/mod.ts";
 
-for (const config of npmConfigs) {
-  await doBuid(config);
+export const doBuidFromJson = async (file: string) => {
+  const version_input = Deno.args[0];
+  let getVersion = (version: string) => {
+    return version;
+  };
+  if (version_input) {
+    if (version_input.startsWith("+")) {
+      const [release, identifier] = version_input
+        .slice(1)
+        .split(/\:/)
+        .map((v, index) => {
+          if (index === 0) {
+            switch (v) {
+              case "1":
+                return "patch";
+              case "1.0":
+                return "minor";
+              case "1.0.0":
+                return "major";
+              case "pre":
+                return "prerelease";
+            }
+          }
+          return v;
+        });
+      if (
+        !(
+          release === "major" ||
+          release === "minor" ||
+          release === "patch" ||
+          (release === "prerelease" && typeof identifier === "string")
+        )
+      ) {
+        console.error(
+          "请输入正确的 ReleaseType: major, minor, patch, prerelease:identifier"
+        );
+        Deno.exit(0);
+      }
+      // major, minor, patch, or prerelease
+      getVersion = (version) =>
+        semver.inc(version, release, undefined, identifier) || version;
+    } else {
+      const semver_version = semver.minVersion(version_input);
+      if (semver_version === null) {
+        console.error("请输入正确的待发布版本号");
+        Deno.exit(0);
+      }
+
+      getVersion = () => semver_version.toString();
+    }
+  }
+
+  const npmConfigs = (await import(file, { assert: { type: "json" } })).default;
+
+  for (const config of npmConfigs) {
+    await doBuid({
+      ...config,
+      version: getVersion(config.version),
+    });
+  }
+};
+
+if (import.meta.main) {
+  await doBuidFromJson("./npm.json");
 }

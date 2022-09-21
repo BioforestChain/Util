@@ -1,19 +1,25 @@
 [
-    {
-        "buildToRootDir": "./.npm/util-node",
-        "importMap": "./import_map.json",
-        "name": "@bnqkl/util-node",
-        "lib": [
-            "es2020"
-        ]
-    },
-    {
-        "buildToRootDir": "./.npm/util-web",
-        "importMap": "./import_map.browser.json",
-        "name": "@bnqkl/util-web",
-        "lib": [
-            "es2020",
-            "dom"
-        ]
-    }
+  {
+    "buildFromRootDir": "./packages",
+    "mainExports": "util",
+    "buildToRootDir": "./.npm/util-node",
+    "importMap": "./import_map.json",
+    "name": "@bnqkl/util-node",
+    "version": "1.1.0",
+    "lib": [
+      "es2020"
+    ]
+  },
+  {
+    "buildFromRootDir": "./packages",
+    "mainExports": "util",
+    "buildToRootDir": "./.npm/util-web",
+    "importMap": "./import_map.browser.json",
+    "name": "@bnqkl/util-web",
+    "version": "1.1.0",
+    "lib": [
+      "es2020",
+      "dom"
+    ]
+  }
 ]
