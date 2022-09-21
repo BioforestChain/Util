@@ -7,11 +7,11 @@ import {
 } from "https://github.com/Gaubee/dnt/raw/feat-more-node-module-map/mod.ts";
 
 export const doBuid = async (config: {
+  name: string;
   version: string;
   buildFromRootDir: string;
   buildToRootDir: string;
-  importMap: string;
-  name: string;
+  importMap?: string;
   lib?: (LibName | string)[];
 }) => {
   const { version, buildFromRootDir, buildToRootDir, importMap, name, lib } =
@@ -114,8 +114,7 @@ export const doBuid = async (config: {
 
 import * as semver from "https://deno.land/std@0.156.0/semver/mod.ts";
 
-export const doBuidFromJson = async (file: string) => {
-  const version_input = Deno.args[0];
+export const getVersionGenerator = (version_input?: string) => {
   let getVersion = (version: string) => {
     return version;
   };
@@ -165,7 +164,11 @@ export const doBuidFromJson = async (file: string) => {
       getVersion = () => semver_version.toString();
     }
   }
+  return getVersion;
+};
 
+export const doBuildFromJson = async (file: string) => {
+  const getVersion = getVersionGenerator(Deno.args[0]);
   const npmConfigs = (await import(file, { assert: { type: "json" } })).default;
 
   for (const config of npmConfigs) {
@@ -177,5 +180,5 @@ export const doBuidFromJson = async (file: string) => {
 };
 
 if (import.meta.main) {
-  await doBuidFromJson("./npm.json");
+  await doBuildFromJson("./npm.json");
 }
