@@ -49,5 +49,5 @@ export const doPubFromJson = async (
 };
 
 if (import.meta.main) {
-  await doPubFromJson("./npm.json");
+  await doPubFromJson(import.meta.resolve("./npm.json"));
 }

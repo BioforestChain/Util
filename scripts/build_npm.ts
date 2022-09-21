@@ -16,7 +16,7 @@ export const doBuid = async (config: {
 }) => {
   const { version, buildFromRootDir, buildToRootDir, importMap, name, lib } =
     config;
-  console.log(`--- START BUILD: ${name}^${version} ---`);
+  console.log(`--- START BUILD: ${name} ${version} ---`);
   const pkgFilter = new Map<string, { entryPointName?: string }>([
     [
       "util",
@@ -180,5 +180,5 @@ export const doBuildFromJson = async (file: string) => {
 };
 
 if (import.meta.main) {
-  await doBuildFromJson("./npm.json");
+  await doBuildFromJson(import.meta.resolve("./npm.json"));
 }
