@@ -12,7 +12,7 @@ export const doPub = async (cwd: string) => {
   return status.success;
 };
 
-import * as path from "https://deno.land/std@0.156.0/path/mod.ts";
+import { cwdResolve } from "./cwd.ts";
 
 export const doPubFromJson = async (
   inputConfigFile: string,
@@ -23,18 +23,14 @@ export const doPubFromJson = async (
   const npmConfigs = (
     await import(inputConfigFile, { assert: { type: "json" } })
   ).default;
-  const cwdRoot = path.toFileUrl(Deno.cwd()).href + "/";
 
   for (const config of npmConfigs) {
     if (await doPub(config.buildToRootDir)) {
       /// 更新配置文件
       config.version = (
-        await import(
-          new URL(config.buildToRootDir + "/package.json", cwdRoot).href,
-          {
-            assert: { type: "json" },
-          }
-        )
+        await import(cwdResolve(config.buildToRootDir + "/package.json"), {
+          assert: { type: "json" },
+        })
       ).default.version;
     }
   }

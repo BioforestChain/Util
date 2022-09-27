@@ -4,7 +4,7 @@ import {
   emptyDir,
   EntryPoint,
   LibName,
-} from "https://deno.land/x/gaubee_dnt@0.30.0-3/mod.ts";
+} from "https://deno.land/x/gaubee_dnt@0.31.0-1/mod.ts";
 
 export const doBuid = async (config: {
   name: string;
@@ -79,6 +79,8 @@ export const doBuid = async (config: {
       target: "ES2020",
       importHelpers: true,
       isolatedModules: false,
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
       lib: lib as LibName[],
     },
     packageManager: "npm",
@@ -167,8 +169,8 @@ export const getVersionGenerator = (version_input?: string) => {
   return getVersion;
 };
 
-export const doBuildFromJson = async (file: string) => {
-  const getVersion = getVersionGenerator(Deno.args[0]);
+export const doBuildFromJson = async (file: string, args = Deno.args) => {
+  const getVersion = getVersionGenerator(args[0]);
   const npmConfigs = (await import(file, { assert: { type: "json" } })).default;
 
   for (const config of npmConfigs) {
