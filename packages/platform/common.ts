@@ -24,6 +24,8 @@ export const isCordova = checkType("cordova", "object");
 /**web worker and main thread all has location as navigator */
 export const isWebView = checkType("navigator", "object");
 
+export const isDenoRuntime = checkType("Deno", "object");
+
 export const isAndroid = isWebView && /Android/i.test(navigator.userAgent);
 
 export const isIOS = isWebView && /iPhone|iPod|iPad/i.test(navigator.userAgent);
@@ -34,7 +36,7 @@ export const isWebWorker = isWebView && !isWebMainThread;
 
 export const platformInfo = {
   getGlobalFlag(flag_name: string, defaultValue = ""): string {
-    const g = this.global() as any;
+    const g = isDenoRuntime ? this : this.global();
     return (
       g[flag_name] ||
       (g.process && g.process.env && g.process.env[flag_name]) ||
