@@ -1,4 +1,3 @@
-import { Reflect } from "https://deno.land/x/reflect_metadata@v0.1.12-2/mod.ts";
 import { $Constructor } from "../typings/$types.ts";
 import {
   $MODULE_ID_TYPE,

@@ -1,3 +1,4 @@
+import "https://esm.sh/reflect-metadata@0.1.13";
 export * from "./$types.ts";
 export * from "./common.ts";
 export * from "./Inject.ts";
